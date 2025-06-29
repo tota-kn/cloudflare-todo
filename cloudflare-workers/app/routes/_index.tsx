@@ -8,7 +8,7 @@ export const loader = async (args: Route.LoaderArgs) => {
   const isWaitUntilDefined = !!cloudflare.ctx.waitUntil;
 
   // /apiエンドポイントを呼び出し
-  const res = await client.api.test.$get({
+  const res = await client.api.$get({
     query: { name: "John", count: "5" },
   });
   const apiData = await res.json();
