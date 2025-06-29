@@ -4,13 +4,17 @@ compatibility_date = "2024-11-06"
 main = "./worker.ts"
 assets = { directory = "./build/client" }
 
+# ログを有効にする
+[observability]
+enabled = true
+
 [vars]
 MY_VAR = "My Value local"
 API_BASE_URL = "http://localhost:5173/"
 
 [env.dev.vars]
 MY_VAR = "My Value dev"
-API_BASE_URL = "https://example-cloudflare-workers-dev.omen-bt.workers.dev/"
+API_BASE_URL = "/"
 
 [env.prd.vars]
 MY_VAR = "My Value dev"

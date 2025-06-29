@@ -9,6 +9,7 @@ export const loader = async (args: Route.LoaderArgs) => {
 
   // /apiエンドポイントを呼び出し
   const API_BASE_URL = args.context.cloudflare.env.API_BASE_URL;
+  console.log("API_BASE_URL:", API_BASE_URL);
   const client = createClient(API_BASE_URL);
   const res = await client.api.$get({
     query: { name: "John", count: "5" },
