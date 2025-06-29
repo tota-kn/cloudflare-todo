@@ -6,6 +6,8 @@
   "scripts": {
     "build": "react-router build",
     "deploy": "pnpm run build && wrangler deploy",
+    "deploy:dev": "pnpm run deploy --env dev",
+    "deploy:prd": "pnpm run deploy --env prd",
     "dev": "react-router dev",
     "start": "wrangler dev",
     "typecheck": "react-router typegen && tsc",

@@ -8,18 +8,32 @@ export const loader = async (args: Route.LoaderArgs) => {
   const isWaitUntilDefined = !!cloudflare.ctx.waitUntil;
 
   // /apiエンドポイントを呼び出し
-  const client = createClient(args.context.cloudflare.env.API_BASE_URL || "/");
+  const API_BASE_URL = args.context.cloudflare.env.API_BASE_URL;
+  const client = createClient(API_BASE_URL);
   const res = await client.api.$get({
     query: { name: "John", count: "5" },
   });
   const apiData = await res.json();
 
-  return { cloudflare, extra, myVarInVariables, isWaitUntilDefined, apiData };
+  return {
+    cloudflare,
+    extra,
+    myVarInVariables,
+    isWaitUntilDefined,
+    apiData,
+    API_BASE_URL,
+  };
 };
 
 export default function Index({ loaderData }: Route.ComponentProps) {
-  const { cloudflare, extra, myVarInVariables, isWaitUntilDefined, apiData } =
-    loaderData;
+  const {
+    cloudflare,
+    extra,
+    myVarInVariables,
+    isWaitUntilDefined,
+    apiData,
+    API_BASE_URL,
+  } = loaderData;
   return (
     <div>
       <h1>React Router and Hono</h1>
@@ -33,6 +47,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
       <h5>Var in Variables is {myVarInVariables}</h5>
       <h6>waitUntil is {isWaitUntilDefined ? "defined" : "not defined"}</h6>
       <h6>API Response: {JSON.stringify(apiData)}</h6>
+      <h6>API Response: {API_BASE_URL}</h6>
     </div>
   );
 }

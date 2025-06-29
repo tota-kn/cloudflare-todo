@@ -5,5 +5,13 @@ main = "./worker.ts"
 assets = { directory = "./build/client" }
 
 [vars]
-MY_VAR = "My Value"
+MY_VAR = "My Value local"
+API_BASE_URL = "http://localhost:5173/"
+
+[env.dev.vars]
+MY_VAR = "My Value dev"
+API_BASE_URL = "https://example-cloudflare-workers-dev.omen-bt.workers.dev/"
+
+[env.prd.vars]
+MY_VAR = "My Value dev"
 API_BASE_URL = "/"
