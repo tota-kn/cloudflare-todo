@@ -3,7 +3,7 @@ import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import { HonoContext } from "../types";
 
-const api = new Hono<HonoContext>().get(
+const getIndexRoute = new Hono<HonoContext>().get(
   "/",
   zValidator(
     "query",
@@ -30,4 +30,4 @@ const api = new Hono<HonoContext>().get(
   }
 );
 
-export default api;
+export default getIndexRoute;

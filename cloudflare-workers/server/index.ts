@@ -1,7 +1,12 @@
 // server/index.ts
 import { Hono } from "hono";
-import api from "./routes/api";
 import { HonoContext } from "./types";
+import getIndexRoute from "./routes/get";
+import postTestRoute from "./routes/post";
+
+const api = new Hono<HonoContext>()
+  .route("/", getIndexRoute)
+  .route("/", postTestRoute);
 
 const app = new Hono<HonoContext>()
   .use(async (c, next) => {
