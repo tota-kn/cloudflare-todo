@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
-import { HonoContext } from "../types";
+import { HonoContext } from "../../types/honoContext";
 
 const postTestRoute = new Hono<HonoContext>().post(
   "/",

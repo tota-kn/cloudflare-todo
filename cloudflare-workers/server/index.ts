@@ -1,6 +1,6 @@
 // server/index.ts
 import { Hono } from "hono";
-import { HonoContext } from "./types";
+import { HonoContext } from "../types/honoContext";
 import getIndexRoute from "./routes/get";
 import postTestRoute from "./routes/post";
 
