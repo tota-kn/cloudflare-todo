@@ -1,4 +1,4 @@
-import { client } from "~/lib/api";
+import { createClient } from "~/lib/api";
 import type { Route } from "./+types/_index";
 
 export const loader = async (args: Route.LoaderArgs) => {
@@ -8,6 +8,7 @@ export const loader = async (args: Route.LoaderArgs) => {
   const isWaitUntilDefined = !!cloudflare.ctx.waitUntil;
 
   // /apiエンドポイントを呼び出し
+  const client = createClient(args.context.cloudflare.env.API_BASE_URL || "/");
   const res = await client.api.$get({
     query: { name: "John", count: "5" },
   });
