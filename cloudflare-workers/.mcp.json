@@ -2,28 +2,19 @@
   "mcpServers": {
     "cloudflare-docs": {
       "type": "sse",
-      "url": "https://docs.mcp.cloudflare.com/sse",
-      "allow": [
-        "search_cloudflare_documentation",
-        "migrate_pages_to_workers_guide"
-      ]
+      "url": "https://docs.mcp.cloudflare.com/sse"
     },
     "cloudflare-observability": {
       "type": "sse",
-      "url": "https://observability.mcp.cloudflare.com/sse",
-      "allow": [
-        "accounts_list",
-        "set_active_account",
-        "workers_list",
-        "workers_get_worker",
-        "workers_get_worker_code",
-        "query_worker_observability",
-        "observ”bility_keys",
-        "observability_values",
-        "search_cloudflare_documentation",
-        "migrate_pages_to_workers_guide"
+      "url": "https://observability.mcp.cloudflare.com/sse"
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
       ],
-      "deny": []
+      "env": {}
     }
   }
 }
