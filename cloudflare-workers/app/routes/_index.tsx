@@ -1,5 +1,6 @@
 import { createClient } from "~/lib/api";
 import type { Route } from "./+types/_index";
+import { useState } from "react";
 
 export const loader = async (args: Route.LoaderArgs) => {
   const extra = args.context.extra;
@@ -7,14 +8,20 @@ export const loader = async (args: Route.LoaderArgs) => {
   const myVarInVariables = args.context.hono.context.get("MY_VAR_IN_VARIABLES");
   const isWaitUntilDefined = !!cloudflare.ctx.waitUntil;
 
-  // /apiエンドポイントを呼び出し
-  const API_BASE_URL = args.context.cloudflare.env.API_BASE_URL;
-  console.log("API_BASE_URL:", API_BASE_URL);
+  // リクエストのホスト情報を取得してAPI_BASE_URLを構築
+  const url = new URL(args.request.url);
+  const API_BASE_URL = `${url.protocol}//${url.host}`;
   const client = createClient(API_BASE_URL);
-  const res = await client.api.$get({
-    query: { name: "John", count: "5" },
+  const response = await client.api.$get({
+    query: { name: "a" },
   });
-  const apiData = await res.json();
+  console.log("API Response:", response.status, response.statusText);
+  console.log(API_BASE_URL);
+  if (!response.ok) {
+    throw new Error(`API request failed with status`);
+  }
+  // APIからのデータを取得
+  const apiData = await response.json();
 
   return {
     cloudflare,
@@ -35,6 +42,26 @@ export default function Index({ loaderData }: Route.ComponentProps) {
     apiData,
     API_BASE_URL,
   } = loaderData;
+
+  const [apiResult, setApiResult] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleApiCall = async () => {
+    setLoading(true);
+    try {
+      const client = createClient(API_BASE_URL);
+      const response = await client.api.$get({
+        query: { name: "a" },
+      });
+      const data = await response.json();
+      setApiResult(data);
+    } catch (error) {
+      setApiResult({ error: "Failed to fetch data" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       <h1>React Router and Hono</h1>
@@ -49,6 +76,24 @@ export default function Index({ loaderData }: Route.ComponentProps) {
       <h6>waitUntil is {isWaitUntilDefined ? "defined" : "not defined"}</h6>
       <h6>API Response: {JSON.stringify(apiData)}</h6>
       <h6>API Response: {API_BASE_URL}</h6>
+
+      <div style={{ marginTop: "20px" }}>
+        <button onClick={handleApiCall} disabled={loading}>
+          {loading ? "Loading..." : "Request /api?name=a"}
+        </button>
+        {apiResult && (
+          <div
+            style={{
+              marginTop: "10px",
+              padding: "10px",
+              border: "1px solid #ccc",
+            }}
+          >
+            <strong>Result:</strong>
+            <pre>{JSON.stringify(apiResult, null, 2)}</pre>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
