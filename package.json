@@ -1,0 +1,12 @@
+{
+  "name": "cloudflare-todo",
+  "version": "1.0.0",
+  "workspaces": [
+    "front",
+    "back"
+  ],
+  "scripts": {
+    "back": "pnpm -F \"back\"",
+    "front": "pnpm -F \"front\""
+  }
+}

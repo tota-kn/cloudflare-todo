@@ -1,0 +1,4 @@
+packages:
+  - "back"
+  - "front"
+  - "back-remix"

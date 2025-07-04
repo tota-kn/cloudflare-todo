@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "todo-back",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-02-14",
+  "env": {
+    "local": {
+      "vars": {
+        "CORS_ORIGIN": "http://localhost:3000"
+      }
+    },
+    "dev": {
+      "vars": {
+        "CORS_ORIGIN": "https://develop.front-ybj.pages.dev"
+      }
+    },
+    "prd": {
+      "vars": {
+        "CORS_ORIGIN": "https://front-ybj.pages.dev/"
+      }
+    }
+  }
+}
