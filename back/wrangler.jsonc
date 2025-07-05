@@ -3,6 +3,9 @@
   "name": "todo-back",
   "compatibility_date": "2025-02-14",
   "main": "src/index.ts",
+  "observability": {
+    "enabled": true
+  },
   "env": {
     "local": {
       "name": "todo-back-local",
