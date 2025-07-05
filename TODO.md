@@ -1,4 +1,4 @@
-- [ ] ORM
+- [ ] ORM Drizzel
 - [ ] frontのリンター、フォーマッター
 - [ ] ユニットテスト
 - [ ] APIテスト(Bruno?)
@@ -6,4 +6,5 @@
 - [ ] tailwind
 - [ ] ライトモード、ダークモード
 - [ ] shadcn?
-- [ ] 
+- [ ] E2Eテスト
+- [ ] OAuth認証 
