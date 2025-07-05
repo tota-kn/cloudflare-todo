@@ -9,17 +9,17 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export async function loader({ context }: Route.LoaderArgs) {
-  const res = await client.index.$get({
-    query: {
-      title: "test",
-      body: "test",
-    },
-  });
-  const a = await res.json();
-  return { message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE, a };
+export function loader({ context }: Route.LoaderArgs) {
+  // const res = await client.index.$get({
+  //   query: {
+  //     title: "test",
+  //     body: "test",
+  //   },
+  // });
+  // const a = await res.json();
+  return { message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE };
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  return <Welcome message={loaderData.a.message} />;
+  return <Welcome message={loaderData.message} />;
 }

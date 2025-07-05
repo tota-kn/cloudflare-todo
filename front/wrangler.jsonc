@@ -7,11 +7,22 @@
 	"name": "todo-front",
 	"compatibility_date": "2025-04-04",
 	"main": "./workers/app.ts",
-	"vars": {
-		"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare"
-	},
 	"observability": {
 		"enabled": true
+	},
+	"env": {
+		"dev": {
+			"name": "todo-front-dev",
+			"vars": {
+				"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare Dev"
+			}
+		},
+		"prd": {
+			"name": "todo-front-prd",
+			"vars": {
+				"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare Production"
+			}
+		}
 	}
 	/**
 	 * Smart Placement
