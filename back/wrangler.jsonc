@@ -7,18 +7,21 @@
     "local": {
       "name": "todo-back-local",
       "vars": {
+        "STAGE": "local",
         "CORS_ORIGIN": "http://localhost:5173/"
       }
     },
     "dev": {
       "name": "todo-back-dev",
       "vars": {
+        "STAGE": "dev",
         "CORS_ORIGIN": "https://todo-front-dev.omen-bt.workers.dev"
       }
     },
     "prd": {
       "name": "todo-back-prd",
       "vars": {
+        "STAGE": "prd",
         "CORS_ORIGIN": "https://todo-front-prd.omen-bt.workers.dev"
       }
     }
