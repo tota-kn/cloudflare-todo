@@ -1,8 +1,8 @@
-import type { ClientType } from "../../shared/client";
 import { hc } from "hono/client";
+import type { ClientType } from "../../shared/client";
 
 export const createServerFetcher = (env: Env) => {
-  if (env.IS_LOCAL === "true") {
+  if (env.IS_LOCAL) {
     return hc<ClientType>(env.API_BASE_URL);
   } else {
     return hc<ClientType>("http://example/", {
