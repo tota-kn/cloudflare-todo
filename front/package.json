@@ -8,7 +8,6 @@
 		"deploy:dev": "CLOUDFLARE_ENV=dev pnpm run build && wrangler deploy",
 		"deploy:prd": "CLOUDFLARE_ENV=prd pnpm run build && wrangler deploy",
 		"dev": "CLOUDFLARE_ENV=local react-router dev",
-		"dev:wrangler": "CLOUDFLARE_ENV=local pnpm build && wrangler dev",
 		"postinstall": "npm run cf-typegen",
 		"preview": "pnpm run build && vite preview",
 		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b"

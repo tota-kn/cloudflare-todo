@@ -15,6 +15,7 @@ export async function loader({ context }: Route.LoaderArgs) {
     "backendService:",
     backendService ? "available" : "not available"
   );
+  console.log(backendService);
   const client = createClient(context.cloudflare.env);
   const req = await client.index.$get({
     query: {
