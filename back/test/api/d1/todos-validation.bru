@@ -1,0 +1,29 @@
+meta {
+  name: todos-validation
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{BASE_URL}}/d1/todos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "",
+    "description": "This should fail validation"
+  }
+}
+
+tests {
+  test("Response status is 400", function() {
+    expect(res.getStatus()).to.equal(400);
+  });
+  
+  test("Response contains validation error", function() {
+    const body = res.getBody();
+    expect(body).to.have.property('error');
+  });
+}

@@ -1,0 +1,32 @@
+meta {
+  name: todos-create
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{BASE_URL}}/d1/todos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Test Todo",
+    "description": "This is a test todo item",
+    "completed": false
+  }
+}
+
+tests {
+  test("Response status is 201", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+  
+  test("Response contains created todo", function() {
+    expect(res.getBody()).to.have.property('todo');
+    expect(res.getBody().todo).to.have.property('title', 'Test Todo');
+    expect(res.getBody().todo).to.have.property('description', 'This is a test todo item');
+    expect(res.getBody().todo).to.have.property('completed', 0);
+  });
+}

@@ -1,0 +1,22 @@
+meta {
+  name: todos-list
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{BASE_URL}}/d1/todos
+  body: none
+  auth: none
+}
+
+tests {
+  test("Response status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Response contains todos array", function() {
+    expect(res.getBody()).to.have.property('todos');
+    expect(res.getBody().todos).to.be.an('array');
+  });
+}

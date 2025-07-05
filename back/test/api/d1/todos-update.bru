@@ -1,0 +1,39 @@
+meta {
+  name: todos-update
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{BASE_URL}}/d1/todos/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Updated Test Todo",
+    "description": "This todo has been updated",
+    "completed": true
+  }
+}
+
+tests {
+  test("Response status is 200 or 404", function() {
+    expect([200, 404]).to.include(res.getStatus());
+  });
+  
+  test("If found, response contains updated todo", function() {
+    if (res.getStatus() === 200) {
+      expect(res.getBody()).to.have.property('todo');
+      expect(res.getBody().todo).to.have.property('title', 'Updated Test Todo');
+      expect(res.getBody().todo).to.have.property('completed', 1);
+    }
+  });
+  
+  test("If not found, response contains error", function() {
+    if (res.getStatus() === 404) {
+      expect(res.getBody()).to.have.property('error', 'Todo not found');
+    }
+  });
+}
