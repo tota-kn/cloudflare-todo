@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { Route } from "./+types/backend-test";
 import { createClientFetcher } from "~/client";
+import type { Route } from "./+types/test";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -31,7 +31,9 @@ export default function BackendTest({ loaderData }: Route.ComponentProps) {
       const res = await req.json();
       setResult(res.message);
     } catch (error) {
-      setResult("Error: " + (error instanceof Error ? error.message : "Unknown error"));
+      setResult(
+        "Error: " + (error instanceof Error ? error.message : "Unknown error")
+      );
     } finally {
       setLoading(false);
     }
