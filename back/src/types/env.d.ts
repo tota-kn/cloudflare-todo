@@ -5,6 +5,7 @@ declare namespace Cloudflare {
 	interface Env {
 		STAGE: "local" | "dev" | "prd";
 		CORS_ORIGIN: "http://localhost:5173" | "https://todo-front-dev.omen-bt.workers.dev" | "https://todo-front-prd.omen-bt.workers.dev";
+		STORAGE: R2Bucket;
 	}
 }
 interface CloudflareEnv extends Cloudflare.Env {}

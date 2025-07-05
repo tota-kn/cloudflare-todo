@@ -9,21 +9,39 @@
       "vars": {
         "STAGE": "local",
         "CORS_ORIGIN": "http://localhost:5173"
-      }
+      },
+      "r2_buckets": [
+        {
+          "binding": "STORAGE",
+          "bucket_name": "todo-app-storage-local"
+        }
+      ]
     },
     "dev": {
       "name": "todo-back-dev",
       "vars": {
         "STAGE": "dev",
         "CORS_ORIGIN": "https://todo-front-dev.omen-bt.workers.dev"
-      }
+      },
+      "r2_buckets": [
+        {
+          "binding": "STORAGE",
+          "bucket_name": "todo-app-storage-dev"
+        }
+      ]
     },
     "prd": {
       "name": "todo-back-prd",
       "vars": {
         "STAGE": "prd",
         "CORS_ORIGIN": "https://todo-front-prd.omen-bt.workers.dev"
-      }
+      },
+      "r2_buckets": [
+        {
+          "binding": "STORAGE",
+          "bucket_name": "todo-app-storage-prd"
+        }
+      ]
     }
   }
 }

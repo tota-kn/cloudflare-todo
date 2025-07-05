@@ -1,0 +1,13 @@
+import { Hono } from 'hono'
+
+export const r2Delete = new Hono<{ Bindings: CloudflareEnv }>()
+  .delete('/:key', async (c) => {
+    const key = c.req.param('key')
+    
+    try {
+      await c.env.STORAGE.delete(key)
+      return c.json({ message: `File ${key} deleted successfully` })
+    } catch (error) {
+      return c.json({ error: 'Failed to delete file' }, 500)
+    }
+  })
