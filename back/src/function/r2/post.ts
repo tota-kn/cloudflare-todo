@@ -1,6 +1,6 @@
-import { Hono } from 'hono'
+import { createHonoApp } from '../../utils/hono'
 
-export const r2Post = new Hono<{ Bindings: CloudflareEnv }>()
+export const r2Post = createHonoApp()
   .post('', async (c) => {
     const key = c.req.param('key')
     const body = await c.req.raw.arrayBuffer()

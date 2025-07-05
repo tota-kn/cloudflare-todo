@@ -1,6 +1,6 @@
-import { Hono } from 'hono'
+import { createHonoApp } from '../../utils/hono'
 
-export const r2List = new Hono<{ Bindings: CloudflareEnv }>()
+export const r2List = createHonoApp()
   .get('', async (c) => {
     try {
       const list = await c.env.STORAGE.list()

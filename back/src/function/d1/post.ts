@@ -1,6 +1,6 @@
 import { zValidator } from '@hono/zod-validator'
-import { Hono } from 'hono'
 import { z } from 'zod'
+import { createHonoApp } from '../../utils/hono'
 
 const todoSchema = z.object({
   title: z.string().min(1),
@@ -8,7 +8,7 @@ const todoSchema = z.object({
   completed: z.boolean().optional().default(false),
 })
 
-export const d1Post = new Hono<{ Bindings: CloudflareEnv }>()
+export const d1Post = createHonoApp()
   .post('', zValidator('json', todoSchema), async (c) => {
     const todo = c.req.valid('json')
 

@@ -21,17 +21,17 @@ const app = new Hono<{ Bindings: CloudflareEnv }>()
       allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     }),
   )
-  .route('', indexGet)
+  .route('/', indexGet)
   .route('/v1', v1Get)
   .route('/r2/files', r2List)
-  .route('/r2/files', r2Get)
+  .route('/r2/files/:key', r2Get)
   .route('/r2/files', r2Post)
-  .route('/r2/files', r2Delete)
+  .route('/r2/files/:key', r2Delete)
   .route('/d1/todos', d1List)
-  .route('/d1/todos', d1Get)
+  .route('/d1/todos/:id', d1Get)
   .route('/d1/todos', d1Post)
-  .route('/d1/todos', d1Put)
-  .route('/d1/todos', d1Delete)
+  .route('/d1/todos/:id', d1Put)
+  .route('/d1/todos/:id', d1Delete)
 
 export type RouteType = typeof app
 export default app

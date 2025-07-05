@@ -1,7 +1,7 @@
-import { Hono } from 'hono'
+import { createHonoApp } from '../../utils/hono'
 
-export const r2Get = new Hono<{ Bindings: CloudflareEnv }>()
-  .get('/:key', async (c) => {
+export const r2Get = createHonoApp()
+  .get('', async (c) => {
     const key = c.req.param('key')
 
     try {

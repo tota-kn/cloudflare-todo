@@ -1,8 +1,8 @@
-import { Hono } from 'hono'
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
+import { createHonoApp } from '../../utils/hono'
 
-export const v1Get = new Hono().get(
+export const v1Get = createHonoApp().get(
   '',
   zValidator(
     'query',

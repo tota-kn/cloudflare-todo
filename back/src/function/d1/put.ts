@@ -1,6 +1,6 @@
 import { zValidator } from '@hono/zod-validator'
-import { Hono } from 'hono'
 import { z } from 'zod'
+import { createHonoApp } from '../../utils/hono'
 
 const todoUpdateSchema = z.object({
   title: z.string().min(1).optional(),
@@ -8,8 +8,8 @@ const todoUpdateSchema = z.object({
   completed: z.boolean().optional(),
 })
 
-export const d1Put = new Hono<{ Bindings: CloudflareEnv }>()
-  .put('/:id', zValidator('json', todoUpdateSchema), async (c) => {
+export const d1Put = createHonoApp()
+  .put('', zValidator('json', todoUpdateSchema), async (c) => {
     const id = c.req.param('id')
     const updates = c.req.valid('json')
 

@@ -1,8 +1,8 @@
 import { zValidator } from '@hono/zod-validator'
-import { Hono } from 'hono'
 import { z } from 'zod'
+import { createHonoApp } from '../utils/hono'
 
-export const indexGet = new Hono<{ Bindings: CloudflareEnv }>().get(
+export const indexGet = createHonoApp().get(
   '',
   zValidator(
     'query',

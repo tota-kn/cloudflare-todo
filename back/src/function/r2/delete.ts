@@ -1,7 +1,7 @@
-import { Hono } from 'hono'
+import { createHonoApp } from '../../utils/hono'
 
-export const r2Delete = new Hono<{ Bindings: CloudflareEnv }>()
-  .delete('/:key', async (c) => {
+export const r2Delete = createHonoApp()
+  .delete('', async (c) => {
     const key = c.req.param('key')
 
     try {
