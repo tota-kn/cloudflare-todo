@@ -21,6 +21,17 @@ export async function loader({ context }: Route.LoaderArgs) {
       text: context.cloudflare.env.VALUE_FROM_CLOUDFLARE,
     },
   });
+
+  if (!req.ok) {
+    console.error("API request failed:", req.status, req.statusText);
+    const errorText = await req.text();
+    console.error("Error response:", errorText);
+    return {
+      message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE,
+      res: { message: "API request failed", error: errorText },
+    };
+  }
+
   const res = await req.json();
   return {
     message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE,
