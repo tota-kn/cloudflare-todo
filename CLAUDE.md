@@ -83,9 +83,9 @@ pnpm preview
 
 ### Environment Configuration
 Both apps use Wrangler with environment-specific configs:
-- **local**: `http://localhost:3000` CORS origin
-- **dev**: `https://develop.front-ybj.pages.dev` CORS origin  
-- **prd**: `https://front-ybj.pages.dev/` CORS origin
+- **local**: `http://localhost:5173` CORS origin
+- **dev**: `https://todo-front-dev.omen-bt.workers.dev` CORS origin  
+- **prd**: `https://todo-front-prd.omen-bt.workers.dev` CORS origin
 
 ## Key Files
 
