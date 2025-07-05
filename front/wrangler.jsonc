@@ -12,7 +12,7 @@
 			"vars": {
 				"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare Local",
 				"API_BASE_URL": "http://localhost:8787",
-				"IS_LOCAL": "true"
+				"IS_LOCAL": true
 			},
 			"services": [
 				{
@@ -26,7 +26,7 @@
 			"vars": {
 				"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare Dev",
 				"API_BASE_URL": "https://todo-back-dev.omen-bt.workers.dev",
-				"IS_LOCAL": "true"
+				"IS_LOCAL": false
 			},
 			"services": [
 				{
@@ -40,7 +40,7 @@
 			"vars": {
 				"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare Production",
 				"API_BASE_URL": "https://todo-back-prd.omen-bt.workers.dev",
-				"IS_LOCAL": "false"
+				"IS_LOCAL": false
 			},
 			"services": [
 				{
