@@ -10,22 +10,21 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const baseUrl = context.cloudflare.env.API_BASE_URL;
-  console.log("baseUrl:", baseUrl);
-  const client = createClient(baseUrl);
+  const backendService = context.cloudflare.env.BACKEND_API;
+  console.log(
+    "backendService:",
+    backendService ? "available" : "not available"
+  );
+  const client = createClient(context.cloudflare.env);
   const req = await client.index.$get({
     query: {
-      text: baseUrl,
+      text: context.cloudflare.env.VALUE_FROM_CLOUDFLARE,
     },
   });
-  if (!req.ok) {
-    console.error(req.statusText);
-  }
   const res = await req.json();
   return {
     message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE,
     res,
-    baseUrl,
   };
 }
 
@@ -33,8 +32,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <div>
       <Welcome message={loaderData.message} />
-      test1
-      <p>{loaderData.baseUrl}</p>
       <p>{loaderData.res.message || "failed"}</p>
     </div>
   );

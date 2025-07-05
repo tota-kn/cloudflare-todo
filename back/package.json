@@ -4,7 +4,8 @@
     "dev": "wrangler dev -e local",
     "lint": "eslint . --fix",
     "deploy:dev": "wrangler deploy --minify -e dev",
-    "deploy:prd": "wrangler deploy --minify -e prd"
+    "deploy:prd": "wrangler deploy --minify -e prd",
+    "cf-typegen": "wrangler types -e local --env-interface CloudflareEnv ./src/types/env.d.ts"
   },
   "dependencies": {
     "@hono/swagger-ui": "^0.5.0",
