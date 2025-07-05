@@ -13,6 +13,7 @@ export const r2List = new Hono<{ Bindings: CloudflareEnv }>()
       return c.json({ files })
     }
     catch (error) {
+      console.error('Failed to list files:', error)
       return c.json({ error: 'Failed to list files' }, 500)
     }
   })

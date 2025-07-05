@@ -17,6 +17,7 @@ export const d1Delete = new Hono<{ Bindings: CloudflareEnv }>()
       return c.json({ message: `Todo ${id} deleted successfully` })
     }
     catch (error) {
+      console.error('Failed to delete todo:', error)
       return c.json({ error: 'Failed to delete todo' }, 500)
     }
   })

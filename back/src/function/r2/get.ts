@@ -17,6 +17,7 @@ export const r2Get = new Hono<{ Bindings: CloudflareEnv }>()
       return new Response(object.body, { headers })
     }
     catch (error) {
+      console.error('Failed to get file:', error)
       return c.json({ error: 'Failed to get file' }, 500)
     }
   })

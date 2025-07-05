@@ -14,6 +14,7 @@ export const d1Get = new Hono<{ Bindings: CloudflareEnv }>()
       return c.json({ todo: results[0] })
     }
     catch (error) {
+      console.error('Failed to get todo:', error)
       return c.json({ error: 'Failed to get todo' }, 500)
     }
   })

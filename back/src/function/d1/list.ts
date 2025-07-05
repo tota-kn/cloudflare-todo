@@ -7,6 +7,7 @@ export const d1List = new Hono<{ Bindings: CloudflareEnv }>()
       return c.json({ todos: results })
     }
     catch (error) {
+      console.error('Failed to list todos:', error)
       return c.json({ error: 'Failed to list todos' }, 500)
     }
   })

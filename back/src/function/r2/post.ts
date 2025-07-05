@@ -10,6 +10,7 @@ export const r2Post = new Hono<{ Bindings: CloudflareEnv }>()
       return c.json({ message: `File ${key} uploaded successfully` })
     }
     catch (error) {
+      console.error('Failed to upload file:', error)
       return c.json({ error: 'Failed to upload file' }, 500)
     }
   })

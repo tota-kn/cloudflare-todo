@@ -9,6 +9,7 @@ export const r2Delete = new Hono<{ Bindings: CloudflareEnv }>()
       return c.json({ message: `File ${key} deleted successfully` })
     }
     catch (error) {
+      console.error('Failed to delete file:', error)
       return c.json({ error: 'Failed to delete file' }, 500)
     }
   })

@@ -51,6 +51,7 @@ export const d1Put = new Hono<{ Bindings: CloudflareEnv }>()
       return c.json({ todo: results[0] })
     }
     catch (error) {
+      console.error('Failed to update todo:', error)
       return c.json({ error: 'Failed to update todo' }, 500)
     }
   })
