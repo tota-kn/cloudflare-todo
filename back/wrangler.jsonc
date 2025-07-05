@@ -23,7 +23,7 @@
         {
           "binding": "DB",
           "database_name": "todo-app-db-local",
-          "database_id": "aa062ca7-72e6-47c1-8df6-bac22d30ec67"
+          "database_id": "aa062ca7-72e6-47c1-8df6-bac22d30ec67",
         }
       ]
     },

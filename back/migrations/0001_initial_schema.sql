@@ -1,3 +1,4 @@
+-- Migration number: 0001 	 2025-07-05T14:05:58.946Z
 -- Todoテーブルの作成
 CREATE TABLE IF NOT EXISTS todos (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
