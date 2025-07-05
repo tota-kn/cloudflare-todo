@@ -8,6 +8,7 @@
     "workers/**/*",
     "worker-configuration.d.ts",
     "../shared/**/*",
+    "../back/src/index.ts"
   ],
   "compilerOptions": {
     "composite": true,
