@@ -1,10 +1,10 @@
 meta {
-  name: todos-delete
+  name: todos-get
   type: http
-  seq: 5
+  seq: 1
 }
 
-delete {
+get {
   url: {{BASE_URL}}/v1/todos/1
   body: none
   auth: none
@@ -15,10 +15,10 @@ tests {
     expect([200, 404]).to.include(res.getStatus());
   });
   
-  test("If found, response contains success message", function() {
+  test("If found, response contains todo", function() {
     if (res.getStatus() === 200) {
-      expect(res.getBody()).to.have.property('message');
-      expect(res.getBody().message).to.include('deleted successfully');
+      expect(res.getBody()).to.have.property('todo');
+      expect(res.getBody().todo).to.have.property('id');
     }
   });
   
