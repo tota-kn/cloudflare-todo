@@ -11,6 +11,6 @@ export const createServerFetcher = (env: Env) => {
   }
 };
 
-export const createClientFetcher = (env: Env) => {
-  return hc<ClientType>(env.API_BASE_URL);
+export const createClientFetcher = (baseUrl: string) => {
+  return hc<ClientType>(baseUrl);
 };
