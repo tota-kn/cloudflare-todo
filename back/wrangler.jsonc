@@ -6,17 +6,17 @@
   "env": {
     "local": {
       "vars": {
-        "CORS_ORIGIN": "http://localhost:3000"
+        "CORS_ORIGIN": "http://localhost:5173/"
       }
     },
     "dev": {
       "vars": {
-        "CORS_ORIGIN": "https://develop.front-ybj.pages.dev"
+        "CORS_ORIGIN": "https://todo-front-dev.omen-bt.workers.dev"
       }
     },
     "prd": {
       "vars": {
-        "CORS_ORIGIN": "https://front-ybj.pages.dev/"
+        "CORS_ORIGIN": "https://todo-front-prd.omen-bt.workers.dev"
       }
     }
   }

@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
 
-export const test1Route = new Hono().get(
+export const v1Get = new Hono().get(
   '',
   zValidator(
     'query',
