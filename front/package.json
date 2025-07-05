@@ -4,7 +4,7 @@
 	"type": "module",
 	"scripts": {
 		"build": "react-router build",
-		"cf-typegen": "wrangler types",
+		"cf-typegen": "wrangler types -e local",
 		"deploy:dev": "CLOUDFLARE_ENV=dev pnpm run build && wrangler deploy",
 		"deploy:prd": "CLOUDFLARE_ENV=prd pnpm run build && wrangler deploy",
 		"dev": "CLOUDFLARE_ENV=local react-router dev",

@@ -1,6 +1,6 @@
 import type { Route } from "./+types/home";
 import { Welcome } from "../welcome/welcome";
-import { createClient } from "~/client";
+import { createServerFetcher } from "~/client";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -10,7 +10,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const client = createClient(context.cloudflare.env);
+  const client = createServerFetcher(context.cloudflare.env);
   const req = await client.index.$get({
     query: {
       text: context.cloudflare.env.VALUE_FROM_CLOUDFLARE,
