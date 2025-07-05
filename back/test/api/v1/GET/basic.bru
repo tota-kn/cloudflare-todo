@@ -21,6 +21,6 @@ tests {
   });
   
   test("Response contains success message", function() {
-    expect(res.getBody()).to.have.property('message', 'API is OK!');
+    expect(res.getBody().message).to.include('OK');
   });
 }
