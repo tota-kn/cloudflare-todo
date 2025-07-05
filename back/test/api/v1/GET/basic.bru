@@ -5,9 +5,14 @@ meta {
 }
 
 get {
-  url: {{BASE_URL}}/v1/?title=Test&body=Body
+  url: {{BASE_URL}}/v1?title=Test&body=Body
   body: none
   auth: none
+}
+
+params:query {
+  title: Test
+  body: Body
 }
 
 tests {
