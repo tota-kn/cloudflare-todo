@@ -1,6 +1,6 @@
 import { createHonoApp } from '../../../../utils/hono'
 
-export const r2Get = createHonoApp()
+export const v1FilesKeyGet = createHonoApp()
   .get('', async (c) => {
     const key = c.req.param('key')
 

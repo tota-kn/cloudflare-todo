@@ -23,7 +23,7 @@ export default function BackendTest({ loaderData }: Route.ComponentProps) {
     setLoading(true);
     try {
       const client = createClientFetcher(loaderData.apiBaseUrl);
-      const req = await client.index.$get({
+      const req = await client.v1.$get({
         query: {
           text: "test from browser",
         },

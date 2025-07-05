@@ -1,6 +1,6 @@
 import { createHonoApp } from '../../../../utils/hono'
 
-export const r2Delete = createHonoApp()
+export const v1FilesKeyDelete = createHonoApp()
   .delete('', async (c) => {
     const key = c.req.param('key')
 

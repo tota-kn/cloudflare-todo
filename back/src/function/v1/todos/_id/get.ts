@@ -1,6 +1,6 @@
 import { createHonoApp } from '../../../../utils/hono'
 
-export const d1Get = createHonoApp()
+export const v1TodosIdGet = createHonoApp()
   .get('', async (c) => {
     const id = c.req.param('id')
 

@@ -1,5 +1,5 @@
-import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
+import { z } from 'zod'
 import { createHonoApp } from '../../utils/hono'
 
 export const v1Get = createHonoApp().get(
@@ -7,13 +7,14 @@ export const v1Get = createHonoApp().get(
   zValidator(
     'query',
     z.object({
-      title: z.string(),
-      body: z.string(),
+      text: z.string().optional(),
     }),
   ),
   (c) => {
+    const query = c.req.valid('query')
+    const stage = c.env.STAGE
     return c.json({
-      message: 'API is OK!',
+      message: `${stage} is OK; text=${query.text}`,
     })
   },
 )

@@ -1,6 +1,6 @@
 import { createHonoApp } from '../../../utils/hono'
 
-export const r2List = createHonoApp()
+export const v1FilesGet = createHonoApp()
   .get('', async (c) => {
     try {
       const list = await c.env.STORAGE.list()

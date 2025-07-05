@@ -8,7 +8,7 @@ const todoUpdateSchema = z.object({
   completed: z.boolean().optional(),
 })
 
-export const d1Put = createHonoApp()
+export const v1TodosIdPut = createHonoApp()
   .put('', zValidator('json', todoUpdateSchema), async (c) => {
     const id = c.req.param('id')
     const updates = c.req.valid('json')
