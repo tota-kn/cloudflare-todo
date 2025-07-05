@@ -1,0 +1,21 @@
+meta {
+  name: v1-get
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{BASE_URL}}/v1?title=Test&body=Body
+  body: none
+  auth: none
+}
+
+tests {
+  test("Response status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Response contains success message", function() {
+    expect(res.getBody()).to.have.property('message', 'API is OK!');
+  });
+}
