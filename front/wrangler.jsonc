@@ -6,18 +6,20 @@
 	"observability": {
 		"enabled": true
 	},
+	"services": [
+		{
+			"binding": "BACKEND_API",
+			"service": ""
+		}
+	],
 	"env": {
 		"local": {
 			"name": "todo-front-local",
 			"vars": {
 				"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare Local",
+				"IS_LOCAL": "true"
 			},
-			"services": [
-				{
-					"binding": "BACKEND_API",
-					"service": "todo-back-local"
-				}
-			]
+			"services": []
 		},
 		"dev": {
 			"name": "todo-front-dev",
