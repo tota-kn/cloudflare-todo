@@ -6,6 +6,11 @@ import { r2List } from './function/r2/list'
 import { r2Get } from './function/r2/get'
 import { r2Post } from './function/r2/post'
 import { r2Delete } from './function/r2/delete'
+import { d1List } from './function/d1/list'
+import { d1Get } from './function/d1/get'
+import { d1Post } from './function/d1/post'
+import { d1Put } from './function/d1/put'
+import { d1Delete } from './function/d1/delete'
 
 const app = new Hono<{ Bindings: CloudflareEnv }>()
   .use(
@@ -22,6 +27,11 @@ const app = new Hono<{ Bindings: CloudflareEnv }>()
   .route('/r2/files', r2Get)
   .route('/r2/files', r2Post)
   .route('/r2/files', r2Delete)
+  .route('/d1/todos', d1List)
+  .route('/d1/todos', d1Get)
+  .route('/d1/todos', d1Post)
+  .route('/d1/todos', d1Put)
+  .route('/d1/todos', d1Delete)
 
 export type RouteType = typeof app
 export default app

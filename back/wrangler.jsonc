@@ -18,6 +18,13 @@
           "binding": "STORAGE",
           "bucket_name": "todo-app-storage-local"
         }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "todo-app-db-local",
+          "database_id": "aa062ca7-72e6-47c1-8df6-bac22d30ec67"
+        }
       ]
     },
     "dev": {
@@ -31,6 +38,13 @@
           "binding": "STORAGE",
           "bucket_name": "todo-app-storage-dev"
         }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "todo-app-db-dev",
+          "database_id": "cc062ca7-72e6-47c1-8df6-bac22d30ec67"
+        }
       ]
     },
     "prd": {
@@ -43,6 +57,13 @@
         {
           "binding": "STORAGE",
           "bucket_name": "todo-app-storage-prd"
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "todo-app-db-prd",
+          "database_id": "9aad595b-0429-4b5d-8051-7f28a31b17ca"
         }
       ]
     }

@@ -11,7 +11,8 @@ export const r2List = new Hono<{ Bindings: CloudflareEnv }>()
         etag: obj.etag,
       }))
       return c.json({ files })
-    } catch (error) {
+    }
+    catch (error) {
       return c.json({ error: 'Failed to list files' }, 500)
     }
   })
