@@ -101,3 +101,7 @@ Both apps use Wrangler with environment-specific configs:
 2. Frontend changes: Use typed client in loaders/actions, full IntelliSense available
 3. Both apps can be developed simultaneously with hot reload
 4. Deploy separately to Cloudflare Workers (backend) and Pages (frontend)
+
+## Memories
+
+- Claude will respond in Japanese (日本語で応答する) when prompted with "日本語で応答して"
