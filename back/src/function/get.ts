@@ -7,13 +7,13 @@ export const indexGet = new Hono().get(
   zValidator(
     'query',
     z.object({
-      title: z.string().optional(),
+      text: z.string().optional(),
     }),
   ),
   (c) => {
     const query = c.req.valid('query')
     return c.json({
-      message: query.title || 'API is OK!',
+      message: `${query.text}: API is OK!`,
     })
   },
 )

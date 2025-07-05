@@ -40,7 +40,7 @@ pnpm deploy:prd       # Deploy to production
 ### Frontend (front/)
 ```bash
 # Start development server
-pnpm dev              # Runs on localhost:5173
+pnpm dev              # Runs on localhost:5173 with local env
 
 # Build application
 pnpm build

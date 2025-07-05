@@ -11,12 +11,16 @@ export function meta({}: Route.MetaArgs) {
 
 export async function loader({ context }: Route.LoaderArgs) {
   const baseUrl = context.cloudflare.env.API_BASE_URL;
+  console.log("baseUrl:", baseUrl);
   const client = createClient(baseUrl);
   const req = await client.index.$get({
     query: {
-      title: "Local API",
+      text: baseUrl,
     },
   });
+  if (!req.ok) {
+    console.error(req.statusText);
+  }
   const res = await req.json();
   return {
     message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE,
@@ -29,6 +33,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <div>
       <Welcome message={loaderData.message} />
+      test1
       <p>{loaderData.baseUrl}</p>
       <p>{loaderData.res.message || "failed"}</p>
     </div>
