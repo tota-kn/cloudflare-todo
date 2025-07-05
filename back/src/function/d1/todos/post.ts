@@ -1,6 +1,6 @@
 import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
-import { createHonoApp } from '../../utils/hono'
+import { createHonoApp } from '../../../utils/hono'
 
 const todoSchema = z.object({
   title: z.string().min(1),

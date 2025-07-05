@@ -1,4 +1,4 @@
-import { createHonoApp } from '../../utils/hono'
+import { createHonoApp } from '../../../../utils/hono'
 
 export const d1Delete = createHonoApp()
   .delete('', async (c) => {

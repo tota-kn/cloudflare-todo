@@ -1,4 +1,4 @@
-import { createHonoApp } from '../../utils/hono'
+import { createHonoApp } from '../../../../utils/hono'
 
 export const d1Get = createHonoApp()
   .get('', async (c) => {
