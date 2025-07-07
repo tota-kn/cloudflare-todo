@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Form, useSubmit } from "react-router";
+import { Form } from "react-router";
 import { createServerFetcher } from "~/client";
+import { useTodos, useCreateTodo, useUpdateTodo, useDeleteTodo, useToggleTodo } from "~/hooks/useTodos";
 import type { Route } from "./+types/todos";
 
 interface TodoItem {
@@ -105,22 +106,22 @@ export async function action({ request, context }: Route.ActionArgs) {
 export default function Todos({ loaderData }: Route.ComponentProps) {
   const [showForm, setShowForm] = useState(false);
   const [editingTodo, setEditingTodo] = useState<TodoItem | null>(null);
-  const submit = useSubmit();
+  
+  const { data: todos, isLoading, error } = useTodos();
+  const createTodo = useCreateTodo();
+  const updateTodo = useUpdateTodo();
+  const deleteTodo = useDeleteTodo();
+  const toggleTodo = useToggleTodo();
+  
+  const currentTodos = todos || loaderData.todos;
 
   const handleToggleComplete = (todo: TodoItem) => {
-    const formData = new FormData();
-    formData.append("action", "toggle");
-    formData.append("id", todo.id);
-    formData.append("completed", todo.completed.toString());
-    submit(formData, { method: "post" });
+    toggleTodo.mutate({ id: todo.id, completed: todo.completed });
   };
 
   const handleDelete = (todo: TodoItem) => {
     if (confirm("Are you sure you want to delete this todo?")) {
-      const formData = new FormData();
-      formData.append("action", "delete");
-      formData.append("id", todo.id);
-      submit(formData, { method: "post" });
+      deleteTodo.mutate(todo.id);
     }
   };
 
@@ -151,7 +152,25 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
           <h2 className="text-xl font-semibold mb-4 text-black">
             {editingTodo ? 'Edit Todo' : 'Create New Todo'}
           </h2>
-          <Form method="post" onSubmit={handleCancelEdit}>
+          <Form method="post" onSubmit={(e) => {
+            e.preventDefault();
+            const formData = new FormData(e.currentTarget);
+            const title = formData.get("title") as string;
+            const description = formData.get("description") as string;
+            
+            if (editingTodo) {
+              const completed = formData.get("completed") === "true";
+              updateTodo.mutate(
+                { id: editingTodo.id, title, description, completed },
+                { onSuccess: () => handleCancelEdit() }
+              );
+            } else {
+              createTodo.mutate(
+                { title, description },
+                { onSuccess: () => handleCancelEdit() }
+              );
+            }
+          }}>
             <input type="hidden" name="action" value={editingTodo ? "update" : "create"} />
             {editingTodo && <input type="hidden" name="id" value={editingTodo.id} />}
             
@@ -200,9 +219,12 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
             <div className="flex space-x-2">
               <button
                 type="submit"
-                className="bg-green-200 text-black px-4 py-2 rounded hover:bg-green-300"
+                disabled={createTodo.isPending || updateTodo.isPending}
+                className="bg-green-200 text-black px-4 py-2 rounded hover:bg-green-300 disabled:opacity-50"
               >
-                {editingTodo ? 'Update' : 'Create'}
+                {createTodo.isPending || updateTodo.isPending 
+                  ? 'Saving...' 
+                  : (editingTodo ? 'Update' : 'Create')}
               </button>
               <button
                 type="button"
@@ -216,11 +238,23 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
         </div>
       )}
       
-      {loaderData.todos.length === 0 ? (
+      {isLoading && (
+        <div className="flex justify-center items-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        </div>
+      )}
+      
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          Error: {error.message}
+        </div>
+      )}
+      
+      {!isLoading && currentTodos.length === 0 ? (
         <p className="text-black text-center py-8">No todos found. Create your first todo!</p>
       ) : (
         <div className="space-y-4">
-          {loaderData.todos.map((todo: TodoItem) => (
+          {currentTodos.map((todo: TodoItem) => (
             <div 
               key={todo.id} 
               className={`border rounded-lg p-4 ${
@@ -260,13 +294,14 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
                   </span>
                   <button
                     onClick={() => handleToggleComplete(todo)}
-                    className={`px-3 py-1 text-xs rounded font-medium ${
+                    disabled={toggleTodo.isPending}
+                    className={`px-3 py-1 text-xs rounded font-medium disabled:opacity-50 ${
                       todo.completed
                         ? 'bg-orange-200 text-black hover:bg-orange-300'
                         : 'bg-green-200 text-black hover:bg-green-300'
                     }`}
                   >
-                    {todo.completed ? 'Mark Pending' : 'Mark Complete'}
+                    {toggleTodo.isPending ? 'Updating...' : (todo.completed ? 'Mark Pending' : 'Mark Complete')}
                   </button>
                   <button
                     onClick={() => handleEdit(todo)}
@@ -276,9 +311,10 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
                   </button>
                   <button
                     onClick={() => handleDelete(todo)}
-                    className="px-3 py-1 text-xs rounded font-medium bg-red-200 text-black hover:bg-red-300"
+                    disabled={deleteTodo.isPending}
+                    className="px-3 py-1 text-xs rounded font-medium bg-red-200 text-black hover:bg-red-300 disabled:opacity-50"
                   >
-                    Delete
+                    {deleteTodo.isPending ? 'Deleting...' : 'Delete'}
                   </button>
                 </div>
               </div>
