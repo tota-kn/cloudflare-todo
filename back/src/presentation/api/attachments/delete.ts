@@ -4,12 +4,10 @@ import { z } from 'zod'
 import { Dependencies } from '../../../infrastructure/config/Dependencies'
 
 export function createDetachFileFromTodoApi(dependencies: Dependencies) {
-  const app = new Hono<{ Bindings: CloudflareEnv }>()
-
-  app.delete(
-    '/v1/todos/:id/attachments/:attachmentId',
+  return new Hono<{ Bindings: CloudflareEnv }>().delete(
+    '/v1/todos/:todoId/attachments/:attachmentId',
     zValidator('param', z.object({
-      id: z.string(),
+      todoId: z.string(),
       attachmentId: z.string(),
     })),
     async (c) => {
@@ -32,6 +30,4 @@ export function createDetachFileFromTodoApi(dependencies: Dependencies) {
       }
     },
   )
-
-  return app
 }

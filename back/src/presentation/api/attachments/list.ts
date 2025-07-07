@@ -5,18 +5,16 @@ import { Dependencies } from '../../../infrastructure/config/Dependencies'
 import { AttachmentDtoMapper } from '../../dto/AttachmentDto'
 
 export function createListAttachmentsApi(dependencies: Dependencies) {
-  const app = new Hono<{ Bindings: CloudflareEnv }>()
-
-  app.get(
-    '/v1/todos/:id/attachments',
-    zValidator('param', z.object({ id: z.string() })),
+  return new Hono<{ Bindings: CloudflareEnv }>().get(
+    '/v1/todos/:todoId/attachments',
+    zValidator('param', z.object({ attachmentId: z.string() })),
     async (c) => {
-      const { id } = c.req.valid('param')
+      const { attachmentId } = c.req.valid('param')
 
       const useCase = dependencies.getGetAttachmentsUseCase()
 
       try {
-        const attachments = await useCase.execute(id)
+        const attachments = await useCase.execute(attachmentId)
         return c.json({
           success: true,
           data: attachments.map(AttachmentDtoMapper.toResponseDto),
@@ -30,6 +28,4 @@ export function createListAttachmentsApi(dependencies: Dependencies) {
       }
     },
   )
-
-  return app
 }

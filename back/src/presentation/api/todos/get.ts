@@ -8,7 +8,7 @@ export function createGetTodoApi(dependencies: Dependencies) {
   const getTodoUseCase = dependencies.getGetTodoUseCase()
 
   return new Hono<{ Bindings: CloudflareEnv }>()
-    .get('/v1/todos/:id', zValidator('param', z.object({ id: z.string().min(1) })), async (c) => {
+    .get('/v1/todos/:todoId', zValidator('param', z.object({ id: z.string().min(1) })), async (c) => {
       try {
         const { id } = c.req.valid('param')
         const todo = await getTodoUseCase.execute(id)

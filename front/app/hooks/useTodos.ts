@@ -71,9 +71,9 @@ export const useUpdateTodo = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async ({ id, ...updates }: UpdateTodoRequest & { id: string }) => {
-      const res = await client.v1.todos[":id"].$put({
-        param: { id },
+    mutationFn: async ({ todoId, ...updates }: UpdateTodoRequest & { todoId: string }) => {
+      const res = await client.v1.todos[":todoId"].$put({
+        param: { todoId },
         json: updates,
       });
       
@@ -86,14 +86,14 @@ export const useUpdateTodo = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
-    onMutate: async ({ id, ...updates }) => {
+    onMutate: async ({ todoId, ...updates }) => {
       await queryClient.cancelQueries({ queryKey: ["todos"] });
       
       const previousTodos = queryClient.getQueryData<TodoItem[]>(["todos"]);
       
       queryClient.setQueryData<TodoItem[]>(["todos"], (old) => 
         old?.map((todo) => 
-          todo.id === id 
+          todo.id === todoId 
             ? { ...todo, ...updates, updated_at: new Date().toISOString() }
             : todo
         ) || []
@@ -112,7 +112,7 @@ export const useDeleteTodo = () => {
   
   return useMutation({
     mutationFn: async (id: string) => {
-      const res = await client.v1.todos[":id"].$delete({
+      const res = await client.v1.todos[":todoId"].$delete({
         param: { id },
       });
       
@@ -146,9 +146,9 @@ export const useToggleTodo = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async ({ id, completed }: { id: string; completed: boolean }) => {
-      const res = await client.v1.todos[":id"].$put({
-        param: { id },
+    mutationFn: async ({ todoId, completed }: { todoId: string; completed: boolean }) => {
+      const res = await client.v1.todos[":todoId"].$put({
+        param: { todoId },
         json: { completed: !completed },
       });
       
@@ -161,14 +161,14 @@ export const useToggleTodo = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
-    onMutate: async ({ id, completed }) => {
+    onMutate: async ({ todoId, completed }) => {
       await queryClient.cancelQueries({ queryKey: ["todos"] });
       
       const previousTodos = queryClient.getQueryData<TodoItem[]>(["todos"]);
       
       queryClient.setQueryData<TodoItem[]>(["todos"], (old) => 
         old?.map((todo) => 
-          todo.id === id 
+          todo.id === todoId
             ? { ...todo, completed: !completed, updated_at: new Date().toISOString() }
             : todo
         ) || []
@@ -182,13 +182,13 @@ export const useToggleTodo = () => {
   });
 };
 
-export const useAttachments = (todoId: string) => {
+export const useAttachments = (attachmentId: string) => {
   return useQuery({
-    queryKey: ["attachments", todoId],
+    queryKey: ["attachments", attachmentId],
     queryFn: async () => {
       try {
-        const res = await client.v1.todos[":id"].attachments.$get({
-          param: { todoId },
+        const res = await client.v1.todos[":todoId"].attachments.$get({
+          param: { attachmentId },
         });
         
         if (!res.ok) {
@@ -198,13 +198,7 @@ export const useAttachments = (todoId: string) => {
           throw new Error('Failed to fetch attachments');
         }
         
-        const data = await res.json();
-        
-        if ('error' in data) {
-          throw new Error(data.error);
-        }
-        
-        return data.success ? data.data : [];
+        return await res.json();  
       } catch (error) {
         if (error instanceof Error && error.message.includes('404')) {
           return [];

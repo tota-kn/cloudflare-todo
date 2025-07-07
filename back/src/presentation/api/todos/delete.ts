@@ -7,7 +7,7 @@ export function createDeleteTodoApi(dependencies: Dependencies) {
   const deleteTodoUseCase = dependencies.getDeleteTodoUseCase()
 
   return new Hono<{ Bindings: CloudflareEnv }>()
-    .delete('/v1/todos/:id', zValidator('param', z.object({ id: z.string().min(1) })), async (c) => {
+    .delete('/v1/todos/:todoId', zValidator('param', z.object({ id: z.string().min(1) })), async (c) => {
       try {
         const { id } = c.req.valid('param')
         const deleted = await deleteTodoUseCase.execute(id)

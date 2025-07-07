@@ -14,7 +14,7 @@ export function createUpdateTodoApi(dependencies: Dependencies) {
   const updateTodoUseCase = dependencies.getUpdateTodoUseCase()
 
   return new Hono<{ Bindings: CloudflareEnv }>()
-    .put('/v1/todos/:id', zValidator('json', updateTodoSchema), async (c) => {
+    .put('/v1/todos/:todoId', zValidator('json', updateTodoSchema), async (c) => {
       try {
         const id = c.req.param('id')
         const validatedData = c.req.valid('json')
