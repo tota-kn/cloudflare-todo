@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { createClientFetcher, createServerFetcher } from "~/client";
+import { createServerFetcher } from "~/client";
 import { ResultDisplay } from "~/components/ResultDisplay";
+import { usePingTest } from "~/hooks/usePingTest";
 import type { Route } from "./+types/home";
 
 const title = "Ping Test";
@@ -35,28 +35,11 @@ export async function loader({ context }: Route.LoaderArgs) {
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const [result, setResult] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const { result, loading, error, testClientApi } = usePingTest({
+    apiBaseUrl: loaderData.apiBaseUrl,
+  });
 
-  const handleButtonClick = async () => {
-    setLoading(true);
-    try {
-      const client = createClientFetcher(loaderData.apiBaseUrl);
-      const req = await client.v1.$get({
-        query: {
-          text: "test from browser",
-        },
-      });
-      const res = await req.json();
-      setResult(res.message);
-    } catch (error) {
-      setResult(
-        "Error: " + (error instanceof Error ? error.message : "Unknown error")
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  const displayResult = error ? `Error: ${error}` : result;
 
   return (
     <div className="p-6">
@@ -71,18 +54,18 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       </div>
       
       <button
-        onClick={handleButtonClick}
+        onClick={testClientApi}
         disabled={loading}
         className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white px-4 py-2 rounded"
       >
         {loading ? "Loading..." : "Get Client-side Result"}
       </button>
       
-      {result && (
+      {displayResult && (
         <div className="mt-4">
           <ResultDisplay
             title="Client-side Result:"
-            result={result}
+            result={displayResult}
             type="client"
           />
         </div>
