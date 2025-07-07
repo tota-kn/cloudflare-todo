@@ -1,12 +1,13 @@
 import { Todo } from '../../domain/entities/Todo'
 import { TodoRepository } from '../../domain/repositories/TodoRepository'
 import { TodoId } from '../../domain/value-objects/TodoId'
+import { TodoDtoMapper } from '../../presentation/dto/TodoDto'
 
 export class D1TodoRepository implements TodoRepository {
   constructor(private readonly db: D1Database) {}
 
   async save(todo: Todo): Promise<void> {
-    const data = todo.toData()
+    const data = TodoDtoMapper.toResponseDto(todo)
     await this.db.prepare(
       'INSERT INTO todos (id, title, description, completed, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)',
     ).bind(
@@ -53,7 +54,7 @@ export class D1TodoRepository implements TodoRepository {
   }
 
   async update(todo: Todo): Promise<void> {
-    const data = todo.toData()
+    const data = TodoDtoMapper.toResponseDto(todo)
     await this.db.prepare(
       'UPDATE todos SET title = ?, description = ?, completed = ?, updated_at = ? WHERE id = ?',
     ).bind(

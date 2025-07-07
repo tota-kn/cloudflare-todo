@@ -44,20 +44,4 @@ export class File {
   getContentType(): string | undefined {
     return this.contentType
   }
-
-  toDto(): {
-    key: string
-    size: number
-    uploaded: Date
-    etag: string
-    contentType?: string
-  } {
-    return {
-      key: this.key.toString(),
-      size: this.size,
-      uploaded: this.uploadedAt,
-      etag: this.etag,
-      contentType: this.contentType,
-    }
-  }
 }

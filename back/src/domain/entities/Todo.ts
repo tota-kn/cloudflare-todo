@@ -102,22 +102,4 @@ export class Todo {
     this.status = this.status.toggle()
     this.updatedAt = new Date()
   }
-
-  toData(): {
-    id: string
-    title: string
-    description: string | null
-    completed: number
-    created_at: string
-    updated_at: string
-  } {
-    return {
-      id: this.id.toString(),
-      title: this.title,
-      description: this.description,
-      completed: this.status.isCompleted() ? 1 : 0,
-      created_at: this.createdAt.toISOString(),
-      updated_at: this.updatedAt.toISOString(),
-    }
-  }
 }
