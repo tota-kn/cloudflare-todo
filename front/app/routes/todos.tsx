@@ -4,6 +4,7 @@ import { ErrorMessage } from "~/components/ErrorMessage";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { TodoForm } from "~/components/TodoForm";
 import { TodoList } from "~/components/TodoList";
+import { ThemeToggle } from "~/components/ThemeToggle";
 import { useTodos } from "~/hooks/useTodos";
 import type { TodoItem } from "../../../shared/client";
 import type { Route } from "./+types/todos";
@@ -50,22 +51,25 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-black">Todo List</h1>
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="bg-blue-200 text-black p-3 rounded-full hover:bg-blue-300 transition-colors"
-          title={showForm ? 'Cancel' : 'Add Todo'}
-        >
-          {showForm ? (
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-          )}
-        </button>
+        <h1 className="text-3xl font-bold text-foreground">Todo List</h1>
+        <div className="flex items-center space-x-2">
+          <ThemeToggle />
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="bg-primary text-primary-foreground p-3 rounded-full hover:bg-primary/90 transition-colors"
+            title={showForm ? 'Cancel' : 'Add Todo'}
+          >
+            {showForm ? (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+            )}
+          </button>
+        </div>
       </div>
 
       {showForm && (

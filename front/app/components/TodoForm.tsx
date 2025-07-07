@@ -12,8 +12,8 @@ export function TodoForm({ editingTodo, onCancel }: TodoFormProps) {
   const updateTodo = useUpdateTodo();
 
   return (
-    <div className="bg-white border-2 border-blue-200 rounded-lg p-6 mb-6 shadow-md">
-      <h2 className="text-xl font-semibold mb-4 text-black">
+    <div className="bg-card border-2 border-border rounded-lg p-6 mb-6 shadow-md">
+      <h2 className="text-xl font-semibold mb-4 text-card-foreground">
         {editingTodo ? 'Edit Todo' : 'Create New Todo'}
       </h2>
       <Form method="post" onSubmit={(e) => {
@@ -39,7 +39,7 @@ export function TodoForm({ editingTodo, onCancel }: TodoFormProps) {
         {editingTodo && <input type="hidden" name="id" value={editingTodo.id} />}
         
         <div className="mb-4">
-          <label htmlFor="title" className="block text-sm font-medium text-black mb-2">
+          <label htmlFor="title" className="block text-sm font-medium text-foreground mb-2">
             Title
           </label>
           <input
@@ -48,12 +48,12 @@ export function TodoForm({ editingTodo, onCancel }: TodoFormProps) {
             name="title"
             defaultValue={editingTodo?.title || ""}
             required
-            className="w-full px-3 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
+            className="w-full px-3 py-2 border-2 border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring text-foreground bg-background"
           />
         </div>
         
         <div className="mb-4">
-          <label htmlFor="description" className="block text-sm font-medium text-black mb-2">
+          <label htmlFor="description" className="block text-sm font-medium text-foreground mb-2">
             Description
           </label>
           <textarea
@@ -61,13 +61,13 @@ export function TodoForm({ editingTodo, onCancel }: TodoFormProps) {
             name="description"
             defaultValue={editingTodo?.description || ""}
             rows={3}
-            className="w-full px-3 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
+            className="w-full px-3 py-2 border-2 border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring text-foreground bg-background"
           />
         </div>
         
         {editingTodo && (
           <div className="mb-4">
-            <label className="flex items-center text-black">
+            <label className="flex items-center text-foreground">
               <input
                 type="checkbox"
                 name="completed"
@@ -84,7 +84,7 @@ export function TodoForm({ editingTodo, onCancel }: TodoFormProps) {
           <button
             type="submit"
             disabled={createTodo.isPending || updateTodo.isPending}
-            className="bg-green-200 text-black px-4 py-2 rounded hover:bg-green-300 disabled:opacity-50"
+            className="bg-primary text-primary-foreground px-4 py-2 rounded hover:bg-primary/90 disabled:opacity-50"
           >
             {createTodo.isPending || updateTodo.isPending 
               ? 'Saving...' 
@@ -93,7 +93,7 @@ export function TodoForm({ editingTodo, onCancel }: TodoFormProps) {
           <button
             type="button"
             onClick={onCancel}
-            className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300"
+            className="bg-secondary text-secondary-foreground px-4 py-2 rounded hover:bg-secondary/80"
           >
             Cancel
           </button>

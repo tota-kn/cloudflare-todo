@@ -23,24 +23,24 @@ export function TodoItem({ todo, onEdit }: TodoItemProps) {
   return (
     <div 
       className={`border rounded-lg p-4 ${
-        todo.completed ? 'bg-gray-50 border-gray-300' : 'bg-white border-gray-400'
+        todo.completed ? 'bg-muted border-border' : 'bg-card border-border'
       }`}
     >
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <h3 className={`text-lg font-semibold ${
-            todo.completed ? 'line-through text-gray-500' : 'text-black'
+            todo.completed ? 'line-through text-muted-foreground' : 'text-card-foreground'
           }`}>
             {todo.title}
           </h3>
           {todo.description && (
             <p className={`mt-1 text-sm ${
-              todo.completed ? 'text-gray-500' : 'text-black'
+              todo.completed ? 'text-muted-foreground' : 'text-card-foreground'
             }`}>
               {todo.description}
             </p>
           )}
-          <div className="mt-2 text-xs text-gray-600">
+          <div className="mt-2 text-xs text-muted-foreground">
             Created: {new Date(todo.created_at).toLocaleDateString()}
             {todo.updated_at !== todo.created_at && (
               <span className="ml-2">
@@ -55,8 +55,8 @@ export function TodoItem({ todo, onEdit }: TodoItemProps) {
             disabled={toggleTodo.isPending}
             className={`p-2 rounded-full transition-colors disabled:opacity-50 ${
               todo.completed
-                ? 'bg-orange-200 text-orange-800 hover:bg-orange-300'
-                : 'bg-green-200 text-green-800 hover:bg-green-300'
+                ? 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                : 'bg-primary text-primary-foreground hover:bg-primary/90'
             }`}
             title={toggleTodo.isPending ? 'Updating...' : (todo.completed ? 'Mark Pending' : 'Mark Complete')}
           >
@@ -74,7 +74,7 @@ export function TodoItem({ todo, onEdit }: TodoItemProps) {
           </button>
           <button
             onClick={() => onEdit(todo)}
-            className="p-2 rounded-full bg-blue-200 text-blue-800 hover:bg-blue-300 transition-colors"
+            className="p-2 rounded-full bg-accent text-accent-foreground hover:bg-accent/80 transition-colors"
             title="Edit"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,7 +84,7 @@ export function TodoItem({ todo, onEdit }: TodoItemProps) {
           <button
             onClick={handleDelete}
             disabled={deleteTodo.isPending}
-            className="p-2 rounded-full bg-red-200 text-red-800 hover:bg-red-300 transition-colors disabled:opacity-50"
+            className="p-2 rounded-full bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors disabled:opacity-50"
             title={deleteTodo.isPending ? 'Deleting...' : 'Delete'}
           >
             {deleteTodo.isPending ? (
