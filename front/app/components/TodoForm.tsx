@@ -1,5 +1,7 @@
 import { Form } from "react-router";
 import { useCreateTodo, useUpdateTodo } from "~/hooks/useTodos";
+import { FileUpload } from "./FileUpload";
+import { AttachmentList } from "./AttachmentList";
 import type { TodoItem } from "../../../shared/client";
 
 interface TodoFormProps {
@@ -77,6 +79,16 @@ export function TodoForm({ editingTodo, onCancel }: TodoFormProps) {
               />
               Completed
             </label>
+          </div>
+        )}
+
+        {editingTodo && (
+          <div className="mb-6">
+            <h3 className="text-lg font-medium text-foreground mb-3">添付ファイル</h3>
+            <div className="space-y-4">
+              <FileUpload todoId={editingTodo.id} />
+              <AttachmentList todoId={editingTodo.id} />
+            </div>
           </div>
         )}
         

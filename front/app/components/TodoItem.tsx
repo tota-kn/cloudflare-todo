@@ -1,4 +1,4 @@
-import { useDeleteTodo, useToggleTodo } from "~/hooks/useTodos";
+import { useAttachments, useDeleteTodo, useToggleTodo } from "~/hooks/useTodos";
 import type { TodoItem as TodoItemData } from "../../../shared/client";
 
 interface TodoItemProps {
@@ -9,6 +9,7 @@ interface TodoItemProps {
 export function TodoItem({ todo, onEdit }: TodoItemProps) {
   const deleteTodo = useDeleteTodo();
   const toggleTodo = useToggleTodo();
+  const { data: attachments } = useAttachments(todo.id);
 
   const handleToggleComplete = () => {
     toggleTodo.mutate({ id: todo.id, completed: todo.completed });
@@ -45,6 +46,14 @@ export function TodoItem({ todo, onEdit }: TodoItemProps) {
             {todo.updated_at !== todo.created_at && (
               <span className="ml-2">
                 Updated: {new Date(todo.updated_at).toLocaleDateString()}
+              </span>
+            )}
+{attachments && Array.isArray(attachments) && attachments.length > 0 && (
+              <span className="ml-2 inline-flex items-center">
+                <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                </svg>
+                {attachments.length}個の添付ファイル
               </span>
             )}
           </div>

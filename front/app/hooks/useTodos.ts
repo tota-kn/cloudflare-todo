@@ -181,3 +181,90 @@ export const useToggleTodo = () => {
     },
   });
 };
+
+export const useAttachments = (todoId: string) => {
+  return useQuery({
+    queryKey: ["attachments", todoId],
+    queryFn: async () => {
+      try {
+        const res = await client.v1.todos[":todoId"].attachments.$get({
+          param: { todoId },
+        });
+        
+        if (!res.ok) {
+          if (res.status === 404) {
+            return [];
+          }
+          throw new Error('Failed to fetch attachments');
+        }
+        
+        const data = await res.json();
+        
+        if ('error' in data) {
+          throw new Error(data.error);
+        }
+        
+        return data.success ? data.data : [];
+      } catch (error) {
+        if (error instanceof Error && error.message.includes('404')) {
+          return [];
+        }
+        throw error;
+      }
+    },
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    retry: (failureCount, error) => {
+      if (error.message.includes('404') || error.message.includes('Failed to fetch attachments')) {
+        return false;
+      }
+      return failureCount < 3;
+    },
+  });
+};
+
+export const useUploadAttachment = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async ({ todoId, file }: { todoId: string; file: File }) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const res = await client.v1.todos[":todoId"].attachments.$post({
+        param: { todoId },
+        form: formData,
+      });
+      
+      if (!res.ok) {
+        throw new Error('Failed to upload attachment');
+      }
+      
+      return res.json();
+    },
+    onSuccess: (_data, { todoId }) => {
+      queryClient.invalidateQueries({ queryKey: ["attachments", todoId] });
+    },
+  });
+};
+
+export const useDeleteAttachment = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async ({ todoId, attachmentId }: { todoId: string; attachmentId: string }) => {
+      const res = await client.v1.todos[":todoId"].attachments[":attachmentId"].$delete({
+        param: { todoId, attachmentId },
+      });
+      
+      if (!res.ok) {
+        throw new Error('Failed to delete attachment');
+      }
+      
+      return res.json();
+    },
+    onSuccess: (_data, { todoId }) => {
+      queryClient.invalidateQueries({ queryKey: ["attachments", todoId] });
+    },
+  });
+};
