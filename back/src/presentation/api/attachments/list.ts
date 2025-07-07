@@ -1,8 +1,8 @@
 import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { z } from 'zod'
-import { Dependencies } from '../../infrastructure/config/Dependencies'
-import { TodoAttachmentDtoMapper } from '../dto/TodoAttachmentDto'
+import { Dependencies } from '../../../infrastructure/config/Dependencies'
+import { TodoAttachmentDtoMapper } from '../../dto/TodoAttachmentDto'
 
 export function createListTodoAttachmentsApi(dependencies: Dependencies) {
   const app = new Hono<{ Bindings: CloudflareEnv }>()

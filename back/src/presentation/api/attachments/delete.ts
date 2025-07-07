@@ -1,7 +1,7 @@
 import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { z } from 'zod'
-import { Dependencies } from '../../infrastructure/config/Dependencies'
+import { Dependencies } from '../../../infrastructure/config/Dependencies'
 
 export function createDetachFileFromTodoApi(dependencies: Dependencies) {
   const app = new Hono<{ Bindings: CloudflareEnv }>()

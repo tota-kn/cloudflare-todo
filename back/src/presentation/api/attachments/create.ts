@@ -1,8 +1,8 @@
 import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { z } from 'zod'
-import { Dependencies } from '../../infrastructure/config/Dependencies'
-import { TodoAttachmentDtoMapper } from '../dto/TodoAttachmentDto'
+import { Dependencies } from '../../../infrastructure/config/Dependencies'
+import { TodoAttachmentDtoMapper } from '../../dto/TodoAttachmentDto'
 
 const attachFileSchema = z.object({
   fileKey: z.string().min(1, 'File key is required'),
