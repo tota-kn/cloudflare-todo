@@ -24,6 +24,10 @@ export async function loader({ context }: Route.LoaderArgs) {
   const req = await client.v1.todos.$get();
   const res = await req.json();
 
+  if ('error' in res) {
+    throw new Error(res.error);
+  }
+
   return {
     todos: res.todos,
   };
@@ -133,18 +137,18 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Todo List</h1>
+        <h1 className="text-3xl font-bold text-black">Todo List</h1>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="bg-blue-200 text-black px-4 py-2 rounded hover:bg-blue-300"
         >
           {showForm ? 'Cancel' : 'Add Todo'}
         </button>
       </div>
 
       {showForm && (
-        <div className="bg-white border rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4">
+        <div className="bg-white border-2 border-blue-200 rounded-lg p-6 mb-6 shadow-md">
+          <h2 className="text-xl font-semibold mb-4 text-black">
             {editingTodo ? 'Edit Todo' : 'Create New Todo'}
           </h2>
           <Form method="post" onSubmit={handleCancelEdit}>
@@ -152,7 +156,7 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
             {editingTodo && <input type="hidden" name="id" value={editingTodo.id} />}
             
             <div className="mb-4">
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="title" className="block text-sm font-medium text-black mb-2">
                 Title
               </label>
               <input
@@ -161,12 +165,12 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
                 name="title"
                 defaultValue={editingTodo?.title || ""}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
               />
             </div>
             
             <div className="mb-4">
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="description" className="block text-sm font-medium text-black mb-2">
                 Description
               </label>
               <textarea
@@ -174,13 +178,13 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
                 name="description"
                 defaultValue={editingTodo?.description || ""}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
               />
             </div>
             
             {editingTodo && (
               <div className="mb-4">
-                <label className="flex items-center">
+                <label className="flex items-center text-black">
                   <input
                     type="checkbox"
                     name="completed"
@@ -196,14 +200,14 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
             <div className="flex space-x-2">
               <button
                 type="submit"
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                className="bg-green-200 text-black px-4 py-2 rounded hover:bg-green-300"
               >
                 {editingTodo ? 'Update' : 'Create'}
               </button>
               <button
                 type="button"
                 onClick={handleCancelEdit}
-                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300"
               >
                 Cancel
               </button>
@@ -213,31 +217,31 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
       )}
       
       {loaderData.todos.length === 0 ? (
-        <p className="text-gray-500">No todos found. Create your first todo!</p>
+        <p className="text-black text-center py-8">No todos found. Create your first todo!</p>
       ) : (
         <div className="space-y-4">
-          {loaderData.todos.map((todo) => (
+          {loaderData.todos.map((todo: TodoItem) => (
             <div 
               key={todo.id} 
               className={`border rounded-lg p-4 ${
-                todo.completed ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-300'
+                todo.completed ? 'bg-gray-50 border-gray-300' : 'bg-white border-gray-400'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <h3 className={`text-lg font-semibold ${
-                    todo.completed ? 'line-through text-gray-500' : 'text-gray-900'
+                    todo.completed ? 'line-through text-gray-500' : 'text-black'
                   }`}>
                     {todo.title}
                   </h3>
                   {todo.description && (
                     <p className={`mt-1 text-sm ${
-                      todo.completed ? 'text-gray-400' : 'text-gray-600'
+                      todo.completed ? 'text-gray-500' : 'text-black'
                     }`}>
                       {todo.description}
                     </p>
                   )}
-                  <div className="mt-2 text-xs text-gray-400">
+                  <div className="mt-2 text-xs text-gray-600">
                     Created: {new Date(todo.created_at).toLocaleDateString()}
                     {todo.updated_at !== todo.created_at && (
                       <span className="ml-2">
@@ -247,32 +251,32 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className={`px-2 py-1 text-xs rounded-full ${
+                  <span className={`px-2 py-1 text-xs rounded-full font-medium ${
                     todo.completed 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-yellow-100 text-yellow-800'
+                      ? 'bg-green-100 text-green-900' 
+                      : 'bg-orange-100 text-orange-900'
                   }`}>
                     {todo.completed ? 'Completed' : 'Pending'}
                   </span>
                   <button
                     onClick={() => handleToggleComplete(todo)}
-                    className={`px-3 py-1 text-xs rounded ${
+                    className={`px-3 py-1 text-xs rounded font-medium ${
                       todo.completed
-                        ? 'bg-yellow-500 text-white hover:bg-yellow-600'
-                        : 'bg-green-500 text-white hover:bg-green-600'
+                        ? 'bg-orange-200 text-black hover:bg-orange-300'
+                        : 'bg-green-200 text-black hover:bg-green-300'
                     }`}
                   >
                     {todo.completed ? 'Mark Pending' : 'Mark Complete'}
                   </button>
                   <button
                     onClick={() => handleEdit(todo)}
-                    className="px-3 py-1 text-xs rounded bg-blue-500 text-white hover:bg-blue-600"
+                    className="px-3 py-1 text-xs rounded font-medium bg-blue-200 text-black hover:bg-blue-300"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDelete(todo)}
-                    className="px-3 py-1 text-xs rounded bg-red-500 text-white hover:bg-red-600"
+                    className="px-3 py-1 text-xs rounded font-medium bg-red-200 text-black hover:bg-red-300"
                   >
                     Delete
                   </button>
