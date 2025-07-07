@@ -1,0 +1,169 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Backend Dev Server",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["-F", "todo-back", "dev"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": [],
+      "detail": "バックエンド開発サーバーを起動 (localhost:8787)"
+    },
+    {
+      "label": "Frontend Dev Server",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["-F", "todo-front", "dev"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": [],
+      "detail": "フロントエンド開発サーバーを起動 (localhost:5173)"
+    },
+    {
+      "label": "Start All Dev Servers",
+      "dependsOrder": "parallel",
+      "dependsOn": ["Backend Dev Server", "Frontend Dev Server"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "detail": "フロントエンドとバックエンドの両方の開発サーバーを並行起動"
+    },
+    {
+      "label": "Install Dependencies",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["install"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "プロジェクトの依存関係をインストール"
+    },
+    {
+      "label": "Backend Lint",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["-F", "todo-back", "lint"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$eslint-stylish"],
+      "detail": "バックエンドのコードをlint"
+    },
+    {
+      "label": "Frontend Typecheck",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["-F", "todo-front", "typecheck"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$tsc"],
+      "detail": "フロントエンドの型チェック"
+    },
+    {
+      "label": "Database Migrate",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["-F", "todo-back", "db:migrate"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "D1データベースマイグレーションを実行"
+    },
+    {
+      "label": "Run API Tests",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["-F", "todo-back", "test:api"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "Bruno APIテストを実行"
+    }
+  ]
+}
