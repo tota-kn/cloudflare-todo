@@ -7,14 +7,20 @@ import { ListFilesUseCase } from '../../application/usecases/ListFilesUseCase'
 import { ListTodosUseCase } from '../../application/usecases/ListTodosUseCase'
 import { UpdateTodoUseCase } from '../../application/usecases/UpdateTodoUseCase'
 import { UploadFileUseCase } from '../../application/usecases/UploadFileUseCase'
+import { AttachFileToTodoUseCase } from '../../application/usecases/AttachFileToTodoUseCase'
+import { GetTodoAttachmentsUseCase } from '../../application/usecases/GetTodoAttachmentsUseCase'
+import { DetachFileFromTodoUseCase } from '../../application/usecases/DetachFileFromTodoUseCase'
 import { FileRepository } from '../../domain/repositories/FileRepository'
 import { TodoRepository } from '../../domain/repositories/TodoRepository'
+import { TodoAttachmentRepository } from '../../domain/repositories/TodoAttachmentRepository'
 import { D1TodoRepository } from '../repositories/D1TodoRepository'
 import { R2FileRepository } from '../repositories/R2FileRepository'
+import { D1TodoAttachmentRepository } from '../repositories/D1TodoAttachmentRepository'
 
 export class Dependencies {
   private todoRepository: TodoRepository
   private fileRepository: FileRepository
+  private todoAttachmentRepository: TodoAttachmentRepository
 
   private createTodoUseCase: CreateTodoUseCase
   private getTodoUseCase: GetTodoUseCase
@@ -27,10 +33,15 @@ export class Dependencies {
   private uploadFileUseCase: UploadFileUseCase
   private deleteFileUseCase: DeleteFileUseCase
 
+  private attachFileToTodoUseCase: AttachFileToTodoUseCase
+  private getTodoAttachmentsUseCase: GetTodoAttachmentsUseCase
+  private detachFileFromTodoUseCase: DetachFileFromTodoUseCase
+
   constructor(env: CloudflareEnv) {
     // Repositories
     this.todoRepository = new D1TodoRepository(env.DB)
     this.fileRepository = new R2FileRepository(env.STORAGE)
+    this.todoAttachmentRepository = new D1TodoAttachmentRepository(env.DB)
 
     // Todo Use Cases
     this.createTodoUseCase = new CreateTodoUseCase(this.todoRepository)
@@ -44,6 +55,18 @@ export class Dependencies {
     this.getFileUseCase = new GetFileUseCase(this.fileRepository)
     this.uploadFileUseCase = new UploadFileUseCase(this.fileRepository)
     this.deleteFileUseCase = new DeleteFileUseCase(this.fileRepository)
+
+    // Todo Attachment Use Cases
+    this.attachFileToTodoUseCase = new AttachFileToTodoUseCase(
+      this.todoRepository,
+      this.todoAttachmentRepository,
+    )
+    this.getTodoAttachmentsUseCase = new GetTodoAttachmentsUseCase(
+      this.todoAttachmentRepository,
+    )
+    this.detachFileFromTodoUseCase = new DetachFileFromTodoUseCase(
+      this.todoAttachmentRepository,
+    )
   }
 
   // Todo Use Cases
@@ -82,5 +105,31 @@ export class Dependencies {
 
   getDeleteFileUseCase(): DeleteFileUseCase {
     return this.deleteFileUseCase
+  }
+
+  // Repositories
+  getTodoRepository(): TodoRepository {
+    return this.todoRepository
+  }
+
+  getFileRepository(): FileRepository {
+    return this.fileRepository
+  }
+
+  getTodoAttachmentRepository(): TodoAttachmentRepository {
+    return this.todoAttachmentRepository
+  }
+
+  // Todo Attachment Use Cases
+  getAttachFileToTodoUseCase(): AttachFileToTodoUseCase {
+    return this.attachFileToTodoUseCase
+  }
+
+  getGetTodoAttachmentsUseCase(): GetTodoAttachmentsUseCase {
+    return this.getTodoAttachmentsUseCase
+  }
+
+  getDetachFileFromTodoUseCase(): DetachFileFromTodoUseCase {
+    return this.detachFileFromTodoUseCase
   }
 }

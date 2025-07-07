@@ -12,6 +12,10 @@ import { createDeleteFileApi } from './presentation/api/files/delete'
 import { createGetFileApi } from './presentation/api/files/get'
 import { createListFilesApi } from './presentation/api/files/list'
 import { createUploadFileApi } from './presentation/api/files/upload'
+// Todo Attachment APIs
+import { createAttachFileToTodoApi } from './presentation/attachments/create'
+import { createDetachFileFromTodoApi } from './presentation/attachments/delete'
+import { createListTodoAttachmentsApi } from './presentation/attachments/list'
 
 export function createApp(env: CloudflareEnv) {
   const dependencies = new Dependencies(env)
@@ -35,6 +39,9 @@ export function createApp(env: CloudflareEnv) {
     .route('/v1/files', createGetFileApi(dependencies))
     .route('/v1/files', createUploadFileApi(dependencies))
     .route('/v1/files', createDeleteFileApi(dependencies))
+    .route('/v1/todos', createAttachFileToTodoApi(dependencies))
+    .route('/v1/todos', createListTodoAttachmentsApi(dependencies))
+    .route('/v1/todos', createDetachFileFromTodoApi(dependencies))
 
   return app
 }
