@@ -30,9 +30,9 @@ export function createApp(env: CloudflareEnv) {
     .route('/v1/todos', createGetTodoApi(dependencies))
     .route('/v1/todos', createUpdateTodoApi(dependencies))
     .route('/v1/todos', createDeleteTodoApi(dependencies))
-    .route('/v1/todos/:todoId/attachments', createAttachFileToTodoApi(dependencies))
-    .route('/v1/todos/:todoId/attachments', createListAttachmentsApi(dependencies))
-    .route('/v1/todos/:todoId/attachments', createDetachFileFromTodoApi(dependencies))
+    .route('/v1/todos/:id/attachments', createAttachFileToTodoApi(dependencies))
+    .route('/v1/todos/:id/attachments', createListAttachmentsApi(dependencies))
+    .route('/v1/todos/:id/attachments', createDetachFileFromTodoApi(dependencies))
 
   return app
 }

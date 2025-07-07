@@ -1,8 +1,14 @@
 import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
+import { z } from 'zod'
 import { Dependencies } from '../../../infrastructure/config/Dependencies'
 import { TodoDtoMapper } from '../../dto/TodoDto'
-import { updateTodoSchema, UpdateTodoSchema } from '../../validators/TodoValidator'
+
+export const updateTodoSchema = z.object({
+  title: z.string().min(1, 'Title cannot be empty').optional(),
+  description: z.string().optional(),
+  completed: z.boolean().optional(),
+})
 
 export function createUpdateTodoApi(dependencies: Dependencies) {
   const updateTodoUseCase = dependencies.getUpdateTodoUseCase()
@@ -11,7 +17,7 @@ export function createUpdateTodoApi(dependencies: Dependencies) {
     .put(':id', zValidator('json', updateTodoSchema), async (c) => {
       try {
         const id = c.req.param('id')
-        const validatedData = c.req.valid('json') as UpdateTodoSchema
+        const validatedData = c.req.valid('json')
 
         const todo = await updateTodoUseCase.execute({
           id,

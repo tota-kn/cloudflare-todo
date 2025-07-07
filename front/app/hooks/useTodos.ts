@@ -187,7 +187,7 @@ export const useAttachments = (todoId: string) => {
     queryKey: ["attachments", todoId],
     queryFn: async () => {
       try {
-        const res = await client.v1.todos[":todoId"].attachments.$get({
+        const res = await client.v1.todos[":id"].attachments.$get({
           param: { todoId },
         });
         
