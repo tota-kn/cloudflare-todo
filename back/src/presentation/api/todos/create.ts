@@ -14,7 +14,7 @@ export function createCreateTodoApi(dependencies: Dependencies) {
   const createTodoUseCase = dependencies.getCreateTodoUseCase()
 
   return new Hono<{ Bindings: CloudflareEnv }>()
-    .post('', zValidator('json', createTodoSchema), async (c) => {
+    .post('/v1/todos', zValidator('json', createTodoSchema), async (c) => {
       try {
         const validatedData = c.req.valid('json')
 

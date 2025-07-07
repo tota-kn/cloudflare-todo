@@ -6,7 +6,7 @@ export function createListTodosApi(dependencies: Dependencies) {
   const listTodosUseCase = dependencies.getListTodosUseCase()
 
   return new Hono<{ Bindings: CloudflareEnv }>()
-    .get('', async (c) => {
+    .get('/v1/todos', async (c) => {
       try {
         const todos = await listTodosUseCase.execute()
         return c.json({

@@ -1,4 +1,6 @@
+import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
+import { z } from 'zod'
 import { Dependencies } from '../../../infrastructure/config/Dependencies'
 import { TodoDtoMapper } from '../../dto/TodoDto'
 
@@ -6,9 +8,9 @@ export function createGetTodoApi(dependencies: Dependencies) {
   const getTodoUseCase = dependencies.getGetTodoUseCase()
 
   return new Hono<{ Bindings: CloudflareEnv }>()
-    .get(':id', async (c) => {
+    .get('/v1/todos/:id', zValidator('param', z.object({ id: z.string().min(1) })), async (c) => {
       try {
-        const id = c.req.param('id')
+        const { id } = c.req.valid('param')
         const todo = await getTodoUseCase.execute(id)
 
         if (!todo) {

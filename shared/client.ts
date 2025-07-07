@@ -3,8 +3,6 @@ import type { TodoResponseDto, CreateTodoRequestDto, UpdateTodoRequestDto } from
 import type { AttachmentResponseDto as BackendAttachmentResponseDto, AttachFileToTodoRequestDto } from "../back/src/presentation/dto/AttachmentDto.ts";
 
 export type ClientType = RouteType;
-
-// Re-export commonly used types for frontend consumption
 export type TodoItem = TodoResponseDto;
 export type CreateTodoRequest = CreateTodoRequestDto;
 export type UpdateTodoRequest = UpdateTodoRequestDto;

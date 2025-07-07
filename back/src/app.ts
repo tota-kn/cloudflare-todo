@@ -25,14 +25,14 @@ export function createApp(env: CloudflareEnv) {
       }),
     )
     .get('/v1', c => c.json({ message: `${c.env.STAGE}: Hello from Cloudflare Workers!` }))
-    .route('/v1/todos', createListTodosApi(dependencies))
-    .route('/v1/todos', createCreateTodoApi(dependencies))
-    .route('/v1/todos', createGetTodoApi(dependencies))
-    .route('/v1/todos', createUpdateTodoApi(dependencies))
-    .route('/v1/todos', createDeleteTodoApi(dependencies))
-    .route('/v1/todos/:id/attachments', createAttachFileToTodoApi(dependencies))
-    .route('/v1/todos/:id/attachments', createListAttachmentsApi(dependencies))
-    .route('/v1/todos/:id/attachments', createDetachFileFromTodoApi(dependencies))
+    .route('', createListTodosApi(dependencies))
+    .route('', createCreateTodoApi(dependencies))
+    .route('', createGetTodoApi(dependencies))
+    .route('', createUpdateTodoApi(dependencies))
+    .route('', createDeleteTodoApi(dependencies))
+    .route('', createAttachFileToTodoApi(dependencies))
+    .route('', createListAttachmentsApi(dependencies))
+    .route('', createDetachFileFromTodoApi(dependencies))
 
   return app
 }

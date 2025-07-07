@@ -8,15 +8,15 @@ export function createListAttachmentsApi(dependencies: Dependencies) {
   const app = new Hono<{ Bindings: CloudflareEnv }>()
 
   app.get(
-    '',
-    zValidator('param', z.object({ todoId: z.string() })),
+    '/v1/todos/:id/attachments',
+    zValidator('param', z.object({ id: z.string() })),
     async (c) => {
-      const { todoId } = c.req.valid('param')
+      const { id } = c.req.valid('param')
 
       const useCase = dependencies.getGetAttachmentsUseCase()
 
       try {
-        const attachments = await useCase.execute(todoId)
+        const attachments = await useCase.execute(id)
         return c.json({
           success: true,
           data: attachments.map(AttachmentDtoMapper.toResponseDto),

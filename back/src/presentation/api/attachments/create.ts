@@ -15,17 +15,17 @@ export function createAttachFileToTodoApi(dependencies: Dependencies) {
   const app = new Hono<{ Bindings: CloudflareEnv }>()
 
   app.post(
-    '',
-    zValidator('param', z.object({ todoId: z.string() })),
+    '/v1/todos/:id/attachments',
+    zValidator('param', z.object({ id: z.string() })),
     zValidator('json', attachFileSchema),
     async (c) => {
-      const { todoId } = c.req.valid('param')
+      const { id } = c.req.valid('param')
       const attachRequest = c.req.valid('json')
 
       const useCase = dependencies.getAttachFileToTodoUseCase()
 
       try {
-        const attachment = await useCase.execute(todoId, attachRequest)
+        const attachment = await useCase.execute(id, attachRequest)
         return c.json({
           success: true,
           data: AttachmentDtoMapper.toResponseDto(attachment),
