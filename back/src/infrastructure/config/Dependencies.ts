@@ -1,16 +1,14 @@
 import { CreateTodoUseCase } from '../../application/usecases/CreateTodoUseCase'
+import { DeleteFileUseCase } from '../../application/usecases/DeleteFileUseCase'
 import { DeleteTodoUseCase } from '../../application/usecases/DeleteTodoUseCase'
+import { GetFileUseCase } from '../../application/usecases/GetFileUseCase'
 import { GetTodoUseCase } from '../../application/usecases/GetTodoUseCase'
+import { ListFilesUseCase } from '../../application/usecases/ListFilesUseCase'
 import { ListTodosUseCase } from '../../application/usecases/ListTodosUseCase'
 import { UpdateTodoUseCase } from '../../application/usecases/UpdateTodoUseCase'
-import { DeleteFileUseCase } from '../../application/usecases/DeleteFileUseCase'
-import { GetFileUseCase } from '../../application/usecases/GetFileUseCase'
-import { ListFilesUseCase } from '../../application/usecases/ListFilesUseCase'
 import { UploadFileUseCase } from '../../application/usecases/UploadFileUseCase'
-import { TodoRepository } from '../../domain/repositories/TodoRepository'
 import { FileRepository } from '../../domain/repositories/FileRepository'
-import { TodoController } from '../../presentation/controllers/TodoController'
-import { FileController } from '../../presentation/controllers/FileController'
+import { TodoRepository } from '../../domain/repositories/TodoRepository'
 import { D1TodoRepository } from '../repositories/D1TodoRepository'
 import { R2FileRepository } from '../repositories/R2FileRepository'
 
@@ -29,9 +27,6 @@ export class Dependencies {
   private uploadFileUseCase: UploadFileUseCase
   private deleteFileUseCase: DeleteFileUseCase
 
-  private todoController: TodoController
-  private fileController: FileController
-
   constructor(env: CloudflareEnv) {
     // Repositories
     this.todoRepository = new D1TodoRepository(env.DB)
@@ -49,29 +44,43 @@ export class Dependencies {
     this.getFileUseCase = new GetFileUseCase(this.fileRepository)
     this.uploadFileUseCase = new UploadFileUseCase(this.fileRepository)
     this.deleteFileUseCase = new DeleteFileUseCase(this.fileRepository)
-
-    // Controllers
-    this.todoController = new TodoController(
-      this.createTodoUseCase,
-      this.getTodoUseCase,
-      this.listTodosUseCase,
-      this.updateTodoUseCase,
-      this.deleteTodoUseCase,
-    )
-
-    this.fileController = new FileController(
-      this.listFilesUseCase,
-      this.getFileUseCase,
-      this.uploadFileUseCase,
-      this.deleteFileUseCase,
-    )
   }
 
-  getTodoController(): TodoController {
-    return this.todoController
+  // Todo Use Cases
+  getCreateTodoUseCase(): CreateTodoUseCase {
+    return this.createTodoUseCase
   }
 
-  getFileController(): FileController {
-    return this.fileController
+  getGetTodoUseCase(): GetTodoUseCase {
+    return this.getTodoUseCase
+  }
+
+  getListTodosUseCase(): ListTodosUseCase {
+    return this.listTodosUseCase
+  }
+
+  getUpdateTodoUseCase(): UpdateTodoUseCase {
+    return this.updateTodoUseCase
+  }
+
+  getDeleteTodoUseCase(): DeleteTodoUseCase {
+    return this.deleteTodoUseCase
+  }
+
+  // File Use Cases
+  getListFilesUseCase(): ListFilesUseCase {
+    return this.listFilesUseCase
+  }
+
+  getGetFileUseCase(): GetFileUseCase {
+    return this.getFileUseCase
+  }
+
+  getUploadFileUseCase(): UploadFileUseCase {
+    return this.uploadFileUseCase
+  }
+
+  getDeleteFileUseCase(): DeleteFileUseCase {
+    return this.deleteFileUseCase
   }
 }
