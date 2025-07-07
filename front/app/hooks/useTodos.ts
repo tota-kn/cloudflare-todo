@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createBrowserClient } from "~/client";
-import type { TodoItem, CreateTodoRequest, UpdateTodoRequest } from "~/types/todo";
+import type { CreateTodoRequest, TodoItem, UpdateTodoRequest } from "../../../shared/client";
 
 const client = createBrowserClient();
 
