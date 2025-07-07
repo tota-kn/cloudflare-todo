@@ -2,9 +2,9 @@ import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { z } from 'zod'
 import { Dependencies } from '../../../infrastructure/config/Dependencies'
-import { TodoAttachmentDtoMapper } from '../../dto/TodoAttachmentDto'
+import { AttachmentDtoMapper } from '../../dto/AttachmentDto'
 
-export function createListTodoAttachmentsApi(dependencies: Dependencies) {
+export function createListAttachmentsApi(dependencies: Dependencies) {
   const app = new Hono<{ Bindings: CloudflareEnv }>()
 
   app.get(
@@ -13,13 +13,13 @@ export function createListTodoAttachmentsApi(dependencies: Dependencies) {
     async (c) => {
       const { todoId } = c.req.valid('param')
 
-      const useCase = dependencies.getGetTodoAttachmentsUseCase()
+      const useCase = dependencies.getGetAttachmentsUseCase()
 
       try {
         const attachments = await useCase.execute(todoId)
         return c.json({
           success: true,
-          data: attachments.map(TodoAttachmentDtoMapper.toResponseDto),
+          data: attachments.map(AttachmentDtoMapper.toResponseDto),
         })
       }
       catch (error) {

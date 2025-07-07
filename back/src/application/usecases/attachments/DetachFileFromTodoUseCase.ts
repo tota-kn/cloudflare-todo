@@ -1,17 +1,17 @@
-import { TodoAttachmentRepository } from '../../../domain/repositories/TodoAttachmentRepository'
-import { TodoAttachmentId } from '../../../domain/value-objects/TodoAttachmentId'
+import { AttachmentRepository } from '../../../domain/repositories/AttachmentRepository'
+import { AttachmentId } from '../../../domain/value-objects/AttachmentId'
 
 export class DetachFileFromTodoUseCase {
   constructor(
-    private readonly todoAttachmentRepository: TodoAttachmentRepository,
+    private readonly attachmentRepository: AttachmentRepository,
   ) {}
 
   async execute(attachmentId: string): Promise<void> {
-    const attachment = await this.todoAttachmentRepository.findById(new TodoAttachmentId(attachmentId))
+    const attachment = await this.attachmentRepository.findById(new AttachmentId(attachmentId))
     if (!attachment) {
       throw new Error('Attachment not found')
     }
 
-    await this.todoAttachmentRepository.delete(new TodoAttachmentId(attachmentId))
+    await this.attachmentRepository.delete(new AttachmentId(attachmentId))
   }
 }

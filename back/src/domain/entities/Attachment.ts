@@ -1,9 +1,9 @@
-import { TodoAttachmentId } from '../value-objects/TodoAttachmentId'
+import { AttachmentId } from '../value-objects/AttachmentId'
 import { TodoId } from '../value-objects/TodoId'
 
-export class TodoAttachment {
+export class Attachment {
   constructor(
-    private readonly id: TodoAttachmentId,
+    private readonly id: AttachmentId,
     private readonly todoId: TodoId,
     private readonly fileKey: string,
     private readonly originalFilename: string,
@@ -40,7 +40,7 @@ export class TodoAttachment {
     }
   }
 
-  getId(): TodoAttachmentId {
+  getId(): AttachmentId {
     return this.id
   }
 
@@ -68,7 +68,7 @@ export class TodoAttachment {
     return this.createdAt
   }
 
-  equals(other: TodoAttachment): boolean {
+  equals(other: Attachment): boolean {
     return this.id.equals(other.id)
   }
 }

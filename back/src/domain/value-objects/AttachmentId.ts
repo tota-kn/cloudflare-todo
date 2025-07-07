@@ -1,7 +1,7 @@
-export class TodoAttachmentId {
+export class AttachmentId {
   constructor(private readonly value: string) {
     if (!value) {
-      throw new Error('TodoAttachmentId cannot be empty')
+      throw new Error('AttachmentId cannot be empty')
     }
   }
 
@@ -9,7 +9,7 @@ export class TodoAttachmentId {
     return this.value
   }
 
-  equals(other: TodoAttachmentId): boolean {
+  equals(other: AttachmentId): boolean {
     return this.value === other.value
   }
 }

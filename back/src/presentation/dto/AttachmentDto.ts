@@ -1,6 +1,6 @@
-import { TodoAttachment } from '../../domain/entities/TodoAttachment'
+import { Attachment } from '../../domain/entities/Attachment'
 
-export interface TodoAttachmentDto {
+export interface AttachmentDto {
   id: string
   todoId: string
   fileKey: string
@@ -17,7 +17,7 @@ export interface AttachFileToTodoRequestDto {
   contentType: string
 }
 
-export interface TodoAttachmentResponseDto {
+export interface AttachmentResponseDto {
   id: string
   todoId: string
   fileKey: string
@@ -27,8 +27,8 @@ export interface TodoAttachmentResponseDto {
   createdAt: string
 }
 
-export class TodoAttachmentDtoMapper {
-  static toResponseDto(attachment: TodoAttachment): TodoAttachmentResponseDto {
+export class AttachmentDtoMapper {
+  static toResponseDto(attachment: Attachment): AttachmentResponseDto {
     return {
       id: attachment.getId().toString(),
       todoId: attachment.getTodoId().toString(),
@@ -40,7 +40,7 @@ export class TodoAttachmentDtoMapper {
     }
   }
 
-  static toDto(attachment: TodoAttachment): TodoAttachmentDto {
+  static toDto(attachment: Attachment): AttachmentDto {
     return {
       id: attachment.getId().toString(),
       todoId: attachment.getTodoId().toString(),

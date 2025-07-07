@@ -1,12 +1,12 @@
-import { TodoAttachment } from '../../domain/entities/TodoAttachment'
-import { TodoAttachmentRepository } from '../../domain/repositories/TodoAttachmentRepository'
-import { TodoAttachmentId } from '../../domain/value-objects/TodoAttachmentId'
+import { Attachment } from '../../domain/entities/Attachment'
+import { AttachmentRepository } from '../../domain/repositories/AttachmentRepository'
+import { AttachmentId } from '../../domain/value-objects/AttachmentId'
 import { TodoId } from '../../domain/value-objects/TodoId'
 
-export class D1TodoAttachmentRepository implements TodoAttachmentRepository {
+export class D1AttachmentRepository implements AttachmentRepository {
   constructor(private readonly db: D1Database) {}
 
-  async save(attachment: TodoAttachment): Promise<void> {
+  async save(attachment: Attachment): Promise<void> {
     const stmt = this.db.prepare(`
       INSERT INTO todo_attachments (
         id, todo_id, file_key, original_filename, file_size, content_type, created_at
@@ -24,7 +24,7 @@ export class D1TodoAttachmentRepository implements TodoAttachmentRepository {
     ).run()
   }
 
-  async findById(id: TodoAttachmentId): Promise<TodoAttachment | null> {
+  async findById(id: AttachmentId): Promise<Attachment | null> {
     const stmt = this.db.prepare(`
       SELECT id, todo_id, file_key, original_filename, file_size, content_type, created_at
       FROM todo_attachments
@@ -37,10 +37,10 @@ export class D1TodoAttachmentRepository implements TodoAttachmentRepository {
       return null
     }
 
-    return this.mapToTodoAttachment(result)
+    return this.mapToAttachment(result)
   }
 
-  async findByTodoId(todoId: TodoId): Promise<TodoAttachment[]> {
+  async findByTodoId(todoId: TodoId): Promise<Attachment[]> {
     const stmt = this.db.prepare(`
       SELECT id, todo_id, file_key, original_filename, file_size, content_type, created_at
       FROM todo_attachments
@@ -50,10 +50,10 @@ export class D1TodoAttachmentRepository implements TodoAttachmentRepository {
 
     const results = await stmt.bind(todoId.toString()).all()
 
-    return results.results.map(result => this.mapToTodoAttachment(result))
+    return results.results.map(result => this.mapToAttachment(result))
   }
 
-  async delete(id: TodoAttachmentId): Promise<void> {
+  async delete(id: AttachmentId): Promise<void> {
     const stmt = this.db.prepare(`
       DELETE FROM todo_attachments
       WHERE id = ?
@@ -71,7 +71,7 @@ export class D1TodoAttachmentRepository implements TodoAttachmentRepository {
     await stmt.bind(todoId.toString()).run()
   }
 
-  private mapToTodoAttachment(data: unknown): TodoAttachment {
+  private mapToAttachment(data: unknown): Attachment {
     const row = data as {
       id: string
       todo_id: string
@@ -81,8 +81,8 @@ export class D1TodoAttachmentRepository implements TodoAttachmentRepository {
       content_type: string
       created_at: string
     }
-    return new TodoAttachment(
-      new TodoAttachmentId(row.id),
+    return new Attachment(
+      new AttachmentId(row.id),
       new TodoId(row.todo_id),
       row.file_key,
       row.original_filename,

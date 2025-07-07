@@ -4,7 +4,7 @@ import { Dependencies } from './infrastructure/config/Dependencies'
 // Todo APIs
 import { createAttachFileToTodoApi } from './presentation/api/attachments/create'
 import { createDetachFileFromTodoApi } from './presentation/api/attachments/delete'
-import { createListTodoAttachmentsApi } from './presentation/api/attachments/list'
+import { createListAttachmentsApi } from './presentation/api/attachments/list'
 import { createCreateTodoApi } from './presentation/api/todos/create'
 import { createDeleteTodoApi } from './presentation/api/todos/delete'
 import { createGetTodoApi } from './presentation/api/todos/get'
@@ -31,7 +31,7 @@ export function createApp(env: CloudflareEnv) {
     .route('/v1/todos', createUpdateTodoApi(dependencies))
     .route('/v1/todos', createDeleteTodoApi(dependencies))
     .route('/v1/todos/:todoId/attachments', createAttachFileToTodoApi(dependencies))
-    .route('/v1/todos/:todoId/attachments/:attachmentId', createListTodoAttachmentsApi(dependencies))
+    .route('/v1/todos/:todoId/attachments', createListAttachmentsApi(dependencies))
     .route('/v1/todos/:todoId/attachments', createDetachFileFromTodoApi(dependencies))
 
   return app

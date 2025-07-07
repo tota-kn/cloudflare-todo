@@ -1,19 +1,19 @@
 import { AttachFileToTodoUseCase } from '../../application/usecases/attachments/AttachFileToTodoUseCase'
 import { DetachFileFromTodoUseCase } from '../../application/usecases/attachments/DetachFileFromTodoUseCase'
-import { GetTodoAttachmentsUseCase } from '../../application/usecases/attachments/GetTodoAttachmentsUseCase'
+import { GetAttachmentsUseCase } from '../../application/usecases/attachments/GetAttachmentsUseCase'
 import { CreateTodoUseCase } from '../../application/usecases/todos/CreateTodoUseCase'
 import { DeleteTodoUseCase } from '../../application/usecases/todos/DeleteTodoUseCase'
 import { GetTodoUseCase } from '../../application/usecases/todos/GetTodoUseCase'
 import { ListTodosUseCase } from '../../application/usecases/todos/ListTodosUseCase'
 import { UpdateTodoUseCase } from '../../application/usecases/todos/UpdateTodoUseCase'
-import { TodoAttachmentRepository } from '../../domain/repositories/TodoAttachmentRepository'
+import { AttachmentRepository } from '../../domain/repositories/AttachmentRepository'
 import { TodoRepository } from '../../domain/repositories/TodoRepository'
-import { D1TodoAttachmentRepository } from '../repositories/D1TodoAttachmentRepository'
+import { D1AttachmentRepository } from '../repositories/D1AttachmentRepository'
 import { D1TodoRepository } from '../repositories/D1TodoRepository'
 
 export class Dependencies {
   private todoRepository: TodoRepository
-  private todoAttachmentRepository: TodoAttachmentRepository
+  private attachmentRepository: AttachmentRepository
 
   private createTodoUseCase: CreateTodoUseCase
   private getTodoUseCase: GetTodoUseCase
@@ -22,13 +22,13 @@ export class Dependencies {
   private deleteTodoUseCase: DeleteTodoUseCase
 
   private attachFileToTodoUseCase: AttachFileToTodoUseCase
-  private getTodoAttachmentsUseCase: GetTodoAttachmentsUseCase
+  private getAttachmentsUseCase: GetAttachmentsUseCase
   private detachFileFromTodoUseCase: DetachFileFromTodoUseCase
 
   constructor(env: CloudflareEnv) {
     // Repositories
     this.todoRepository = new D1TodoRepository(env.DB)
-    this.todoAttachmentRepository = new D1TodoAttachmentRepository(env.DB)
+    this.attachmentRepository = new D1AttachmentRepository(env.DB)
 
     // Todo Use Cases
     this.createTodoUseCase = new CreateTodoUseCase(this.todoRepository)
@@ -37,16 +37,16 @@ export class Dependencies {
     this.updateTodoUseCase = new UpdateTodoUseCase(this.todoRepository)
     this.deleteTodoUseCase = new DeleteTodoUseCase(this.todoRepository)
 
-    // Todo Attachment Use Cases
+    // Attachment Use Cases
     this.attachFileToTodoUseCase = new AttachFileToTodoUseCase(
       this.todoRepository,
-      this.todoAttachmentRepository,
+      this.attachmentRepository,
     )
-    this.getTodoAttachmentsUseCase = new GetTodoAttachmentsUseCase(
-      this.todoAttachmentRepository,
+    this.getAttachmentsUseCase = new GetAttachmentsUseCase(
+      this.attachmentRepository,
     )
     this.detachFileFromTodoUseCase = new DetachFileFromTodoUseCase(
-      this.todoAttachmentRepository,
+      this.attachmentRepository,
     )
   }
 
@@ -76,17 +76,17 @@ export class Dependencies {
     return this.todoRepository
   }
 
-  getTodoAttachmentRepository(): TodoAttachmentRepository {
-    return this.todoAttachmentRepository
+  getAttachmentRepository(): AttachmentRepository {
+    return this.attachmentRepository
   }
 
-  // Todo Attachment Use Cases
+  // Attachment Use Cases
   getAttachFileToTodoUseCase(): AttachFileToTodoUseCase {
     return this.attachFileToTodoUseCase
   }
 
-  getGetTodoAttachmentsUseCase(): GetTodoAttachmentsUseCase {
-    return this.getTodoAttachmentsUseCase
+  getGetAttachmentsUseCase(): GetAttachmentsUseCase {
+    return this.getAttachmentsUseCase
   }
 
   getDetachFileFromTodoUseCase(): DetachFileFromTodoUseCase {
