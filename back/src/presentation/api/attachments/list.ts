@@ -8,7 +8,7 @@ export function createListTodoAttachmentsApi(dependencies: Dependencies) {
   const app = new Hono<{ Bindings: CloudflareEnv }>()
 
   app.get(
-    '/:todoId/attachments',
+    '',
     zValidator('param', z.object({ todoId: z.string() })),
     async (c) => {
       const { todoId } = c.req.valid('param')

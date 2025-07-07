@@ -1,6 +1,6 @@
-import { TodoAttachment } from '../../domain/entities/TodoAttachment'
-import { TodoAttachmentRepository } from '../../domain/repositories/TodoAttachmentRepository'
-import { TodoId } from '../../domain/value-objects/TodoId'
+import { TodoAttachment } from '../../../domain/entities/TodoAttachment'
+import { TodoAttachmentRepository } from '../../../domain/repositories/TodoAttachmentRepository'
+import { TodoId } from '../../../domain/value-objects/TodoId'
 
 export class GetTodoAttachmentsUseCase {
   constructor(

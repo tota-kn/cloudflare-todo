@@ -7,7 +7,7 @@ export function createDetachFileFromTodoApi(dependencies: Dependencies) {
   const app = new Hono<{ Bindings: CloudflareEnv }>()
 
   app.delete(
-    '/:todoId/attachments/:attachmentId',
+    '',
     zValidator('param', z.object({
       todoId: z.string(),
       attachmentId: z.string(),

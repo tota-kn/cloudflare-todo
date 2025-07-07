@@ -1,5 +1,5 @@
-import { TodoAttachmentRepository } from '../../domain/repositories/TodoAttachmentRepository'
-import { TodoAttachmentId } from '../../domain/value-objects/TodoAttachmentId'
+import { TodoAttachmentRepository } from '../../../domain/repositories/TodoAttachmentRepository'
+import { TodoAttachmentId } from '../../../domain/value-objects/TodoAttachmentId'
 
 export class DetachFileFromTodoUseCase {
   constructor(
