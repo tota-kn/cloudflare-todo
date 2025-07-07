@@ -35,6 +35,12 @@ pnpm lint
 # Deploy
 pnpm deploy:dev       # Deploy to dev environment
 pnpm deploy:prd       # Deploy to production
+
+# Database operations
+pnpm db:migrate       # Apply D1 database migrations
+
+# API testing
+pnpm test:api         # Run Bruno API tests
 ```
 
 ### Frontend (front/)
@@ -60,9 +66,16 @@ pnpm preview
 
 ### Backend Architecture
 - **Framework**: Hono with TypeScript
-- **Structure**: Modular route-based organization in `src/function/`
+- **Pattern**: Clean Architecture with clear separation of concerns
+- **Structure**: 
+  - `src/domain/` - Entities, repositories, value objects
+  - `src/application/` - Use cases and DTOs
+  - `src/infrastructure/` - D1/R2 implementations, dependency injection
+  - `src/presentation/` - Controllers, routes, validators
 - **Validation**: Zod schemas with `@hono/zod-validator`
 - **Entry Point**: `src/index.ts` - composes all routes into main app
+- **Database**: Cloudflare D1 with migrations in `migrations/`
+- **Storage**: Cloudflare R2 for file uploads
 - **Type Safety**: Routes export types that are consumed by frontend
 
 ### Frontend Architecture
@@ -90,17 +103,28 @@ Both apps use Wrangler with environment-specific configs:
 ## Key Files
 
 - `back/src/index.ts` - Main backend entry point and route composition
+- `back/src/infrastructure/config/Dependencies.ts` - Dependency injection container
 - `front/app/client.ts` - Typed API client configuration
 - `front/workers/app.ts` - Cloudflare Worker request handler
 - `shared/client.ts` - Type bridge between backend and frontend
 - `**/wrangler.jsonc` - Cloudflare Workers configuration
+- `back/migrations/0001_initial_schema.sql` - Database schema
 
 ## Development Workflow
 
-1. Backend changes: Edit routes in `back/src/function/`, types automatically flow to frontend
+1. Backend changes: Edit routes in `back/src/presentation/routes/`, types automatically flow to frontend
 2. Frontend changes: Use typed client in loaders/actions, full IntelliSense available
 3. Both apps can be developed simultaneously with hot reload
 4. Deploy separately to Cloudflare Workers (backend) and Pages (frontend)
+5. Use Bruno for API testing with test suites in `back/test/api/`
+
+## Clean Architecture Implementation
+
+- **Domain Layer**: Pure business logic with entities and value objects
+- **Application Layer**: Use cases orchestrate business operations
+- **Infrastructure Layer**: Concrete implementations of repositories
+- **Presentation Layer**: HTTP controllers and route definitions
+- **Dependency Injection**: Centralized in `Dependencies.ts`
 
 ## Memories
 
