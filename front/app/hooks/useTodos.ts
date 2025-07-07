@@ -1,29 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createBrowserClient } from "~/client";
-
-interface TodoItem {
-  id: string;
-  title: string;
-  description: string | null;
-  completed: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-interface CreateTodoRequest {
-  title: string;
-  description?: string;
-}
-
-interface UpdateTodoRequest {
-  title?: string;
-  description?: string;
-  completed?: boolean;
-}
+import type { TodoItem, CreateTodoRequest, UpdateTodoRequest } from "~/types/todo";
 
 const client = createBrowserClient();
 
-export const useTodos = () => {
+export const useTodos = (initialData?: TodoItem[]) => {
   return useQuery({
     queryKey: ["todos"],
     queryFn: async () => {
@@ -36,6 +17,9 @@ export const useTodos = () => {
       
       return data.todos;
     },
+    initialData,
+    staleTime: 5 * 60 * 1000, // 5分間はキャッシュを新鮮とみなす
+    gcTime: 10 * 60 * 1000, // 10分間はキャッシュを保持
   });
 };
 
@@ -77,7 +61,7 @@ export const useCreateTodo = () => {
       
       return { previousTodos };
     },
-    onError: (err, newTodo, context) => {
+    onError: (_err, _newTodo, context) => {
       queryClient.setQueryData(["todos"], context?.previousTodos);
     },
   });
@@ -117,7 +101,7 @@ export const useUpdateTodo = () => {
       
       return { previousTodos };
     },
-    onError: (err, variables, context) => {
+    onError: (_err, _variables, context) => {
       queryClient.setQueryData(["todos"], context?.previousTodos);
     },
   });
@@ -152,7 +136,7 @@ export const useDeleteTodo = () => {
       
       return { previousTodos };
     },
-    onError: (err, id, context) => {
+    onError: (_err, _id, context) => {
       queryClient.setQueryData(["todos"], context?.previousTodos);
     },
   });
@@ -192,7 +176,7 @@ export const useToggleTodo = () => {
       
       return { previousTodos };
     },
-    onError: (err, variables, context) => {
+    onError: (_err, _variables, context) => {
       queryClient.setQueryData(["todos"], context?.previousTodos);
     },
   });

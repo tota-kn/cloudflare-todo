@@ -1,14 +1,6 @@
 import { Form } from "react-router";
 import { useCreateTodo, useUpdateTodo } from "~/hooks/useTodos";
-
-interface TodoItem {
-  id: string;
-  title: string;
-  description: string | null;
-  completed: boolean;
-  created_at: string;
-  updated_at: string;
-}
+import type { TodoItem } from "../../../shared/client";
 
 interface TodoFormProps {
   editingTodo: TodoItem | null;

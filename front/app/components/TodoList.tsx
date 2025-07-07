@@ -1,13 +1,5 @@
 import { TodoItem } from "./TodoItem";
-
-interface TodoItemData {
-  id: string;
-  title: string;
-  description: string | null;
-  completed: boolean;
-  created_at: string;
-  updated_at: string;
-}
+import type { TodoItem as TodoItemData } from "../../../shared/client";
 
 interface TodoListProps {
   todos: TodoItemData[];

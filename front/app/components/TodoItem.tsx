@@ -1,13 +1,5 @@
 import { useDeleteTodo, useToggleTodo } from "~/hooks/useTodos";
-
-interface TodoItemData {
-  id: string;
-  title: string;
-  description: string | null;
-  completed: boolean;
-  created_at: string;
-  updated_at: string;
-}
+import type { TodoItem as TodoItemData } from "../../../shared/client";
 
 interface TodoItemProps {
   todo: TodoItemData;

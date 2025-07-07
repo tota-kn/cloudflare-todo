@@ -5,16 +5,8 @@ import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { TodoForm } from "~/components/TodoForm";
 import { TodoList } from "~/components/TodoList";
 import { useTodos } from "~/hooks/useTodos";
+import type { TodoItem } from "../../../shared/client";
 import type { Route } from "./+types/todos";
-
-interface TodoItem {
-  id: string;
-  title: string;
-  description: string | null;
-  completed: boolean;
-  created_at: string;
-  updated_at: string;
-}
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -41,9 +33,9 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
   const [showForm, setShowForm] = useState(false);
   const [editingTodo, setEditingTodo] = useState<TodoItem | null>(null);
   
-  const { data: todos, isLoading, error } = useTodos();
+  const { data: todos, isLoading, error } = useTodos(loaderData.todos);
   
-  const currentTodos = todos || loaderData.todos;
+  const currentTodos = todos || [];
 
   const handleEdit = (todo: TodoItem) => {
     setEditingTodo(todo);
