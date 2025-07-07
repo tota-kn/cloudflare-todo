@@ -1,131 +1,135 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+このファイルは、このリポジトリでコードを扱う際にClaude Code (claude.ai/code)にガイダンスを提供します。
 
-## Project Structure
+## プロジェクト構造
 
-This is a full-stack Cloudflare Todo application using a pnpm workspace monorepo:
+これは、pnpm ワークスペースモノレポを使用したフルスタックCloudflare Todoアプリケーションです：
 
-- **back/**: Hono-based API server deployed to Cloudflare Workers
-- **front/**: React Router v7 SSR application deployed to Cloudflare Pages
-- **shared/**: Type definitions shared between frontend and backend
+- **back/**: Cloudflare Workersにデプロイされる Hono ベースのAPIサーバー
+- **front/**: Cloudflare Pagesにデプロイされる React Router v7 SSRアプリケーション
+- **shared/**: フロントエンドとバックエンド間で共有される型定義
 
-## Development Commands
+## 開発コマンド
 
-### Root Level
+### ルートレベル
 ```bash
-# Install dependencies
+# 依存関係をインストール
 pnpm install
 
-# Work with backend
+# バックエンドで作業
 pnpm back [command]
 
-# Work with frontend  
+# フロントエンドで作業
 pnpm front [command]
 ```
 
-### Backend (back/)
+### バックエンド (back/)
 ```bash
-# Start development server
-pnpm dev              # Runs on localhost:8787 with local env
+# 開発サーバーを起動
+pnpm dev              # local envでlocalhost:8787で実行
 
-# Lint and fix
+# リント & 修正
 pnpm lint
 
-# Deploy
-pnpm deploy:dev       # Deploy to dev environment
-pnpm deploy:prd       # Deploy to production
+# デプロイ
+pnpm deploy:dev       # dev環境にデプロイ
+pnpm deploy:prd       # productionにデプロイ
 
-# Database operations
-pnpm db:migrate       # Apply D1 database migrations
+# データベース操作
+pnpm db:migrate       # D1データベースマイグレーションを適用
 
-# API testing
-pnpm test:api         # Run Bruno API tests
+# API テスト
+pnpm test:api         # Bruno APIテストを実行
 ```
 
-### Frontend (front/)
+### フロントエンド (front/)
 ```bash
-# Start development server
-pnpm dev              # Runs on localhost:5173 with local env
+# 開発サーバーを起動
+pnpm dev              # local envでlocalhost:5173で実行
 
-# Build application
+# アプリケーションをビルド
 pnpm build
 
-# Type checking
-pnpm typecheck        # Generates CF types, RR types, and runs tsc
+# 型チェック
+pnpm typecheck        # CF types、RR types を生成し、tscを実行
 
-# Deploy
-pnpm deploy:dev       # Build and deploy to dev
-pnpm deploy:prd       # Build and deploy to production
+# デプロイ
+pnpm deploy:dev       # ビルドしてdevにデプロイ
+pnpm deploy:prd       # ビルドしてproductionにデプロイ
 
-# Preview production build
+# プロダクションビルドをプレビュー
 pnpm preview
 ```
 
-## Architecture
+## アーキテクチャ
 
-### Backend Architecture
-- **Framework**: Hono with TypeScript
-- **Pattern**: Clean Architecture with clear separation of concerns
-- **Structure**: 
-  - `src/domain/` - Entities, repositories, value objects
-  - `src/application/` - Use cases and DTOs
-  - `src/infrastructure/` - D1/R2 implementations, dependency injection
-  - `src/presentation/` - Controllers, routes, validators
-- **Validation**: Zod schemas with `@hono/zod-validator`
-- **Entry Point**: `src/index.ts` - composes all routes into main app
-- **Database**: Cloudflare D1 with migrations in `migrations/`
-- **Storage**: Cloudflare R2 for file uploads
-- **Type Safety**: Routes export types that are consumed by frontend
+### バックエンドアーキテクチャ
+- **フレームワーク**: Hono with TypeScript
+- **パターン**: 関心の分離が明確なクリーンアーキテクチャ
+- **構造**: 
+  - `src/domain/` - エンティティ、リポジトリ、値オブジェクト
+  - `src/application/` - ユースケースとDTO
+  - `src/infrastructure/` - D1/R2実装、依存性注入
+  - `src/presentation/` - コントローラー、ルート、バリデーター
+- **バリデーション**: `@hono/zod-validator`でZodスキーマ
+- **エントリーポイント**: `src/index.ts` - すべてのルートをメインアプリに構成
+- **データベース**: `migrations/`でCloudflare D1マイグレーション
+- **ストレージ**: ファイルアップロード用のCloudflare R2
+- **型安全性**: ルートがフロントエンドで使用される型をエクスポート
 
-### Frontend Architecture
-- **Framework**: React Router v7 with SSR
-- **Deployment**: Cloudflare Pages with Workers integration
-- **Entry Points**: 
-  - `app/root.tsx` - Root layout and error boundary
-  - `workers/app.ts` - Cloudflare Worker entry point
-- **Routing**: File-based routing in `app/routes/`
-- **API Client**: Hono RPC client with full type safety from backend routes
-- **Styling**: TailwindCSS
+### フロントエンドアーキテクチャ
+- **フレームワーク**: SSR付きReact Router v7
+- **デプロイ**: Workers統合によるCloudflare Pages
+- **エントリーポイント**: 
+  - `app/root.tsx` - ルートレイアウトとエラーバウンダリー
+  - `workers/app.ts` - Cloudflare Workerエントリーポイント
+- **ルーティング**: `app/routes/`でファイルベースルーティング
+- **APIクライアント**: バックエンドルートから完全な型安全性を持つHono RPCクライアント
+- **スタイリング**: TailwindCSS
 
-### Type Sharing Strategy
-- Backend routes export `RouteType` from `src/index.ts`
-- `shared/client.ts` re-exports this as `ClientType`
-- Frontend uses `hc<ClientType>()` for fully typed API client
-- This creates end-to-end type safety from backend to frontend
+### 型共有戦略
+- バックエンドルートが`src/index.ts`から`RouteType`をエクスポート
+- `shared/client.ts`がこれを`ClientType`として再エクスポート
+- フロントエンドが完全に型付けされたAPIクライアント用に`hc<ClientType>()`を使用
+- これによりバックエンドからフロントエンドへのエンドツーエンドの型安全性を実現
 
-### Environment Configuration
-Both apps use Wrangler with environment-specific configs:
+### 環境設定
+両アプリはWranglerを環境固有の設定で使用：
 - **local**: `http://localhost:5173` CORS origin
 - **dev**: `https://todo-front-dev.omen-bt.workers.dev` CORS origin  
 - **prd**: `https://todo-front-prd.omen-bt.workers.dev` CORS origin
 
-## Key Files
+## 重要なファイル
 
-- `back/src/index.ts` - Main backend entry point and route composition
-- `back/src/infrastructure/config/Dependencies.ts` - Dependency injection container
-- `front/app/client.ts` - Typed API client configuration
-- `front/workers/app.ts` - Cloudflare Worker request handler
-- `shared/client.ts` - Type bridge between backend and frontend
-- `**/wrangler.jsonc` - Cloudflare Workers configuration
-- `back/migrations/0001_initial_schema.sql` - Database schema
+- `back/src/index.ts` - メインバックエンドエントリーポイントとルート構成
+- `back/src/infrastructure/config/Dependencies.ts` - 依存性注入コンテナ
+- `front/app/client.ts` - 型付きAPIクライアント設定
+- `front/workers/app.ts` - Cloudflare Workerリクエストハンドラー
+- `shared/client.ts` - バックエンドとフロントエンド間の型ブリッジ
+- `**/wrangler.jsonc` - Cloudflare Workers設定
+- `back/migrations/0001_initial_schema.sql` - データベーススキーマ
 
-## Development Workflow
+## 開発ワークフロー
 
-1. Backend changes: Edit routes in `back/src/presentation/routes/`, types automatically flow to frontend
-2. Frontend changes: Use typed client in loaders/actions, full IntelliSense available
-3. Both apps can be developed simultaneously with hot reload
-4. Deploy separately to Cloudflare Workers (backend) and Pages (frontend)
-5. Use Bruno for API testing with test suites in `back/test/api/`
+1. バックエンドの変更: `back/src/presentation/routes/`でルートを編集、型は自動的にフロントエンドに流れる
+2. フロントエンドの変更: ローダー/アクションで型付きクライアントを使用、完全なIntelliSenseが利用可能
+3. 両アプリはホットリロードで同時に開発可能
+4. Cloudflare Workers（バックエンド）とPages（フロントエンド）に別々にデプロイ
+5. `back/test/api/`のテストスイートでBrunoを使用したAPIテスト
 
-## Clean Architecture Implementation
+## クリーンアーキテクチャ実装
 
-- **Domain Layer**: Pure business logic with entities and value objects
-- **Application Layer**: Use cases orchestrate business operations
-- **Infrastructure Layer**: Concrete implementations of repositories
-- **Presentation Layer**: HTTP controllers and route definitions
-- **Dependency Injection**: Centralized in `Dependencies.ts`
+- **ドメイン層**: エンティティと値オブジェクトによる純粋なビジネスロジック
+- **アプリケーション層**: ユースケースがビジネス操作を統率
+- **インフラストラクチャ層**: リポジトリの具体的実装
+- **プレゼンテーション層**: HTTPコントローラーとルート定義
+- **依存性注入**: `Dependencies.ts`で一元化
 
-## Memories
+## メモリ
 
-- Claude will respond in Japanese (日本語で応答する) when prompted with "日本語で応答して"
+# important-instruction-reminders
+求められたことを行う。それ以上でも以下でもない。
+目標を達成するために絶対に必要でない限り、ファイルを作成しない。
+新しいファイルを作成するより、既存のファイルを編集することを常に優先する。
+ユーザーから明示的に要求されない限り、ドキュメントファイル（*.md）やREADMEファイルを積極的に作成しない。
