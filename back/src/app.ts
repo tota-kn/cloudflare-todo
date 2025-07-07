@@ -18,7 +18,7 @@ export function createApp(env: CloudflareEnv) {
         allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
       }),
     )
-    .get('/v1', c => c.json({ message: 'Hello from Cloudflare Workers!' }))
+    .get('/v1', c => c.json({ message: `${c.env.STAGE}: Hello from Cloudflare Workers!` }))
     .route('/v1/todos', createTodoRoutes(todoController))
     .route('/v1/files', createFileRoutes(fileController))
 
