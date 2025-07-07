@@ -17,6 +17,6 @@ tests {
   
   test("Response contains success message", function() {
     expect(res.getBody()).to.have.property('message');
-    expect(res.getBody().message).to.include('deleted successfully');
+    expect(res.getBody().message).to.include('test-file.txt deleted successfully');
   });
 }

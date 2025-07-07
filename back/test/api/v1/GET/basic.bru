@@ -21,6 +21,6 @@ tests {
   });
   
   test("Response contains success message", function() {
-    expect(res.getBody().message).to.include('OK');
+    expect(res.getBody().message).to.include('Hello from Cloudflare Workers!');
   });
 }

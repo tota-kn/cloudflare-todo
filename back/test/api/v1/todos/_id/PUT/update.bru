@@ -27,7 +27,7 @@ tests {
     if (res.getStatus() === 200) {
       expect(res.getBody()).to.have.property('todo');
       expect(res.getBody().todo).to.have.property('title', 'Updated Test Todo');
-      expect(res.getBody().todo).to.have.property('completed', 1);
+      expect(res.getBody().todo).to.have.property('completed', true);
     }
   });
   

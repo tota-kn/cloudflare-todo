@@ -27,6 +27,6 @@ tests {
     expect(res.getBody()).to.have.property('todo');
     expect(res.getBody().todo).to.have.property('title', 'Test Todo');
     expect(res.getBody().todo).to.have.property('description', 'This is a test todo item');
-    expect(res.getBody().todo).to.have.property('completed', 0);
+    expect(res.getBody().todo).to.have.property('completed', false);
   });
 }

@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: {{BASE_URL}}/v1/files
+  url: {{BASE_URL}}/v1/files/test-file.txt
   body: text
   auth: none
 }
@@ -21,6 +21,6 @@ tests {
   
   test("Response contains success message", function() {
     expect(res.getBody()).to.have.property('message');
-    expect(res.getBody().message).to.include('uploaded successfully');
+    expect(res.getBody().message).to.include('test-file.txt uploaded successfully');
   });
 }
