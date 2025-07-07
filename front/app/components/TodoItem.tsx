@@ -12,7 +12,7 @@ export function TodoItem({ todo, onEdit }: TodoItemProps) {
   const { data: attachments } = useAttachments(todo.id);
 
   const handleToggleComplete = () => {
-    toggleTodo.mutate({ id: todo.id, completed: todo.completed });
+    toggleTodo.mutate({ todoId: todo.id, completed: todo.completed });
   };
 
   const handleDelete = () => {

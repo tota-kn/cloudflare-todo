@@ -1,8 +1,8 @@
 import { Form } from "react-router";
 import { useCreateTodo, useUpdateTodo } from "~/hooks/useTodos";
-import { FileUpload } from "./FileUpload";
-import { AttachmentList } from "./AttachmentList";
 import type { TodoItem } from "../../../shared/client";
+import { AttachmentList } from "./AttachmentList";
+import { FileUpload } from "./FileUpload";
 
 interface TodoFormProps {
   editingTodo: TodoItem | null;
@@ -27,7 +27,7 @@ export function TodoForm({ editingTodo, onCancel }: TodoFormProps) {
         if (editingTodo) {
           const completed = formData.get("completed") === "true";
           updateTodo.mutate(
-            { id: editingTodo.id, title, description, completed },
+            { todoId: editingTodo.id, title, description, completed },
             { onSuccess: () => onCancel() }
           );
         } else {
