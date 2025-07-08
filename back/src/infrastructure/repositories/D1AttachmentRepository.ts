@@ -1,5 +1,5 @@
 import { Attachment } from '../../domain/entities/Attachment'
-import { AttachmentRepository } from '../../domain/repositories/AttachmentRepository'
+import type { AttachmentRepository } from '../../domain/repositories/AttachmentRepository'
 import { AttachmentId } from '../../domain/value-objects/AttachmentId'
 import { TodoId } from '../../domain/value-objects/TodoId'
 

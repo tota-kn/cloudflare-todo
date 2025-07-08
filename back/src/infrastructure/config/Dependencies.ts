@@ -6,8 +6,8 @@ import { DeleteTodoUseCase } from '../../application/usecases/todos/DeleteTodoUs
 import { GetTodoUseCase } from '../../application/usecases/todos/GetTodoUseCase'
 import { ListTodosUseCase } from '../../application/usecases/todos/ListTodosUseCase'
 import { UpdateTodoUseCase } from '../../application/usecases/todos/UpdateTodoUseCase'
-import { AttachmentRepository } from '../../domain/repositories/AttachmentRepository'
-import { TodoRepository } from '../../domain/repositories/TodoRepository'
+import type { AttachmentRepository } from '../../domain/repositories/AttachmentRepository'
+import type { TodoRepository } from '../../domain/repositories/TodoRepository'
 import { D1AttachmentRepository } from '../repositories/D1AttachmentRepository'
 import { D1TodoRepository } from '../repositories/D1TodoRepository'
 

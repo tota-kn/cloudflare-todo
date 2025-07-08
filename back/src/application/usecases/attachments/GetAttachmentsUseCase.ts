@@ -1,5 +1,5 @@
 import { Attachment } from '../../../domain/entities/Attachment'
-import { AttachmentRepository } from '../../../domain/repositories/AttachmentRepository'
+import type { AttachmentRepository } from '../../../domain/repositories/AttachmentRepository'
 import { TodoId } from '../../../domain/value-objects/TodoId'
 
 export class GetAttachmentsUseCase {

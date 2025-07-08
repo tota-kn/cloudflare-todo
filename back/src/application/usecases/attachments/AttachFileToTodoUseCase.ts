@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { Attachment } from '../../../domain/entities/Attachment'
-import { AttachmentRepository } from '../../../domain/repositories/AttachmentRepository'
-import { TodoRepository } from '../../../domain/repositories/TodoRepository'
+import type { AttachmentRepository } from '../../../domain/repositories/AttachmentRepository'
+import type { TodoRepository } from '../../../domain/repositories/TodoRepository'
 import { AttachmentId } from '../../../domain/value-objects/AttachmentId'
 import { TodoId } from '../../../domain/value-objects/TodoId'
 

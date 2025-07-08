@@ -1,4 +1,4 @@
-import { TodoRepository } from '../../../domain/repositories/TodoRepository'
+import type { TodoRepository } from '../../../domain/repositories/TodoRepository'
 import { TodoId } from '../../../domain/value-objects/TodoId'
 
 export class DeleteTodoUseCase {
