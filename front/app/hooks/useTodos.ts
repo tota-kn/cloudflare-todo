@@ -182,13 +182,13 @@ export const useToggleTodo = () => {
   });
 };
 
-export const useAttachments = (attachmentId: string) => {
+export const useAttachments = (todoId: string) => {
   return useQuery({
-    queryKey: ["attachments", attachmentId],
+    queryKey: ["attachments", todoId],
     queryFn: async () => {
       try {
         const res = await client.v1.todos[":todoId"].attachments.$get({
-          param: { attachmentId },
+          param: { todoId },
         });
         
         if (!res.ok) {
@@ -198,7 +198,8 @@ export const useAttachments = (attachmentId: string) => {
           throw new Error('Failed to fetch attachments');
         }
         
-        return await res.json();  
+        const response = await res.json();
+        return response.success ? response.data : [];
       } catch (error) {
         if (error instanceof Error && error.message.includes('404')) {
           return [];

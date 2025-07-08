@@ -7,14 +7,14 @@ import { AttachmentDtoMapper } from '../../dto/AttachmentDto'
 export function createListAttachmentsApi(dependencies: Dependencies) {
   return new Hono<{ Bindings: CloudflareEnv }>().get(
     '/v1/todos/:todoId/attachments',
-    zValidator('param', z.object({ attachmentId: z.string() })),
+    zValidator('param', z.object({ todoId: z.string() })),
     async (c) => {
-      const { attachmentId } = c.req.valid('param')
+      const { todoId } = c.req.valid('param')
 
       const useCase = dependencies.getGetAttachmentsUseCase()
 
       try {
-        const attachments = await useCase.execute(attachmentId)
+        const attachments = await useCase.execute(todoId)
         return c.json({
           success: true,
           data: attachments.map(AttachmentDtoMapper.toResponseDto),
