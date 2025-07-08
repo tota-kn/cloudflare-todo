@@ -6,7 +6,8 @@
     "back"
   ],
   "scripts": {
-    "back": "pnpm -F \"back\"",
-    "front": "pnpm -F \"front\""
+    "back": "pnpm --filter \"back\" run",
+    "front": "pnpm --filter \"front\" run",
+    "lint": "pnpm --filter \"back\" run lint && pnpm --filter \"front\" run lint"
   }
 }

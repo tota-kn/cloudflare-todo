@@ -1,16 +1,16 @@
 {
-	"name": "todo-front",
+	"name": "front",
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"build": "react-router build",
-		"cf-typegen": "wrangler types -e local",
+		"dev": "CLOUDFLARE_ENV=local react-router dev",
+		"typecheck": "pnpm run cf-typegen && react-router typegen && tsc -b",
 		"deploy:dev": "CLOUDFLARE_ENV=dev pnpm run build && wrangler deploy",
 		"deploy:prd": "CLOUDFLARE_ENV=prd pnpm run build && wrangler deploy",
-		"dev": "CLOUDFLARE_ENV=local react-router dev",
+		"build": "react-router build",
+		"cf-typegen": "wrangler types -e local",
 		"postinstall": "npm run cf-typegen",
-		"preview": "pnpm run build && vite preview",
-		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b"
+		"preview": "pnpm run build && vite preview"
 	},
 	"dependencies": {
 		"@tanstack/react-query": "^5.81.5",
