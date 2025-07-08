@@ -8,6 +8,6 @@
   "scripts": {
     "back": "pnpm --filter \"back\" run",
     "front": "pnpm --filter \"front\" run",
-    "lint": "pnpm --filter \"back\" run lint && pnpm --filter \"front\" run lint"
+    "typecheck": "pnpm back typecheck && pnpm front typecheck"
   }
 }
