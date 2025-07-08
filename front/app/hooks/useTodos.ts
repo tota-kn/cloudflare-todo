@@ -227,7 +227,12 @@ export const useUploadAttachment = () => {
       
       const res = await client.v1.todos[":todoId"].attachments.$post({
         param: { todoId },
-        form: formData,
+        json: {
+          fileKey: `attachments/${todoId}/${file.name}`,
+          originalFilename: file.name,
+          fileSize: file.size,
+          contentType: file.type,
+        },  
       });
       
       if (!res.ok) {
