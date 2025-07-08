@@ -3,7 +3,7 @@ import { TodoRepository } from '../../../domain/repositories/TodoRepository'
 import { TodoId } from '../../../domain/value-objects/TodoId'
 
 export interface UpdateTodoRequest {
-  id: string
+  todoId: string
   title?: string
   description?: string
   completed?: boolean
@@ -13,7 +13,7 @@ export class UpdateTodoUseCase {
   constructor(private readonly todoRepository: TodoRepository) {}
 
   async execute(request: UpdateTodoRequest): Promise<Todo | null> {
-    const todoId = new TodoId(request.id)
+    const todoId = new TodoId(request.todoId)
     const todo = await this.todoRepository.findById(todoId)
 
     if (!todo) {

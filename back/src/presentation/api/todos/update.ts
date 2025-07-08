@@ -16,11 +16,11 @@ export function createUpdateTodoApi(dependencies: Dependencies) {
   return new Hono<{ Bindings: CloudflareEnv }>()
     .put('/v1/todos/:todoId', zValidator('json', updateTodoSchema), async (c) => {
       try {
-        const id = c.req.param('id')
+        const todoId = c.req.param('todoId')
         const validatedData = c.req.valid('json')
 
         const todo = await updateTodoUseCase.execute({
-          id,
+          todoId,
           title: validatedData.title,
           description: validatedData.description,
           completed: validatedData.completed,

@@ -111,9 +111,9 @@ export const useDeleteTodo = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async (todoId: string) => {
       const res = await client.v1.todos[":todoId"].$delete({
-        param: { id },
+        param: { todoId },
       });
       
       if (!res.ok) {
@@ -125,18 +125,18 @@ export const useDeleteTodo = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
-    onMutate: async (id) => {
+    onMutate: async (todoId) => {
       await queryClient.cancelQueries({ queryKey: ["todos"] });
       
       const previousTodos = queryClient.getQueryData<TodoItem[]>(["todos"]);
       
       queryClient.setQueryData<TodoItem[]>(["todos"], (old) => 
-        old?.filter((todo) => todo.id !== id) || []
+        old?.filter((todo) => todo.id !== todoId) || []
       );
       
       return { previousTodos };
     },
-    onError: (_err, _id, context) => {
+    onError: (_err, _todoId, context) => {
       queryClient.setQueryData(["todos"], context?.previousTodos);
     },
   });
