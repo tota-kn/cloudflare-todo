@@ -13,8 +13,5 @@
     ],
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
-    "declaration": true,
-    "declarationDir": "./dist/types", // 任意の出力先
-    "emitDeclarationOnly": true // JSは出力しない（型だけ出力したいとき）
   },
 }
