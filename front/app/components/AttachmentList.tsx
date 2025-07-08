@@ -1,11 +1,11 @@
 import { useAttachments, useDeleteAttachment } from '~/hooks/useTodos';
-import type { AttachmentResponseDto } from '../../../shared/client';
+import type { AttachmentResponse } from '../../../shared/client';
 
 interface AttachmentListProps {
   todoId: string;
 }
 
-function AttachmentItem({ attachment, onDelete }: { attachment: AttachmentResponseDto; onDelete: (id: string) => void }) {
+function AttachmentItem({ attachment, onDelete }: { attachment: AttachmentResponse; onDelete: (id: string) => void }) {
   const deleteMutation = useDeleteAttachment();
 
   const handleDelete = async () => {

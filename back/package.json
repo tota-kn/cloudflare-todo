@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "pnpm db:migrate && wrangler dev -e local",
     "lint": "eslint . --fix",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc",
     "deploy:dev": "wrangler deploy --minify -e dev",
     "deploy:prd": "wrangler deploy --minify -e prd",
     "cf-typegen": "wrangler types -e local --env-interface CloudflareEnv ./src/types/env.d.ts",
