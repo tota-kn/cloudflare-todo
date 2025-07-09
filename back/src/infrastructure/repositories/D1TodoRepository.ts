@@ -1,74 +1,84 @@
+import { desc, eq } from 'drizzle-orm'
+import { drizzle } from 'drizzle-orm/d1'
 import { Todo } from '../../domain/entities/Todo'
 import type { TodoRepository } from '../../domain/repositories/TodoRepository'
 import { TodoId } from '../../domain/value-objects/TodoId'
 import { TodoDtoMapper } from '../../presentation/dto/TodoDto'
+import { todosTable } from '../database/schema'
 
 export class D1TodoRepository implements TodoRepository {
-  constructor(private readonly db: D1Database) {}
+  private readonly drizzle
+
+  constructor(db: D1Database) {
+    this.drizzle = drizzle(db)
+  }
 
   async save(todo: Todo): Promise<void> {
     const data = TodoDtoMapper.toResponseDto(todo)
-    await this.db.prepare(
-      'INSERT INTO todos (id, title, description, completed, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)',
-    ).bind(
-      data.id,
-      data.title,
-      data.description,
-      data.completed,
-      data.created_at,
-      data.updated_at,
-    ).run()
+    await this.drizzle.insert(todosTable).values({
+      id: data.id,
+      title: data.title,
+      description: data.description,
+      completed: data.completed,
+      createdAt: data.created_at,
+      updatedAt: data.updated_at,
+    })
   }
 
   async findById(id: TodoId): Promise<Todo | null> {
-    const result = await this.db.prepare('SELECT * FROM todos WHERE id = ?')
-      .bind(id.toString())
-      .first<{
-      id: string
-      title: string
-      description: string | null
-      completed: number
-      created_at: string
-      updated_at: string
-    }>()
+    const result = await this.drizzle
+      .select()
+      .from(todosTable)
+      .where(eq(todosTable.id, id.toString()))
+      .get()
 
     if (!result) {
       return null
     }
 
-    return Todo.fromData(result)
+    return Todo.fromData({
+      id: result.id,
+      title: result.title,
+      description: result.description,
+      completed: result.completed ? 1 : 0,
+      created_at: result.createdAt,
+      updated_at: result.updatedAt,
+    })
   }
 
   async findAll(): Promise<Todo[]> {
-    const results = await this.db.prepare('SELECT * FROM todos ORDER BY created_at DESC')
-      .all<{
-      id: string
-      title: string
-      description: string | null
-      completed: number
-      created_at: string
-      updated_at: string
-    }>()
+    const results = await this.drizzle
+      .select()
+      .from(todosTable)
+      .orderBy(desc(todosTable.createdAt))
+      .all()
 
-    return results.results.map(result => Todo.fromData(result))
+    return results.map(result => Todo.fromData({
+      id: result.id,
+      title: result.title,
+      description: result.description,
+      completed: result.completed ? 1 : 0,
+      created_at: result.createdAt,
+      updated_at: result.updatedAt,
+    }))
   }
 
   async update(todo: Todo): Promise<void> {
     const data = TodoDtoMapper.toResponseDto(todo)
-    await this.db.prepare(
-      'UPDATE todos SET title = ?, description = ?, completed = ?, updated_at = ? WHERE id = ?',
-    ).bind(
-      data.title,
-      data.description,
-      data.completed,
-      data.updated_at,
-      data.id,
-    ).run()
+    await this.drizzle
+      .update(todosTable)
+      .set({
+        title: data.title,
+        description: data.description,
+        completed: data.completed,
+        updatedAt: data.updated_at,
+      })
+      .where(eq(todosTable.id, data.id))
   }
 
   async delete(id: TodoId): Promise<void> {
-    await this.db.prepare('DELETE FROM todos WHERE id = ?')
-      .bind(id.toString())
-      .run()
+    await this.drizzle
+      .delete(todosTable)
+      .where(eq(todosTable.id, id.toString()))
   }
 }

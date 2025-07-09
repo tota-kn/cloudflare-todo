@@ -1,37 +1,36 @@
+import { desc, eq } from 'drizzle-orm'
+import { drizzle } from 'drizzle-orm/d1'
 import { Attachment } from '../../domain/entities/Attachment'
 import type { AttachmentRepository } from '../../domain/repositories/AttachmentRepository'
 import { AttachmentId } from '../../domain/value-objects/AttachmentId'
 import { TodoId } from '../../domain/value-objects/TodoId'
+import { todoAttachmentsTable } from '../database/schema'
 
 export class D1AttachmentRepository implements AttachmentRepository {
-  constructor(private readonly db: D1Database) {}
+  private readonly drizzle
+
+  constructor(db: D1Database) {
+    this.drizzle = drizzle(db)
+  }
 
   async save(attachment: Attachment): Promise<void> {
-    const stmt = this.db.prepare(`
-      INSERT INTO todo_attachments (
-        id, todo_id, file_key, original_filename, file_size, content_type, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?)
-    `)
-
-    await stmt.bind(
-      attachment.getId().toString(),
-      attachment.getTodoId().toString(),
-      attachment.getFileKey(),
-      attachment.getOriginalFilename(),
-      attachment.getFileSize(),
-      attachment.getContentType(),
-      attachment.getCreatedAt().toISOString(),
-    ).run()
+    await this.drizzle.insert(todoAttachmentsTable).values({
+      id: attachment.getId().toString(),
+      todoId: attachment.getTodoId().toString(),
+      fileKey: attachment.getFileKey(),
+      originalFilename: attachment.getOriginalFilename(),
+      fileSize: attachment.getFileSize(),
+      contentType: attachment.getContentType(),
+      createdAt: attachment.getCreatedAt().toISOString(),
+    })
   }
 
   async findById(id: AttachmentId): Promise<Attachment | null> {
-    const stmt = this.db.prepare(`
-      SELECT id, todo_id, file_key, original_filename, file_size, content_type, created_at
-      FROM todo_attachments
-      WHERE id = ?
-    `)
-
-    const result = await stmt.bind(id.toString()).first()
+    const result = await this.drizzle
+      .select()
+      .from(todoAttachmentsTable)
+      .where(eq(todoAttachmentsTable.id, id.toString()))
+      .get()
 
     if (!result) {
       return null
@@ -41,54 +40,37 @@ export class D1AttachmentRepository implements AttachmentRepository {
   }
 
   async findByTodoId(todoId: TodoId): Promise<Attachment[]> {
-    const stmt = this.db.prepare(`
-      SELECT id, todo_id, file_key, original_filename, file_size, content_type, created_at
-      FROM todo_attachments
-      WHERE todo_id = ?
-      ORDER BY created_at DESC
-    `)
+    const results = await this.drizzle
+      .select()
+      .from(todoAttachmentsTable)
+      .where(eq(todoAttachmentsTable.todoId, todoId.toString()))
+      .orderBy(desc(todoAttachmentsTable.createdAt))
+      .all()
 
-    const results = await stmt.bind(todoId.toString()).all()
-
-    return results.results.map(result => this.mapToAttachment(result))
+    return results.map(result => this.mapToAttachment(result))
   }
 
   async delete(id: AttachmentId): Promise<void> {
-    const stmt = this.db.prepare(`
-      DELETE FROM todo_attachments
-      WHERE id = ?
-    `)
-
-    await stmt.bind(id.toString()).run()
+    await this.drizzle
+      .delete(todoAttachmentsTable)
+      .where(eq(todoAttachmentsTable.id, id.toString()))
   }
 
   async deleteByTodoId(todoId: TodoId): Promise<void> {
-    const stmt = this.db.prepare(`
-      DELETE FROM todo_attachments
-      WHERE todo_id = ?
-    `)
-
-    await stmt.bind(todoId.toString()).run()
+    await this.drizzle
+      .delete(todoAttachmentsTable)
+      .where(eq(todoAttachmentsTable.todoId, todoId.toString()))
   }
 
-  private mapToAttachment(data: unknown): Attachment {
-    const row = data as {
-      id: string
-      todo_id: string
-      file_key: string
-      original_filename: string
-      file_size: number
-      content_type: string
-      created_at: string
-    }
+  private mapToAttachment(data: { id: string, todoId: string, fileKey: string, originalFilename: string, fileSize: number, contentType: string, createdAt: string }): Attachment {
     return new Attachment(
-      new AttachmentId(row.id),
-      new TodoId(row.todo_id),
-      row.file_key,
-      row.original_filename,
-      row.file_size,
-      row.content_type,
-      new Date(row.created_at),
+      new AttachmentId(data.id),
+      new TodoId(data.todoId),
+      data.fileKey,
+      data.originalFilename,
+      data.fileSize,
+      data.contentType,
+      new Date(data.createdAt),
     )
   }
 }
