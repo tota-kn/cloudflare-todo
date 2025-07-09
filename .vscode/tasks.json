@@ -5,7 +5,7 @@
       "label": "Backend Dev Server",
       "type": "shell",
       "command": "pnpm",
-      "args": ["-F", "todo-back", "dev"],
+      "args": ["-F", "back", "dev"],
       "group": "build",
       "presentation": {
         "echo": true,
@@ -28,7 +28,7 @@
       "label": "Frontend Dev Server",
       "type": "shell",
       "command": "pnpm",
-      "args": ["-F", "todo-front", "dev"],
+      "args": ["-F", "front", "dev"],
       "group": "build",
       "presentation": {
         "echo": true,
@@ -89,7 +89,7 @@
       "label": "Backend Lint",
       "type": "shell",
       "command": "pnpm",
-      "args": ["-F", "todo-back", "lint"],
+      "args": ["-F", "back", "lint"],
       "group": "test",
       "presentation": {
         "echo": true,
@@ -109,7 +109,7 @@
       "label": "Frontend Typecheck",
       "type": "shell",
       "command": "pnpm",
-      "args": ["-F", "todo-front", "typecheck"],
+      "args": ["-F", "front", "typecheck"],
       "group": "test",
       "presentation": {
         "echo": true,
@@ -129,7 +129,7 @@
       "label": "Database Migrate",
       "type": "shell",
       "command": "pnpm",
-      "args": ["-F", "todo-back", "db:migrate"],
+      "args": ["-F", "back", "db:migrate"],
       "group": "build",
       "presentation": {
         "echo": true,
@@ -149,7 +149,7 @@
       "label": "Run API Tests",
       "type": "shell",
       "command": "pnpm",
-      "args": ["-F", "todo-back", "test:api"],
+      "args": ["-F", "back", "test:api"],
       "group": "test",
       "presentation": {
         "echo": true,
