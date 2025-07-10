@@ -1,8 +1,8 @@
 import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { z } from 'zod'
-import { Dependencies } from '../../../infrastructure/config/Dependencies'
-import { AttachmentDtoMapper } from '../../dto/AttachmentDto'
+import { Dependencies } from '../../../../../../infrastructure/config/Dependencies'
+import { AttachmentDtoMapper } from '../../../../../dto/AttachmentDto'
 
 const attachFileSchema = z.object({
   fileKey: z.string().min(1, 'File key is required'),
@@ -11,7 +11,7 @@ const attachFileSchema = z.object({
   contentType: z.string().min(1, 'Content type is required'),
 })
 
-export function createAttachFileToTodoApi(dependencies: Dependencies) {
+export function v1TodosTodoIdAttachmentsPost(dependencies: Dependencies) {
   return new Hono<{ Bindings: CloudflareEnv }>().post(
     '/v1/todos/:todoId/attachments',
     zValidator('param', z.object({ todoId: z.string() })),

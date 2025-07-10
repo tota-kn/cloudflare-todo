@@ -1,9 +1,9 @@
 import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { z } from 'zod'
-import { Dependencies } from '../../../infrastructure/config/Dependencies'
+import { Dependencies } from '../../../../../infrastructure/config/Dependencies'
 
-export function createDeleteTodoApi(dependencies: Dependencies) {
+export function v1TodosTodoIdDelete(dependencies: Dependencies) {
   const deleteTodoUseCase = dependencies.getDeleteTodoUseCase()
 
   return new Hono<{ Bindings: CloudflareEnv }>()

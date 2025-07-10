@@ -1,8 +1,8 @@
 import { Hono } from 'hono'
-import { Dependencies } from '../../../infrastructure/config/Dependencies'
-import { TodoDtoMapper } from '../../dto/TodoDto'
+import { Dependencies } from '../../../../infrastructure/config/Dependencies'
+import { TodoDtoMapper } from '../../../dto/TodoDto'
 
-export function createListTodosApi(dependencies: Dependencies) {
+export function v1TodosGet(dependencies: Dependencies) {
   const listTodosUseCase = dependencies.getListTodosUseCase()
 
   return new Hono<{ Bindings: CloudflareEnv }>()

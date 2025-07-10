@@ -1,8 +1,8 @@
 import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { z } from 'zod'
-import { Dependencies } from '../../../infrastructure/config/Dependencies'
-import { TodoDtoMapper } from '../../dto/TodoDto'
+import { Dependencies } from '../../../../infrastructure/config/Dependencies'
+import { TodoDtoMapper } from '../../../dto/TodoDto'
 
 const createTodoSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -10,7 +10,7 @@ const createTodoSchema = z.object({
   completed: z.boolean().optional().default(false),
 })
 
-export function createCreateTodoApi(dependencies: Dependencies) {
+export function v1TodosPost(dependencies: Dependencies) {
   const createTodoUseCase = dependencies.getCreateTodoUseCase()
 
   return new Hono<{ Bindings: CloudflareEnv }>()

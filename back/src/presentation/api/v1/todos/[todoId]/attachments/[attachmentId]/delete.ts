@@ -1,9 +1,9 @@
 import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { z } from 'zod'
-import { Dependencies } from '../../../infrastructure/config/Dependencies'
+import { Dependencies } from '../../../../../../../infrastructure/config/Dependencies'
 
-export function createDetachFileFromTodoApi(dependencies: Dependencies) {
+export function v1TodosTodoIdAttachmentsAttachmentIdDelete(dependencies: Dependencies) {
   return new Hono<{ Bindings: CloudflareEnv }>().delete(
     '/v1/todos/:todoId/attachments/:attachmentId',
     zValidator('param', z.object({

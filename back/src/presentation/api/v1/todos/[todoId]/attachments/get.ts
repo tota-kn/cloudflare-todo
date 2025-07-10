@@ -1,10 +1,10 @@
 import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { z } from 'zod'
-import { Dependencies } from '../../../infrastructure/config/Dependencies'
-import { AttachmentDtoMapper } from '../../dto/AttachmentDto'
+import { Dependencies } from '../../../../../../infrastructure/config/Dependencies'
+import { AttachmentDtoMapper } from '../../../../../dto/AttachmentDto'
 
-export function createListAttachmentsApi(dependencies: Dependencies) {
+export function v1TodosTodoIdAttachmentsGet(dependencies: Dependencies) {
   return new Hono<{ Bindings: CloudflareEnv }>().get(
     '/v1/todos/:todoId/attachments',
     zValidator('param', z.object({ todoId: z.string() })),
