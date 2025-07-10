@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid'
 import { Attachment } from '../../../domain/entities/Attachment'
-import type { AttachmentRepository } from '../../../domain/repositories/AttachmentRepository'
-import type { TodoRepository } from '../../../domain/repositories/TodoRepository'
 import { AttachmentId } from '../../../domain/value-objects/AttachmentId'
 import { TodoId } from '../../../domain/value-objects/TodoId'
+import type { IAttachmentRepository } from '../../../infrastructure/repositories/attachment/IAttachmentRepository'
+import type { ITodoRepository } from '../../../infrastructure/repositories/todo/TodoRepository'
 
 export interface AttachFileToTodoRequest {
   fileKey: string
@@ -14,8 +14,8 @@ export interface AttachFileToTodoRequest {
 
 export class AttachFileToTodoUseCase {
   constructor(
-    private readonly todoRepository: TodoRepository,
-    private readonly attachmentRepository: AttachmentRepository,
+    private readonly todoRepository: ITodoRepository,
+    private readonly attachmentRepository: IAttachmentRepository,
   ) {}
 
   async execute(todoId: string, request: AttachFileToTodoRequest): Promise<Attachment> {

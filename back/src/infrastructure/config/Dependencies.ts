@@ -6,14 +6,14 @@ import { DeleteTodoUseCase } from '../../application/usecases/todos/DeleteTodoUs
 import { GetTodoUseCase } from '../../application/usecases/todos/GetTodoUseCase'
 import { ListTodosUseCase } from '../../application/usecases/todos/ListTodosUseCase'
 import { UpdateTodoUseCase } from '../../application/usecases/todos/UpdateTodoUseCase'
-import type { AttachmentRepository } from '../../domain/repositories/AttachmentRepository'
-import type { TodoRepository } from '../../domain/repositories/TodoRepository'
-import { D1AttachmentRepository } from '../repositories/D1AttachmentRepository'
-import { D1TodoRepository } from '../repositories/D1TodoRepository'
+import { D1AttachmentRepository } from '../repositories/attachment/D1AttachmentRepository'
+import type { IAttachmentRepository } from '../repositories/attachment/IAttachmentRepository'
+import { D1TodoRepository } from '../repositories/todo/D1TodoRepository'
+import type { ITodoRepository } from '../repositories/todo/TodoRepository'
 
 export class Dependencies {
-  private todoRepository: TodoRepository
-  private attachmentRepository: AttachmentRepository
+  private todoRepository: ITodoRepository
+  private attachmentRepository: IAttachmentRepository
 
   private createTodoUseCase: CreateTodoUseCase
   private getTodoUseCase: GetTodoUseCase
@@ -72,11 +72,11 @@ export class Dependencies {
   }
 
   // Repositories
-  getTodoRepository(): TodoRepository {
+  getTodoRepository(): ITodoRepository {
     return this.todoRepository
   }
 
-  getAttachmentRepository(): AttachmentRepository {
+  getAttachmentRepository(): IAttachmentRepository {
     return this.attachmentRepository
   }
 

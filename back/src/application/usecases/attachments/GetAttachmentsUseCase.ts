@@ -1,10 +1,10 @@
 import { Attachment } from '../../../domain/entities/Attachment'
-import type { AttachmentRepository } from '../../../domain/repositories/AttachmentRepository'
 import { TodoId } from '../../../domain/value-objects/TodoId'
+import type { IAttachmentRepository } from '../../../infrastructure/repositories/attachment/IAttachmentRepository'
 
 export class GetAttachmentsUseCase {
   constructor(
-    private readonly attachmentRepository: AttachmentRepository,
+    private readonly attachmentRepository: IAttachmentRepository,
   ) {}
 
   async execute(todoId: string): Promise<Attachment[]> {

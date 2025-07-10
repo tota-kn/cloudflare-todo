@@ -1,9 +1,9 @@
-import type { AttachmentRepository } from '../../../domain/repositories/AttachmentRepository'
 import { AttachmentId } from '../../../domain/value-objects/AttachmentId'
+import type { IAttachmentRepository } from '../../../infrastructure/repositories/attachment/IAttachmentRepository'
 
 export class DetachFileFromTodoUseCase {
   constructor(
-    private readonly attachmentRepository: AttachmentRepository,
+    private readonly attachmentRepository: IAttachmentRepository,
   ) {}
 
   async execute(attachmentId: string): Promise<void> {

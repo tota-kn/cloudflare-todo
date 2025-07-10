@@ -1,12 +1,12 @@
 import { desc, eq } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/d1'
-import { Todo } from '../../domain/entities/Todo'
-import type { TodoRepository } from '../../domain/repositories/TodoRepository'
-import { TodoId } from '../../domain/value-objects/TodoId'
-import { TodoDtoMapper } from '../../presentation/dto/TodoDto'
-import { todosTable } from '../database/schema'
+import { Todo } from '../../../domain/entities/Todo'
+import { TodoId } from '../../../domain/value-objects/TodoId'
+import { TodoDtoMapper } from '../../../presentation/dto/TodoDto'
+import { todosTable } from '../../database/schema'
+import type { ITodoRepository } from './TodoRepository'
 
-export class D1TodoRepository implements TodoRepository {
+export class D1TodoRepository implements ITodoRepository {
   private readonly drizzle
 
   constructor(db: D1Database) {

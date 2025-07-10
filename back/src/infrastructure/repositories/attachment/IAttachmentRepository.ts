@@ -1,8 +1,8 @@
-import { Attachment } from '../entities/Attachment'
-import { AttachmentId } from '../value-objects/AttachmentId'
-import { TodoId } from '../value-objects/TodoId'
+import { Attachment } from '../../../domain/entities/Attachment'
+import { AttachmentId } from '../../../domain/value-objects/AttachmentId'
+import { TodoId } from '../../../domain/value-objects/TodoId'
 
-export interface AttachmentRepository {
+export interface IAttachmentRepository {
   save(attachment: Attachment): Promise<void>
   findById(id: AttachmentId): Promise<Attachment | null>
   findByTodoId(todoId: TodoId): Promise<Attachment[]>

@@ -1,8 +1,8 @@
 import { Todo } from '../../../domain/entities/Todo'
-import type { TodoRepository } from '../../../domain/repositories/TodoRepository'
+import type { ITodoRepository } from '../../../infrastructure/repositories/todo/TodoRepository'
 
 export class ListTodosUseCase {
-  constructor(private readonly todoRepository: TodoRepository) {}
+  constructor(private readonly todoRepository: ITodoRepository) {}
 
   async execute(): Promise<Todo[]> {
     return await this.todoRepository.findAll()

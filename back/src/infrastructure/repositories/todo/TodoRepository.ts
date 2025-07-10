@@ -1,7 +1,7 @@
-import { Todo } from '../entities/Todo'
-import { TodoId } from '../value-objects/TodoId'
+import { Todo } from '../../../domain/entities/Todo'
+import { TodoId } from '../../../domain/value-objects/TodoId'
 
-export interface TodoRepository {
+export interface ITodoRepository {
   save(todo: Todo): Promise<void>
   findById(id: TodoId): Promise<Todo | null>
   findAll(): Promise<Todo[]>
