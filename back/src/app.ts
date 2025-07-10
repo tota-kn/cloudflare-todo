@@ -1,21 +1,19 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { Dependencies } from './infrastructure/config/Dependencies'
-// Todo APIs
-import { v1TodosPost } from './presentation/api/v1/todos/post'
-import { v1TodosGet } from './presentation/api/v1/todos/get'
+import { v1TodosTodoIdAttachmentsAttachmentIdDelete } from './presentation/api/v1/todos/[todoId]/attachments/[attachmentId]/delete'
+import { v1TodosTodoIdAttachmentsGet } from './presentation/api/v1/todos/[todoId]/attachments/get'
+import { v1TodosTodoIdAttachmentsPost } from './presentation/api/v1/todos/[todoId]/attachments/post'
+import { v1TodosTodoIdDelete } from './presentation/api/v1/todos/[todoId]/delete'
 import { v1TodosTodoIdGet } from './presentation/api/v1/todos/[todoId]/get'
 import { v1TodosTodoIdPut } from './presentation/api/v1/todos/[todoId]/put'
-import { v1TodosTodoIdDelete } from './presentation/api/v1/todos/[todoId]/delete'
-import { v1TodosTodoIdAttachmentsPost } from './presentation/api/v1/todos/[todoId]/attachments/post'
-import { v1TodosTodoIdAttachmentsGet } from './presentation/api/v1/todos/[todoId]/attachments/get'
-import { v1TodosTodoIdAttachmentsAttachmentIdDelete } from './presentation/api/v1/todos/[todoId]/attachments/[attachmentId]/delete'
-// Todo Attachment APIs
+import { v1TodosGet } from './presentation/api/v1/todos/get'
+import { v1TodosPost } from './presentation/api/v1/todos/post'
 
 export function createApp(env: CloudflareEnv) {
   const dependencies = new Dependencies(env)
 
-  const app = new Hono<{ Bindings: CloudflareEnv }>()
+  return new Hono<{ Bindings: CloudflareEnv }>()
     .use(
       '*',
       cors({
@@ -33,6 +31,4 @@ export function createApp(env: CloudflareEnv) {
     .route('', v1TodosTodoIdAttachmentsPost(dependencies))
     .route('', v1TodosTodoIdAttachmentsGet(dependencies))
     .route('', v1TodosTodoIdAttachmentsAttachmentIdDelete(dependencies))
-
-  return app
 }
