@@ -1,4 +1,4 @@
-import { createApp } from './app'
+import { createApp } from './presentation/app'
 
 export type RouteType = ReturnType<typeof createApp>
 export default {

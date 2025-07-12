@@ -1,5 +1,5 @@
-import { AttachmentId } from '../../../domain/value-objects/AttachmentId'
-import type { IAttachmentRepository } from '../../../infrastructure/repositories/attachment/IAttachmentRepository'
+import { AttachmentId } from '../../domain/value-objects/AttachmentId'
+import type { IAttachmentRepository } from '../../infrastructure/repositories/attachment/IAttachmentRepository'
 
 export class DetachFileFromTodoUseCase {
   constructor(

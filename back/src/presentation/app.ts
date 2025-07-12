@@ -1,14 +1,14 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
-import { Dependencies } from './infrastructure/config/Dependencies'
-import { v1TodosTodoIdAttachmentsAttachmentIdDelete } from './presentation/api/v1/todos/[todoId]/attachments/[attachmentId]/delete'
-import { v1TodosTodoIdAttachmentsGet } from './presentation/api/v1/todos/[todoId]/attachments/get'
-import { v1TodosTodoIdAttachmentsPost } from './presentation/api/v1/todos/[todoId]/attachments/post'
-import { v1TodosTodoIdDelete } from './presentation/api/v1/todos/[todoId]/delete'
-import { v1TodosTodoIdGet } from './presentation/api/v1/todos/[todoId]/get'
-import { v1TodosTodoIdPut } from './presentation/api/v1/todos/[todoId]/put'
-import { v1TodosGet } from './presentation/api/v1/todos/get'
-import { v1TodosPost } from './presentation/api/v1/todos/post'
+import { Dependencies } from '../infrastructure/config/Dependencies'
+import { v1TodosTodoIdAttachmentsAttachmentIdDelete } from './api/v1/todos/[todoId]/attachments/[attachmentId]/delete'
+import { v1TodosTodoIdAttachmentsGet } from './api/v1/todos/[todoId]/attachments/get'
+import { v1TodosTodoIdAttachmentsPost } from './api/v1/todos/[todoId]/attachments/post'
+import { v1TodosTodoIdDelete } from './api/v1/todos/[todoId]/delete'
+import { v1TodosTodoIdGet } from './api/v1/todos/[todoId]/get'
+import { v1TodosTodoIdPut } from './api/v1/todos/[todoId]/put'
+import { v1TodosGet } from './api/v1/todos/get'
+import { v1TodosPost } from './api/v1/todos/post'
 
 export function createApp(env: CloudflareEnv) {
   const dependencies = new Dependencies(env)

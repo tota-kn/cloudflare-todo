@@ -1,6 +1,6 @@
-import { Attachment } from '../../../domain/entities/Attachment'
-import { TodoId } from '../../../domain/value-objects/TodoId'
-import type { IAttachmentRepository } from '../../../infrastructure/repositories/attachment/IAttachmentRepository'
+import { Attachment } from '../../domain/entities/Attachment'
+import { TodoId } from '../../domain/value-objects/TodoId'
+import type { IAttachmentRepository } from '../../infrastructure/repositories/attachment/IAttachmentRepository'
 
 export class GetAttachmentsUseCase {
   constructor(

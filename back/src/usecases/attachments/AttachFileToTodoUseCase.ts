@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid'
-import { Attachment } from '../../../domain/entities/Attachment'
-import { AttachmentId } from '../../../domain/value-objects/AttachmentId'
-import { TodoId } from '../../../domain/value-objects/TodoId'
-import type { IAttachmentRepository } from '../../../infrastructure/repositories/attachment/IAttachmentRepository'
-import type { ITodoRepository } from '../../../infrastructure/repositories/todo/TodoRepository'
+import { Attachment } from '../../domain/entities/Attachment'
+import { AttachmentId } from '../../domain/value-objects/AttachmentId'
+import { TodoId } from '../../domain/value-objects/TodoId'
+import type { IAttachmentRepository } from '../../infrastructure/repositories/attachment/IAttachmentRepository'
+import type { ITodoRepository } from '../../infrastructure/repositories/todo/TodoRepository'
 
 export interface AttachFileToTodoRequest {
   fileKey: string
