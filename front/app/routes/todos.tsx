@@ -27,6 +27,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 
   return {
     todos: res.todos,
+    apiBaseUrl: context.cloudflare.env.API_BASE_URL,
   };
 }
 
@@ -70,6 +71,15 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
             )}
           </button>
         </div>
+      </div>
+
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold mb-2">Logo Image:</h2>
+        <img 
+          src={`${loaderData.apiBaseUrl}/v1/assets/logo.jpg`}
+          alt="Logo"
+          className="max-w-xs h-auto border rounded shadow"
+        />
       </div>
 
       {showForm && (
