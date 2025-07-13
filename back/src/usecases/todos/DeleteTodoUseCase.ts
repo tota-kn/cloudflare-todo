@@ -1,5 +1,5 @@
 import { TodoId } from '../../domain/value-objects/TodoId'
-import type { ITodoRepository } from '../../infrastructure/repositories/todo/TodoRepository'
+import type { ITodoRepository } from '../repositories/ITodoRepository'
 
 export class DeleteTodoUseCase {
   constructor(private readonly todoRepository: ITodoRepository) {}

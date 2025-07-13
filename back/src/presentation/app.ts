@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
-import { Dependencies } from '../infrastructure/config/Dependencies'
+import { Dependencies } from '../Dependencies'
 import { v1TodosTodoIdAttachmentsAttachmentIdDelete } from './api/v1/todos/[todoId]/attachments/[attachmentId]/delete'
 import { v1TodosTodoIdAttachmentsGet } from './api/v1/todos/[todoId]/attachments/get'
 import { v1TodosTodoIdAttachmentsPost } from './api/v1/todos/[todoId]/attachments/post'

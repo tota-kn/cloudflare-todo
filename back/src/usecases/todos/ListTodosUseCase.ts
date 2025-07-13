@@ -1,5 +1,5 @@
 import { Todo } from '../../domain/entities/Todo'
-import type { ITodoRepository } from '../../infrastructure/repositories/todo/TodoRepository'
+import type { ITodoRepository } from '../repositories/ITodoRepository'
 
 export class ListTodosUseCase {
   constructor(private readonly todoRepository: ITodoRepository) {}

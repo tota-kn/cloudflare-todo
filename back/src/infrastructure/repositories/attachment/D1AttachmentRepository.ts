@@ -3,8 +3,8 @@ import { drizzle } from 'drizzle-orm/d1'
 import { Attachment } from '../../../domain/entities/Attachment'
 import { AttachmentId } from '../../../domain/value-objects/AttachmentId'
 import { TodoId } from '../../../domain/value-objects/TodoId'
+import type { IAttachmentRepository } from '../../../usecases/repositories/IAttachmentRepository'
 import { todoAttachmentsTable } from '../../database/schema'
-import type { IAttachmentRepository } from './IAttachmentRepository'
 
 export class D1AttachmentRepository implements IAttachmentRepository {
   private readonly drizzle

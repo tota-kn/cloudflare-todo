@@ -1,5 +1,5 @@
-import { Todo } from '../../../domain/entities/Todo'
-import { TodoId } from '../../../domain/value-objects/TodoId'
+import { Todo } from '../../domain/entities/Todo'
+import { TodoId } from '../../domain/value-objects/TodoId'
 
 export interface ITodoRepository {
   save(todo: Todo): Promise<void>

@@ -1,6 +1,6 @@
-import { Attachment } from '../../../domain/entities/Attachment'
-import { AttachmentId } from '../../../domain/value-objects/AttachmentId'
-import { TodoId } from '../../../domain/value-objects/TodoId'
+import { Attachment } from '../../domain/entities/Attachment'
+import { AttachmentId } from '../../domain/value-objects/AttachmentId'
+import { TodoId } from '../../domain/value-objects/TodoId'
 
 export interface IAttachmentRepository {
   save(attachment: Attachment): Promise<void>
