@@ -39,7 +39,6 @@ export default tseslint.config(
             {
               target: './src/application/**/*',
               from: ['./src/presentation/**/*', './src/infrastructure/**/*'],
-              except: ['./src/application/repositories/**/*'],
             },
             // Infrastructure層はPresentation/Application層をimportできない（type importは除く）
             {

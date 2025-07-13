@@ -22,12 +22,19 @@ pnpm back [command]
 
 # フロントエンドで作業
 pnpm front [command]
+
+# 両方の型チェックを実行
+pnpm typecheck
 ```
 
 ### バックエンド (back/)
 ```bash
 # 開発サーバーを起動
 pnpm dev              # local envでlocalhost:8787で実行
+
+# 型生成とチェック
+pnpm cf-typegen       # Cloudflare環境の型を生成
+pnpm typecheck        # 型チェックと宣言ファイル生成
 
 # リント & 修正
 pnpm lint
@@ -51,7 +58,8 @@ pnpm dev              # local envでlocalhost:5173で実行
 # アプリケーションをビルド
 pnpm build
 
-# 型チェック
+# 型生成とチェック
+pnpm cf-typegen       # Cloudflare環境の型を生成
 pnpm typecheck        # CF types、RR types を生成し、tscを実行
 
 # デプロイ
@@ -66,14 +74,14 @@ pnpm preview
 
 ### バックエンドアーキテクチャ
 - **フレームワーク**: Hono with TypeScript
-- **パターン**: 関心の分離が明確なクリーンアーキテクチャ
+- **パターン**: オニオンアーキテクチャ（関心の分離が明確）
 - **構造**: 
   - `src/domain/` - エンティティ、リポジトリ、値オブジェクト
   - `src/application/` - ユースケースとDTO
   - `src/infrastructure/` - D1/R2実装、依存性注入
   - `src/presentation/` - コントローラー、ルート、バリデーター
 - **バリデーション**: `@hono/zod-validator`でZodスキーマ
-- **エントリーポイント**: `src/index.ts` - すべてのルートをメインアプリに構成
+- **エントリーポイント**: `src/index.ts` - Worker実行環境、`src/presentation/app.ts` - アプリケーション構成
 - **データベース**: `migrations/`でCloudflare D1マイグレーション
 - **ストレージ**: ファイルアップロード用のCloudflare R2
 - **型安全性**: ルートがフロントエンドで使用される型をエクスポート
@@ -89,7 +97,7 @@ pnpm preview
 - **スタイリング**: TailwindCSS
 
 ### 型共有戦略
-- バックエンドルートが`src/index.ts`から`RouteType`をエクスポート
+- バックエンドルートが`src/presentation/app.ts`から`AppType`をエクスポート
 - `shared/client.ts`がこれを`ClientType`として再エクスポート
 - フロントエンドが完全に型付けされたAPIクライアント用に`hc<ClientType>()`を使用
 - これによりバックエンドからフロントエンドへのエンドツーエンドの型安全性を実現
@@ -103,12 +111,13 @@ pnpm preview
 ## 重要なファイル
 
 - `back/src/index.ts` - メインバックエンドエントリーポイントとルート構成
-- `back/src/infrastructure/config/Dependencies.ts` - 依存性注入コンテナ
+- `back/src/Dependencies.ts` - 依存性注入コンテナ
 - `front/app/client.ts` - 型付きAPIクライアント設定
 - `front/workers/app.ts` - Cloudflare Workerリクエストハンドラー
 - `shared/client.ts` - バックエンドとフロントエンド間の型ブリッジ
 - `**/wrangler.jsonc` - Cloudflare Workers設定
-- `back/migrations/0001_initial_schema.sql` - データベーススキーマ
+- `back/migrations/0001_initial_schema.sql` - 初期データベーススキーマ
+- `back/migrations/0002_add_todo_attachments.sql` - ファイル添付機能のスキーマ
 
 ## 開発ワークフロー
 
@@ -118,13 +127,14 @@ pnpm preview
 4. Cloudflare Workers（バックエンド）とPages（フロントエンド）に別々にデプロイ
 5. `back/test/api/`のテストスイートでBrunoを使用したAPIテスト
 
-## クリーンアーキテクチャ実装
+## オニオンアーキテクチャ実装
 
 - **ドメイン層**: エンティティと値オブジェクトによる純粋なビジネスロジック
 - **アプリケーション層**: ユースケースがビジネス操作を統率
 - **インフラストラクチャ層**: リポジトリの具体的実装
 - **プレゼンテーション層**: HTTPコントローラーとルート定義
 - **依存性注入**: `Dependencies.ts`で一元化
+- **依存方向制御**: ESLintの`import/no-restricted-paths`ルールでオニオンアーキテクチャの依存方向を強制
 
 ## メモリ
 

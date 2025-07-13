@@ -33,4 +33,4 @@ export function createApp(env: CloudflareEnv) {
     .route('', v1TodosTodoIdAttachmentsAttachmentIdDelete(dependencies))
 }
 
-export type RouteType = ReturnType<typeof createApp>
+export type AppType = ReturnType<typeof createApp>
