@@ -1,6 +1,6 @@
 import { Todo } from '../../domain/entities/Todo'
 
-export interface TodoResponseDto {
+export interface TodoDto {
   id: string
   title: string
   description: string | null
@@ -9,7 +9,7 @@ export interface TodoResponseDto {
   updated_at: string
 }
 
-export const toTodoDto = (todo: Todo): TodoResponseDto => {
+export const toTodoDto = (todo: Todo): TodoDto => {
   return {
     id: todo.getId().toString(),
     title: todo.getTitle(),

@@ -1,7 +1,7 @@
 import { Todo } from '../../domain/entities/Todo'
 import { TodoId } from '../../domain/value-objects/TodoId'
+import { type TodoDto, toTodoDto } from '../dto/TodoDto'
 import type { ITodoRepository } from '../repositories/ITodoRepository'
-import { type TodoResponseDto, toTodoDto } from '../dto/TodoDto'
 
 export interface CreateTodoRequest {
   title: string
@@ -11,7 +11,7 @@ export interface CreateTodoRequest {
 export class CreateTodoUseCase {
   constructor(private readonly todoRepository: ITodoRepository) {}
 
-  async execute(request: CreateTodoRequest): Promise<TodoResponseDto> {
+  async execute(request: CreateTodoRequest): Promise<TodoDto> {
     const id = new TodoId(crypto.randomUUID())
     const todo = Todo.create(id, request.title, request.description)
 

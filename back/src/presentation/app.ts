@@ -1,9 +1,6 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { Dependencies } from '../Dependencies'
-import { v1TodosTodoIdAttachmentsAttachmentIdDelete } from './api/v1/todos/_todoId/attachments/_attachmentId/delete'
-import { v1TodosTodoIdAttachmentsGet } from './api/v1/todos/_todoId/attachments/get'
-import { v1TodosTodoIdAttachmentsPost } from './api/v1/todos/_todoId/attachments/post'
 import { v1TodosTodoIdDelete } from './api/v1/todos/_todoId/delete'
 import { v1TodosTodoIdGet } from './api/v1/todos/_todoId/get'
 import { v1TodosTodoIdPut } from './api/v1/todos/_todoId/put'
@@ -28,9 +25,6 @@ export function createApp(env: CloudflareEnv) {
     .route('', v1TodosTodoIdGet(dependencies))
     .route('', v1TodosTodoIdPut(dependencies))
     .route('', v1TodosTodoIdDelete(dependencies))
-    .route('', v1TodosTodoIdAttachmentsPost(dependencies))
-    .route('', v1TodosTodoIdAttachmentsGet(dependencies))
-    .route('', v1TodosTodoIdAttachmentsAttachmentIdDelete(dependencies))
 }
 
 export type AppType = ReturnType<typeof createApp>

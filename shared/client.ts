@@ -1,11 +1,5 @@
-import type { RouteType } from "../back/dist/types/index.d.ts";
-import type { AttachFileToTodoRequestDto, AttachmentResponseDto } from "../back/dist/types/presentation/dto/AttachmentDto.js";
-import type { CreateTodoRequestDto, TodoResponseDto, UpdateTodoRequestDto } from "../back/dist/types/presentation/dto/TodoDto.js";
+import type { TodoDto } from "../back/dist/types/application/dto/TodoDto";
+import type { AppType } from "../back/dist/types/presentation/app";
 
-
-export type ClientType = RouteType;
-export type TodoItem = TodoResponseDto;
-export type CreateTodoRequest = CreateTodoRequestDto;
-export type UpdateTodoRequest = UpdateTodoRequestDto;
-export type AttachmentResponse = AttachmentResponseDto;
-export type AttachFileToTodoRequest = AttachFileToTodoRequestDto;
+export type ClientType = AppType;
+export type TodoItem = TodoDto;
