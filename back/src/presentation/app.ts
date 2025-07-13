@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { Dependencies } from '../Dependencies'
+import { v1AssetsFilenameGet } from './api/v1/assets/_filename/get'
 import { v1TodosTodoIdDelete } from './api/v1/todos/_todoId/delete'
 import { v1TodosTodoIdGet } from './api/v1/todos/_todoId/get'
 import { v1TodosTodoIdPut } from './api/v1/todos/_todoId/put'
@@ -20,6 +21,7 @@ export function createApp(env: CloudflareEnv) {
       }),
     )
     .get('/v1', c => c.json({ message: `${c.env.STAGE}: Hello from Cloudflare Workers!` }))
+    .route('', v1AssetsFilenameGet(dependencies))
     .route('', v1TodosGet(dependencies))
     .route('', v1TodosPost(dependencies))
     .route('', v1TodosTodoIdGet(dependencies))

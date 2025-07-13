@@ -1,0 +1,21 @@
+meta {
+  name: assets-get-valid
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{BASE_URL}}/v1/assets/sample-image.jpg
+  body: none
+  auth: none
+}
+
+tests {
+  test("Response status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Response has content-type header", function() {
+    expect(res.getHeaders()).to.have.property('content-type');
+  });
+}

@@ -1,0 +1,22 @@
+meta {
+  name: assets-not-found
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{BASE_URL}}/v1/assets/non-existent-file.jpg
+  body: none
+  auth: none
+}
+
+tests {
+  test("Response status is 404", function() {
+    expect(res.getStatus()).to.equal(404);
+  });
+  
+  test("Response contains error message", function() {
+    expect(res.getBody()).to.have.property('error');
+    expect(res.getBody().error).to.equal('File not found');
+  });
+}

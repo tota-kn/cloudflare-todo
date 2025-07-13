@@ -8,6 +8,7 @@ import { D1TodoRepository } from './infrastructure/repositories/D1TodoRepository
 
 export class Dependencies {
   private todoRepository: ITodoRepository
+  private BucketRepository: R2Bucket
   private createTodoUseCase: CreateTodoUseCase
   private getTodoUseCase: GetTodoUseCase
   private listTodosUseCase: ListTodosUseCase
@@ -16,6 +17,7 @@ export class Dependencies {
 
   constructor(env: CloudflareEnv) {
     this.todoRepository = new D1TodoRepository(env.DB)
+    this.BucketRepository = env.STORAGE
     this.createTodoUseCase = new CreateTodoUseCase(this.todoRepository)
     this.getTodoUseCase = new GetTodoUseCase(this.todoRepository)
     this.listTodosUseCase = new ListTodosUseCase(this.todoRepository)
@@ -45,5 +47,9 @@ export class Dependencies {
 
   getTodoRepository(): ITodoRepository {
     return this.todoRepository
+  }
+
+  getBucketRepository(): R2Bucket {
+    return this.BucketRepository
   }
 }
