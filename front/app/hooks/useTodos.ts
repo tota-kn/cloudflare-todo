@@ -1,17 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { InferRequestType } from "hono";
 import { createBrowserClient } from "~/client";
 import type { TodoItem } from "../../../shared/client";
 
-type CreateTodoRequest = {
-  title: string;
-  description?: string;
-};
+type CreateTodoRequest = InferRequestType<
+  typeof client.v1.todos.$post
+>['json'] 
 
-type UpdateTodoRequest = {
-  title?: string;
-  description?: string;
-  completed?: boolean;
-};
+type UpdateTodoRequest =InferRequestType<
+  typeof client.v1.todos[":todoId"]["$put"]
+>['json'] 
 
 const client = createBrowserClient();
 

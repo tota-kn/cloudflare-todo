@@ -5,7 +5,7 @@
     "dev": "pnpm db:migrate && wrangler dev -e local",
     "deploy:dev": "wrangler deploy --minify -e dev",
     "deploy:prd": "wrangler deploy --minify -e prd",
-    "typecheck": "pnpm run cf-typegen && tsc --declaration --emitDeclarationOnly --declarationDir ./dist/types",
+    "typecheck": "pnpm run cf-typegen && rm -rf ./dist/types && tsc --declaration --emitDeclarationOnly --declarationDir ./dist/types",
     "test:api": "cd test/api && bru run",
     "lint": "eslint . --fix",
     "cf-typegen": "wrangler types -e local --env-interface CloudflareEnv ./src/types/env.d.ts",
