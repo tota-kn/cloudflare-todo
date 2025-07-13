@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createBrowserClient } from "~/client";
-import type { CreateTodoRequest, TodoItem, UpdateTodoRequest } from "../../../shared/client";
+import type { TodoItem } from "../../../shared/client";
 
 const client = createBrowserClient();
 
@@ -27,7 +27,7 @@ export const useCreateTodo = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async (newTodo: CreateTodoRequest) => {
+    mutationFn: async (newTodo: TodoItem) => {
       const res = await client.v1.todos.$post({
         json: newTodo,
       });
@@ -71,7 +71,7 @@ export const useUpdateTodo = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async ({ todoId, ...updates }: UpdateTodoRequest & { todoId: string }) => {
+    mutationFn: async ({ todoId, ...updates }: TodoItem & { todoId: string }) => {
       const res = await client.v1.todos[":todoId"].$put({
         param: { todoId },
         json: updates,
@@ -182,89 +182,3 @@ export const useToggleTodo = () => {
   });
 };
 
-export const useAttachments = (todoId: string) => {
-  return useQuery({
-    queryKey: ["attachments", todoId],
-    queryFn: async () => {
-      try {
-        const res = await client.v1.todos[":todoId"].attachments.$get({
-          param: { todoId },
-        });
-        
-        if (!res.ok) {
-          if (res.status === 404) {
-            return [];
-          }
-          throw new Error('Failed to fetch attachments');
-        }
-        
-        const response = await res.json();
-        return response.success ? response.data : [];
-      } catch (error) {
-        if (error instanceof Error && error.message.includes('404')) {
-          return [];
-        }
-        throw error;
-      }
-    },
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-    retry: (failureCount, error) => {
-      if (error.message.includes('404') || error.message.includes('Failed to fetch attachments')) {
-        return false;
-      }
-      return failureCount < 3;
-    },
-  });
-};
-
-export const useUploadAttachment = () => {
-  const queryClient = useQueryClient();
-  
-  return useMutation({
-    mutationFn: async ({ todoId, file }: { todoId: string; file: File }) => {
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      const res = await client.v1.todos[":todoId"].attachments.$post({
-        param: { todoId },
-        json: {
-          fileKey: `attachments/${todoId}/${file.name}`,
-          originalFilename: file.name,
-          fileSize: file.size,
-          contentType: file.type,
-        },  
-      });
-      
-      if (!res.ok) {
-        throw new Error('Failed to upload attachment');
-      }
-      
-      return res.json();
-    },
-    onSuccess: (_data, { todoId }) => {
-      queryClient.invalidateQueries({ queryKey: ["attachments", todoId] });
-    },
-  });
-};
-
-export const useDeleteAttachment = () => {
-  const queryClient = useQueryClient();
-  
-  return useMutation({
-    mutationFn: async ({ todoId, attachmentId }: { todoId: string; attachmentId: string }) => {
-      const res = await client.v1.todos[":todoId"].attachments[":attachmentId"].$delete({
-        param: { todoId, attachmentId },
-      });
-      
-      if (!res.ok) {
-        throw new Error('Failed to delete attachment');
-      }
-      
-      return res.json();
-    },
-    onSuccess: (_data, { todoId }) => {
-      queryClient.invalidateQueries({ queryKey: ["attachments", todoId] });
-    },
-  });
-};

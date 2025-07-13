@@ -1,5 +1,5 @@
-import { TodoItem } from "./TodoItem";
 import type { TodoItem as TodoItemData } from "../../../shared/client";
+import { TodoItem } from "./TodoItem";
 
 interface TodoListProps {
   todos: TodoItemData[];

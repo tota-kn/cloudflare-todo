@@ -2,11 +2,11 @@ import { useState } from "react";
 import { createServerFetcher } from "~/client";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
+import { ThemeToggle } from "~/components/ThemeToggle";
 import { TodoForm } from "~/components/TodoForm";
 import { TodoList } from "~/components/TodoList";
-import { ThemeToggle } from "~/components/ThemeToggle";
 import { useTodos } from "~/hooks/useTodos";
-import type { TodoItem } from "../../../shared/client";
+import type { TodoItem as TodoDto } from "../../../shared/client";
 import type { Route } from "./+types/todos";
 
 export function meta({}: Route.MetaArgs) {
@@ -32,13 +32,13 @@ export async function loader({ context }: Route.LoaderArgs) {
 
 export default function Todos({ loaderData }: Route.ComponentProps) {
   const [showForm, setShowForm] = useState(false);
-  const [editingTodo, setEditingTodo] = useState<TodoItem | null>(null);
+  const [editingTodo, setEditingTodo] = useState<TodoDto | null>(null);
   
   const { data: todos, isLoading, error } = useTodos(loaderData.todos);
   
   const currentTodos = todos || [];
 
-  const handleEdit = (todo: TodoItem) => {
+  const handleEdit = (todo: TodoDto) => {
     setEditingTodo(todo);
     setShowForm(true);
   };
