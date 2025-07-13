@@ -2,7 +2,6 @@ import { desc, eq } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/d1'
 import { Todo } from '../../../domain/entities/Todo'
 import { TodoId } from '../../../domain/value-objects/TodoId'
-import { TodoDtoMapper } from '../../../usecases/dto/TodoDto'
 import type { ITodoRepository } from '../../../usecases/repositories/ITodoRepository'
 import { todosTable } from '../../database/schema'
 
@@ -14,14 +13,13 @@ export class D1TodoRepository implements ITodoRepository {
   }
 
   async save(todo: Todo): Promise<void> {
-    const data = TodoDtoMapper.toResponseDto(todo)
     await this.drizzle.insert(todosTable).values({
-      id: data.id,
-      title: data.title,
-      description: data.description,
-      completed: data.completed,
-      createdAt: data.created_at,
-      updatedAt: data.updated_at,
+      id: todo.getId().toString(),
+      title: todo.getTitle(),
+      description: todo.getDescription(),
+      completed: todo.getStatus().toBoolean(),
+      createdAt: todo.getCreatedAt().toISOString(),
+      updatedAt: todo.getUpdatedAt().toISOString(),
     })
   }
 
@@ -64,16 +62,15 @@ export class D1TodoRepository implements ITodoRepository {
   }
 
   async update(todo: Todo): Promise<void> {
-    const data = TodoDtoMapper.toResponseDto(todo)
     await this.drizzle
       .update(todosTable)
       .set({
-        title: data.title,
-        description: data.description,
-        completed: data.completed,
-        updatedAt: data.updated_at,
+        title: todo.getTitle(),
+        description: todo.getDescription(),
+        completed: todo.getStatus().toBoolean(),
+        updatedAt: todo.getUpdatedAt().toISOString(),
       })
-      .where(eq(todosTable.id, data.id))
+      .where(eq(todosTable.id, todo.getId().toString()))
   }
 
   async delete(id: TodoId): Promise<void> {
