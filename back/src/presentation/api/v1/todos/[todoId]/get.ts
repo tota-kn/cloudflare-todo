@@ -2,7 +2,7 @@ import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { z } from 'zod'
 import { Dependencies } from '../../../../../Dependencies'
-import { TodoDtoMapper } from '../../../../../usecases/dto/TodoDto'
+import { toTodoDto } from '../../../../../usecases/dto/TodoDto'
 
 export function v1TodosTodoIdGet(dependencies: Dependencies) {
   const getTodoUseCase = dependencies.getGetTodoUseCase()
@@ -18,7 +18,7 @@ export function v1TodosTodoIdGet(dependencies: Dependencies) {
         }
 
         return c.json({
-          todo: TodoDtoMapper.toResponseDto(todo),
+          todo: toTodoDto(todo),
         })
       }
       catch (error) {

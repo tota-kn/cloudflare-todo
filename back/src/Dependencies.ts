@@ -1,5 +1,5 @@
-import { D1AttachmentRepository } from './infrastructure/repositories/attachment/D1AttachmentRepository'
-import { D1TodoRepository } from './infrastructure/repositories/todo/D1TodoRepository'
+import { D1AttachmentRepository } from './infrastructure/repositories/D1AttachmentRepository'
+import { D1TodoRepository } from './infrastructure/repositories/D1TodoRepository'
 import { AttachFileToTodoUseCase } from './usecases/attachments/AttachFileToTodoUseCase'
 import { DetachFileFromTodoUseCase } from './usecases/attachments/DetachFileFromTodoUseCase'
 import { GetAttachmentsUseCase } from './usecases/attachments/GetAttachmentsUseCase'
