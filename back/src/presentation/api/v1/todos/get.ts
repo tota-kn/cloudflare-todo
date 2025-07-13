@@ -1,6 +1,5 @@
 import { Hono } from 'hono'
 import { Dependencies } from '../../../../Dependencies'
-import { toTodoDto } from '../../../../usecases/dto/TodoDto'
 
 export function v1TodosGet(dependencies: Dependencies) {
   const listTodosUseCase = dependencies.getListTodosUseCase()
@@ -10,7 +9,7 @@ export function v1TodosGet(dependencies: Dependencies) {
       try {
         const todos = await listTodosUseCase.execute()
         return c.json({
-          todos: todos.map(toTodoDto),
+          todos,
         })
       }
       catch (error) {

@@ -2,7 +2,6 @@ import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { z } from 'zod'
 import { Dependencies } from '../../../../../Dependencies'
-import { toTodoDto } from '../../../../../usecases/dto/TodoDto'
 
 export const updateTodoSchema = z.object({
   title: z.string().min(1, 'Title cannot be empty').optional(),
@@ -31,7 +30,7 @@ export function v1TodosTodoIdPut(dependencies: Dependencies) {
         }
 
         return c.json({
-          todo: toTodoDto(todo),
+          todo,
         })
       }
       catch (error) {

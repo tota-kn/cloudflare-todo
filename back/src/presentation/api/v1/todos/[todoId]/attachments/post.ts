@@ -2,7 +2,6 @@ import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { z } from 'zod'
 import { Dependencies } from '../../../../../../Dependencies'
-import { toAttachmentDto } from '../../../../../../usecases/dto/AttachmentDto'
 
 const attachFileSchema = z.object({
   fileKey: z.string().min(1, 'File key is required'),
@@ -26,7 +25,7 @@ export function v1TodosTodoIdAttachmentsPost(dependencies: Dependencies) {
         const attachment = await useCase.execute(todoId, attachRequest)
         return c.json({
           success: true,
-          data: toAttachmentDto(attachment),
+          data: attachment,
         })
       }
       catch (error) {

@@ -2,7 +2,6 @@ import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { z } from 'zod'
 import { Dependencies } from '../../../../Dependencies'
-import { toTodoDto } from '../../../../usecases/dto/TodoDto'
 
 const createTodoSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -24,7 +23,7 @@ export function v1TodosPost(dependencies: Dependencies) {
         })
 
         return c.json({
-          todo: toTodoDto(todo),
+          todo,
         }, 201)
       }
       catch (error) {

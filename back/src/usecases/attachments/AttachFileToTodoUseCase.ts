@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { Attachment } from '../../domain/entities/Attachment'
 import { AttachmentId } from '../../domain/value-objects/AttachmentId'
 import { TodoId } from '../../domain/value-objects/TodoId'
+import { type AttachmentDto, toAttachmentDto } from '../dto/AttachmentDto'
 import type { IAttachmentRepository } from '../repositories/IAttachmentRepository'
 import type { ITodoRepository } from '../repositories/ITodoRepository'
 
@@ -18,7 +19,7 @@ export class AttachFileToTodoUseCase {
     private readonly attachmentRepository: IAttachmentRepository,
   ) {}
 
-  async execute(todoId: string, request: AttachFileToTodoRequest): Promise<Attachment> {
+  async execute(todoId: string, request: AttachFileToTodoRequest): Promise<AttachmentDto> {
     const todo = await this.todoRepository.findById(new TodoId(todoId))
     if (!todo) {
       throw new Error('Todo not found')
@@ -35,6 +36,6 @@ export class AttachFileToTodoUseCase {
     )
 
     await this.attachmentRepository.save(attachment)
-    return attachment
+    return toAttachmentDto(attachment)
   }
 }

@@ -1,6 +1,6 @@
-import { Todo } from '../../domain/entities/Todo'
 import { TodoId } from '../../domain/value-objects/TodoId'
 import type { ITodoRepository } from '../repositories/ITodoRepository'
+import { type TodoResponseDto, toTodoDto } from '../dto/TodoDto'
 
 export interface UpdateTodoRequest {
   todoId: string
@@ -12,7 +12,7 @@ export interface UpdateTodoRequest {
 export class UpdateTodoUseCase {
   constructor(private readonly todoRepository: ITodoRepository) {}
 
-  async execute(request: UpdateTodoRequest): Promise<Todo | null> {
+  async execute(request: UpdateTodoRequest): Promise<TodoResponseDto | null> {
     const todoId = new TodoId(request.todoId)
     const todo = await this.todoRepository.findById(todoId)
 
@@ -39,6 +39,6 @@ export class UpdateTodoUseCase {
 
     await this.todoRepository.update(todo)
 
-    return todo
+    return toTodoDto(todo)
   }
 }
