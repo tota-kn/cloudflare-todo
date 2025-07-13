@@ -9,17 +9,6 @@ export interface TodoDto {
   updated_at: string
 }
 
-export interface TodoCreateRequest {
-  title: string
-  description?: string
-}
-
-export interface TodoUpdateRequest {
-  title?: string
-  description?: string
-  completed?: boolean
-}
-
 export const toTodoDto = (todo: Todo): TodoDto => {
   return {
     id: todo.getId().toString(),
