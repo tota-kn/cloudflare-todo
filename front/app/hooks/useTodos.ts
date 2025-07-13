@@ -2,6 +2,17 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createBrowserClient } from "~/client";
 import type { TodoItem } from "../../../shared/client";
 
+type CreateTodoRequest = {
+  title: string;
+  description?: string;
+};
+
+type UpdateTodoRequest = {
+  title?: string;
+  description?: string;
+  completed?: boolean;
+};
+
 const client = createBrowserClient();
 
 export const useTodos = (initialData?: TodoItem[]) => {
@@ -27,7 +38,7 @@ export const useCreateTodo = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async (newTodo: TodoItem) => {
+    mutationFn: async (newTodo: CreateTodoRequest) => {
       const res = await client.v1.todos.$post({
         json: newTodo,
       });
@@ -49,7 +60,7 @@ export const useCreateTodo = () => {
       const optimisticTodo: TodoItem = {
         id: `temp-${Date.now()}`,
         title: newTodo.title,
-        description: newTodo.description || null,
+        description: newTodo.description ?? null,
         completed: false,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
@@ -71,7 +82,7 @@ export const useUpdateTodo = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async ({ todoId, ...updates }: TodoItem & { todoId: string }) => {
+    mutationFn: async ({ todoId, ...updates }: UpdateTodoRequest & { todoId: string }) => {
       const res = await client.v1.todos[":todoId"].$put({
         param: { todoId },
         json: updates,

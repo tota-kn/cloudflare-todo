@@ -25,12 +25,12 @@ export function TodoForm({ editingTodo, onCancel }: TodoFormProps) {
         if (editingTodo) {
           const completed = formData.get("completed") === "true";
           updateTodo.mutate(
-            { todoId: editingTodo.id, title, description, completed },
+            { todoId: editingTodo.id, title, description: description || undefined, completed },
             { onSuccess: () => onCancel() }
           );
         } else {
           createTodo.mutate(
-            { title, description },
+            { title, description: description || undefined },
             { onSuccess: () => onCancel() }
           );
         }
