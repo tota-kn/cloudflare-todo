@@ -14,7 +14,6 @@ import { UpdateTodoUseCase } from './usecases/todos/UpdateTodoUseCase'
 export class Dependencies {
   private todoRepository: ITodoRepository
   private attachmentRepository: IAttachmentRepository
-
   private createTodoUseCase: CreateTodoUseCase
   private getTodoUseCase: GetTodoUseCase
   private listTodosUseCase: ListTodosUseCase
@@ -27,7 +26,6 @@ export class Dependencies {
   constructor(env: CloudflareEnv) {
     this.todoRepository = new D1TodoRepository(env.DB)
     this.attachmentRepository = new D1AttachmentRepository(env.DB)
-
     this.createTodoUseCase = new CreateTodoUseCase(this.todoRepository)
     this.getTodoUseCase = new GetTodoUseCase(this.todoRepository)
     this.listTodosUseCase = new ListTodosUseCase(this.todoRepository)
