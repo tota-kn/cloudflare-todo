@@ -33,18 +33,18 @@ export default tseslint.config(
             // Domain層は他の層をimportできない
             {
               target: './src/domain/**/*',
-              from: ['./src/usecases/**/*', './src/infrastructure/**/*', './src/presentation/**/*'],
+              from: ['./src/application/**/*', './src/infrastructure/**/*', './src/presentation/**/*'],
             },
-            // UseCase層はpresentation/infrastructureをimportできない
+            // Application層はPresentation/Infrastructure層をimportできない
             {
-              target: './src/usecases/**/*',
+              target: './src/application/**/*',
               from: ['./src/presentation/**/*', './src/infrastructure/**/*'],
-              except: ['./src/usecases/repositories/**/*'],
+              except: ['./src/application/repositories/**/*'],
             },
-            // Infrastructure層はpresentation/usecaseをimportできない（type importは除く）
+            // Infrastructure層はPresentation/Application層をimportできない（type importは除く）
             {
               target: './src/infrastructure/**/*',
-              from: ['./src/presentation/**/!(repositories)/**/*', './src/usecases/**/!(repositories)/**/*'],
+              from: ['./src/presentation/**/!(repositories)/**/*', './src/application/**/!(repositories)/**/*'],
             },
           ],
         },

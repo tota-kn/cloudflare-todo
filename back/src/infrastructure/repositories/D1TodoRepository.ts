@@ -1,8 +1,8 @@
 import { desc, eq } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/d1'
+import type { ITodoRepository } from '../../application/repositories/ITodoRepository'
 import { Todo } from '../../domain/entities/Todo'
 import { TodoId } from '../../domain/value-objects/TodoId'
-import type { ITodoRepository } from '../../usecases/repositories/ITodoRepository'
 import { todosTable } from '../database/todoTable'
 
 export class D1TodoRepository implements ITodoRepository {

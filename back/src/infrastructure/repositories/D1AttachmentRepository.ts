@@ -1,9 +1,9 @@
 import { desc, eq } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/d1'
+import type { IAttachmentRepository } from '../../application/repositories/IAttachmentRepository'
 import { Attachment } from '../../domain/entities/Attachment'
 import { AttachmentId } from '../../domain/value-objects/AttachmentId'
 import { TodoId } from '../../domain/value-objects/TodoId'
-import type { IAttachmentRepository } from '../../usecases/repositories/IAttachmentRepository'
 import { todoAttachmentsTable } from '../database/todoAttachmentsTable'
 
 export class D1AttachmentRepository implements IAttachmentRepository {
