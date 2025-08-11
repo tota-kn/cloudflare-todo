@@ -9,6 +9,8 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
       include: ['src/**/*.ts'],
       exclude: [
+        'src/application/repositories/**',
+        'src/infrastructure/**',
         'src/presentation/**',
         'src/types/**',
         'src/Dependencies.ts',
