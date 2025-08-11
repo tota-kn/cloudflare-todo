@@ -7,6 +7,7 @@
     "deploy:prd": "wrangler deploy --minify -e prd",
     "typecheck": "pnpm run cf-typegen && rm -rf ./dist/types && tsc --declaration --emitDeclarationOnly --declarationDir ./dist/types",
     "test:api": "cd test/api && bru run",
+    "test:unit": "vitest --coverage",
     "lint": "eslint . --fix",
     "cf-typegen": "wrangler types -e local --env-interface CloudflareEnv ./src/types/env.d.ts",
     "db:migrate": "wrangler d1 migrations apply todo-app-db-local --local -e local"
@@ -28,6 +29,7 @@
     "@types/node": "^20",
     "@types/uuid": "^10.0.0",
     "@usebruno/cli": "^2.7.0",
+    "@vitest/coverage-v8": "^2.1.8",
     "drizzle-kit": "^0.31.4",
     "eslint": "^9",
     "eslint-import-resolver-typescript": "^4.4.4",
@@ -35,6 +37,7 @@
     "eslint-plugin-import": "^2.32.0",
     "typescript": "^5",
     "typescript-eslint": "^8.25.0",
+    "vitest": "^2.1.8",
     "wrangler": "^4.23.0"
   }
 }
