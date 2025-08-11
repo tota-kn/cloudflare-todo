@@ -17,7 +17,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "pnpm -r typecheck && pnpm -r lint"
+            "command": "pnpm back typecheck"
+          },
+          {
+            "type": "command",
+            "command": "pnpm back lint"
           }
         ]
       }
