@@ -1,8 +1,7 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { UpdateTodoUseCase } from '../../../../src/application/usecases/UpdateTodoUseCase'
 import { MockTodoRepository } from '../../mocks/MockTodoRepository'
 import { TestFactory } from '../../mocks/TestFactory'
-import { TodoId } from '../../../../src/domain/value-objects/TodoId'
 
 describe('UpdateTodoUseCase', () => {
   let useCase: UpdateTodoUseCase
@@ -64,7 +63,6 @@ describe('UpdateTodoUseCase', () => {
 
     it('存在するTodoの完了状態をtrueに更新する', async () => {
       const todoId = TestFactory.createTodoId('complete-test-id')
-      const todo = TestFactory.createPendingTodo('未完了タスク')
       // IDを手動で設定
       const todoWithId = TestFactory.createTodo({
         id: todoId,

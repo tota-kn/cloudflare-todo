@@ -1,22 +1,16 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { Todo } from '../../../../src/domain/entities/Todo'
 import { TodoId } from '../../../../src/domain/value-objects/TodoId'
-import { TodoStatus } from '../../../../src/domain/value-objects/TodoStatus'
 import { TestFactory } from '../../mocks/TestFactory'
 
 describe('Todo', () => {
-  let todoId: TodoId
-
-  beforeEach(() => {
-    todoId = TestFactory.createTodoId()
-  })
-
   describe('コンストラクタとファクトリーメソッド', () => {
     describe('create()', () => {
       it('正常な値でTodoを作成する', () => {
         const title = 'テストタスク'
         const description = 'テスト用の説明'
 
+        const todoId = TestFactory.createTodoId()
         const todo = Todo.create(todoId, title, description)
 
         expect(todo.getId()).toBe(todoId)
@@ -30,6 +24,7 @@ describe('Todo', () => {
       it('説明なしでTodoを作成する', () => {
         const title = 'タイトルのみ'
 
+        const todoId = TestFactory.createTodoId()
         const todo = Todo.create(todoId, title)
 
         expect(todo.getId()).toBe(todoId)
@@ -80,18 +75,22 @@ describe('Todo', () => {
 
   describe('バリデーション', () => {
     it('空のタイトルでエラーを投げる', () => {
+      const todoId = TestFactory.createTodoId()
       expect(() => Todo.create(todoId, '')).toThrow('Todo title cannot be empty')
     })
 
     it('スペースのみのタイトルでエラーを投げる', () => {
+      const todoId = TestFactory.createTodoId()
       expect(() => Todo.create(todoId, '   ')).toThrow('Todo title cannot be empty')
     })
   })
 
   describe('ゲッターメソッド', () => {
+    let todoId: TodoId
     let todo: Todo
 
     beforeEach(() => {
+      todoId = TestFactory.createTodoId()
       todo = TestFactory.createTodo({
         id: todoId,
         title: 'テストタスク',
@@ -122,18 +121,22 @@ describe('Todo', () => {
   })
 
   describe('更新メソッド', () => {
+    let todoId: TodoId
     let todo: Todo
     const originalUpdatedAt = new Date('2024-01-01T00:00:00.000Z')
 
     beforeEach(() => {
+      vi.useFakeTimers()
+      vi.setSystemTime(originalUpdatedAt)
+
+      todoId = TestFactory.createTodoId()
       todo = TestFactory.createTodo({
         id: todoId,
         title: '元のタイトル',
         description: '元の説明',
       })
-      // 更新時間の変化をテストするため、手動で古い時間を設定
-      const originalTodo = todo as any
-      originalTodo.updatedAt = originalUpdatedAt
+
+      vi.useRealTimers()
     })
 
     describe('updateTitle()', () => {
@@ -171,13 +174,22 @@ describe('Todo', () => {
   })
 
   describe('ステータス変更メソッド', () => {
+    let todoId: TodoId
     let todo: Todo
     const originalUpdatedAt = new Date('2024-01-01T00:00:00.000Z')
 
     beforeEach(() => {
-      todo = TestFactory.createTodo({ id: todoId })
-      const originalTodo = todo as any
-      originalTodo.updatedAt = originalUpdatedAt
+      vi.useFakeTimers()
+      vi.setSystemTime(originalUpdatedAt)
+
+      todoId = TestFactory.createTodoId()
+      todo = TestFactory.createTodo({
+        id: todoId,
+        title: '元のタイトル',
+        description: '元の説明',
+      })
+
+      vi.useRealTimers()
     })
 
     describe('complete()', () => {
@@ -195,9 +207,6 @@ describe('Todo', () => {
       it('ステータスを未完了に変更し、updatedAtも更新する', () => {
         todo.complete()
         expect(todo.getStatus().isCompleted()).toBe(true)
-
-        const todoAny = todo as any
-        todoAny.updatedAt = originalUpdatedAt
 
         todo.markAsPending()
 
@@ -219,9 +228,6 @@ describe('Todo', () => {
       it('完了から未完了に変更し、updatedAtも更新する', () => {
         todo.complete()
         expect(todo.getStatus().isCompleted()).toBe(true)
-
-        const todoAny = todo as any
-        todoAny.updatedAt = originalUpdatedAt
 
         todo.toggleStatus()
 

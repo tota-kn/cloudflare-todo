@@ -1,5 +1,5 @@
 export class TodoStatus {
-  constructor(private readonly value: boolean) {}
+  private constructor(private readonly value: boolean) {}
 
   static completed(): TodoStatus {
     return new TodoStatus(true)

@@ -1,8 +1,7 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { GetTodoUseCase } from '../../../../src/application/usecases/GetTodoUseCase'
 import { MockTodoRepository } from '../../mocks/MockTodoRepository'
 import { TestFactory } from '../../mocks/TestFactory'
-import { TodoId } from '../../../../src/domain/value-objects/TodoId'
 
 describe('GetTodoUseCase', () => {
   let useCase: GetTodoUseCase
@@ -36,7 +35,6 @@ describe('GetTodoUseCase', () => {
 
     it('完了状態のTodoを正常に取得する', async () => {
       const todoId = TestFactory.createTodoId('completed-todo-id')
-      const todo = TestFactory.createCompletedTodo('完了済みタスク', '完了したタスク')
       // IDを手動で設定
       const todoWithId = TestFactory.createTodo({
         id: todoId,

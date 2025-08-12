@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { DeleteTodoUseCase } from '../../../../src/application/usecases/DeleteTodoUseCase'
 import { MockTodoRepository } from '../../mocks/MockTodoRepository'
 import { TestFactory } from '../../mocks/TestFactory'
-import { TodoId } from '../../../../src/domain/value-objects/TodoId'
 
 describe('DeleteTodoUseCase', () => {
   let useCase: DeleteTodoUseCase

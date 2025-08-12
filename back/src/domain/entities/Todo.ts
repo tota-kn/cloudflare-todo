@@ -2,7 +2,7 @@ import { TodoId } from '../value-objects/TodoId'
 import { TodoStatus } from '../value-objects/TodoStatus'
 
 export class Todo {
-  constructor(
+  private constructor(
     private readonly id: TodoId,
     private title: string,
     private description: string | null,
