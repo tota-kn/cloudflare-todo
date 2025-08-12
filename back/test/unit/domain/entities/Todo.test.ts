@@ -1,7 +1,27 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { Todo } from '../../../../src/domain/entities/Todo'
-import { TodoId } from '../../../../src/domain/value-objects/TodoId'
 import { TestFactory } from '../../mocks/TestFactory'
+
+const ORIGINAL_UPDATED_AT = new Date('2024-01-01T00:00:00.000Z')
+
+function createTestTodo(overrides = {}) {
+  return TestFactory.createTodo({
+    title: 'テストタスク',
+    description: 'テスト説明',
+    ...overrides,
+  })
+}
+
+function createTodoWithFixedTime() {
+  vi.useFakeTimers()
+  vi.setSystemTime(ORIGINAL_UPDATED_AT)
+
+  const todo = createTestTodo()
+
+  vi.useRealTimers()
+
+  return todo
+}
 
 describe('Todo', () => {
   describe('コンストラクタとファクトリーメソッド', () => {
@@ -86,153 +106,130 @@ describe('Todo', () => {
   })
 
   describe('ゲッターメソッド', () => {
-    let todoId: TodoId
-    let todo: Todo
-
-    beforeEach(() => {
-      todoId = TestFactory.createTodoId()
-      todo = TestFactory.createTodo({
-        id: todoId,
-        title: 'テストタスク',
-        description: 'テスト説明',
-      })
-    })
-
     it('getId()が正しいIDを返す', () => {
+      const todoId = TestFactory.createTodoId()
+      const todo = createTestTodo({ id: todoId })
+
       expect(todo.getId()).toBe(todoId)
     })
 
     it('getTitle()が正しいタイトルを返す', () => {
+      const todo = createTestTodo()
+
       expect(todo.getTitle()).toBe('テストタスク')
     })
 
     it('getDescription()が正しい説明を返す', () => {
+      const todo = createTestTodo()
+
       expect(todo.getDescription()).toBe('テスト説明')
     })
 
     it('getStatus()が正しいステータスを返す', () => {
+      const todo = createTestTodo()
+
       expect(todo.getStatus().isPending()).toBe(true)
     })
 
     it('getCreatedAt()とgetUpdatedAt()がDateインスタンスを返す', () => {
+      const todo = createTestTodo()
+
       expect(todo.getCreatedAt()).toBeInstanceOf(Date)
       expect(todo.getUpdatedAt()).toBeInstanceOf(Date)
     })
   })
 
   describe('更新メソッド', () => {
-    let todoId: TodoId
-    let todo: Todo
-    const originalUpdatedAt = new Date('2024-01-01T00:00:00.000Z')
-
-    beforeEach(() => {
-      vi.useFakeTimers()
-      vi.setSystemTime(originalUpdatedAt)
-
-      todoId = TestFactory.createTodoId()
-      todo = TestFactory.createTodo({
-        id: todoId,
-        title: '元のタイトル',
-        description: '元の説明',
-      })
-
-      vi.useRealTimers()
-    })
-
     describe('updateTitle()', () => {
       it('タイトルを更新し、updatedAtも更新する', () => {
-        const newTitle = '新しいタイトル'
+        const todo = createTodoWithFixedTime()
 
+        const newTitle = '新しいタイトル'
         todo.updateTitle(newTitle)
 
         expect(todo.getTitle()).toBe(newTitle)
-        expect(todo.getUpdatedAt().getTime()).toBeGreaterThan(originalUpdatedAt.getTime())
+        expect(todo.getUpdatedAt().getTime()).toBeGreaterThan(ORIGINAL_UPDATED_AT.getTime())
       })
 
       it('空のタイトルでエラーを投げる', () => {
+        const todo = createTestTodo()
+
         expect(() => todo.updateTitle('')).toThrow('Todo title cannot be empty')
       })
     })
 
     describe('updateDescription()', () => {
       it('説明を更新し、updatedAtも更新する', () => {
-        const newDescription = '新しい説明'
+        const todo = createTodoWithFixedTime()
 
+        const newDescription = '新しい説明'
         todo.updateDescription(newDescription)
 
         expect(todo.getDescription()).toBe(newDescription)
-        expect(todo.getUpdatedAt().getTime()).toBeGreaterThan(originalUpdatedAt.getTime())
+        expect(todo.getUpdatedAt().getTime()).toBeGreaterThan(ORIGINAL_UPDATED_AT.getTime())
       })
 
       it('説明をnullに設定できる', () => {
+        const todo = createTodoWithFixedTime()
+
         todo.updateDescription(null)
 
         expect(todo.getDescription()).toBeNull()
-        expect(todo.getUpdatedAt().getTime()).toBeGreaterThan(originalUpdatedAt.getTime())
+        expect(todo.getUpdatedAt().getTime()).toBeGreaterThan(ORIGINAL_UPDATED_AT.getTime())
       })
     })
   })
 
   describe('ステータス変更メソッド', () => {
-    let todoId: TodoId
-    let todo: Todo
-    const originalUpdatedAt = new Date('2024-01-01T00:00:00.000Z')
-
-    beforeEach(() => {
-      vi.useFakeTimers()
-      vi.setSystemTime(originalUpdatedAt)
-
-      todoId = TestFactory.createTodoId()
-      todo = TestFactory.createTodo({
-        id: todoId,
-        title: '元のタイトル',
-        description: '元の説明',
-      })
-
-      vi.useRealTimers()
-    })
-
     describe('complete()', () => {
       it('ステータスを完了に変更し、updatedAtも更新する', () => {
+        const todo = createTodoWithFixedTime()
+
         expect(todo.getStatus().isPending()).toBe(true)
 
         todo.complete()
 
         expect(todo.getStatus().isCompleted()).toBe(true)
-        expect(todo.getUpdatedAt().getTime()).toBeGreaterThan(originalUpdatedAt.getTime())
+        expect(todo.getUpdatedAt().getTime()).toBeGreaterThan(ORIGINAL_UPDATED_AT.getTime())
       })
     })
 
     describe('markAsPending()', () => {
       it('ステータスを未完了に変更し、updatedAtも更新する', () => {
+        const todo = createTodoWithFixedTime()
+
         todo.complete()
         expect(todo.getStatus().isCompleted()).toBe(true)
 
         todo.markAsPending()
 
         expect(todo.getStatus().isPending()).toBe(true)
-        expect(todo.getUpdatedAt().getTime()).toBeGreaterThan(originalUpdatedAt.getTime())
+        expect(todo.getUpdatedAt().getTime()).toBeGreaterThan(ORIGINAL_UPDATED_AT.getTime())
       })
     })
 
     describe('toggleStatus()', () => {
       it('未完了から完了に変更し、updatedAtも更新する', () => {
+        const todo = createTodoWithFixedTime()
+
         expect(todo.getStatus().isPending()).toBe(true)
 
         todo.toggleStatus()
 
         expect(todo.getStatus().isCompleted()).toBe(true)
-        expect(todo.getUpdatedAt().getTime()).toBeGreaterThan(originalUpdatedAt.getTime())
+        expect(todo.getUpdatedAt().getTime()).toBeGreaterThan(ORIGINAL_UPDATED_AT.getTime())
       })
 
       it('完了から未完了に変更し、updatedAtも更新する', () => {
+        const todo = createTodoWithFixedTime()
+
         todo.complete()
         expect(todo.getStatus().isCompleted()).toBe(true)
 
         todo.toggleStatus()
 
         expect(todo.getStatus().isPending()).toBe(true)
-        expect(todo.getUpdatedAt().getTime()).toBeGreaterThan(originalUpdatedAt.getTime())
+        expect(todo.getUpdatedAt().getTime()).toBeGreaterThan(ORIGINAL_UPDATED_AT.getTime())
       })
     })
   })
