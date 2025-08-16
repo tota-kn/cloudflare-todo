@@ -5,7 +5,7 @@ meta {
 }
 
 put {
-  url: {{BASE_URL}}/v1/todos/1
+  url: {{BASE_URL}}/v1/todos/test-put-success-001
   body: json
   auth: none
 }
@@ -19,21 +19,18 @@ body:json {
 }
 
 tests {
-  test("Response status is 200 or 404", function() {
-    expect([200, 404]).to.include(res.getStatus());
+  test("Response status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
   });
   
-  test("If found, response contains updated todo", function() {
-    if (res.getStatus() === 200) {
-      expect(res.getBody()).to.have.property('todo');
-      expect(res.getBody().todo).to.have.property('title', 'Updated Test Todo');
-      expect(res.getBody().todo).to.have.property('completed', true);
-    }
-  });
-  
-  test("If not found, response contains error", function() {
-    if (res.getStatus() === 404) {
-      expect(res.getBody()).to.have.property('error', 'Todo not found');
-    }
+  test("Response contains updated todo", function() {
+    expect(res.getBody()).to.have.property('todo');
+    const todo = res.getBody().todo;
+    expect(todo).to.have.property('id', 'test-put-success-001');
+    expect(todo).to.have.property('title', 'Updated Test Todo');
+    expect(todo).to.have.property('description', 'This todo has been updated');
+    expect(todo).to.have.property('completed', true);
+    expect(todo).to.have.property('created_at');
+    expect(todo).to.have.property('updated_at');
   });
 }
