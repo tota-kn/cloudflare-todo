@@ -5,7 +5,7 @@ export class Todo {
   private constructor(
     private readonly id: TodoId,
     private title: string,
-    private description: string | null,
+    private description: string,
     private status: TodoStatus,
     private readonly createdAt: Date,
     private updatedAt: Date,
@@ -22,7 +22,7 @@ export class Todo {
     return new Todo(
       id,
       title,
-      description || null,
+      description || '',
       TodoStatus.pending(),
       now,
       now,
@@ -32,7 +32,7 @@ export class Todo {
   static fromData(data: {
     id: string
     title: string
-    description: string | null
+    description: string
     completed: number
     created_at: string
     updated_at: string
@@ -40,7 +40,7 @@ export class Todo {
     return new Todo(
       new TodoId(data.id),
       data.title,
-      data.description,
+      data.description || '',
       data.completed === 1 ? TodoStatus.completed() : TodoStatus.pending(),
       new Date(data.created_at),
       new Date(data.updated_at),
@@ -61,7 +61,7 @@ export class Todo {
     return this.title
   }
 
-  getDescription(): string | null {
+  getDescription(): string {
     return this.description
   }
 
@@ -83,7 +83,7 @@ export class Todo {
     this.updatedAt = new Date()
   }
 
-  updateDescription(description: string | null): void {
+  updateDescription(description: string): void {
     this.description = description
     this.updatedAt = new Date()
   }

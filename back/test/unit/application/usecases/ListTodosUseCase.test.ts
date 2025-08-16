@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { ListTodosUseCase } from '../../../../src/application/usecases/ListTodosUseCase'
 import { MockTodoRepository } from '../../mocks/MockTodoRepository'
 import { TestFactory } from '../../mocks/TestFactory'
@@ -77,7 +77,7 @@ describe('ListTodosUseCase', () => {
       expect(completedResult?.completed).toBe(true)
     })
 
-    it('説明がnullのTodoも正しく含まれる', async () => {
+    it('説明が空文字のTodoも正しく含まれる', async () => {
       const todoWithDescription = TestFactory.createTodo({
         title: '説明ありタスク',
         description: 'テスト説明',
@@ -98,7 +98,7 @@ describe('ListTodosUseCase', () => {
       const withoutDesc = result.find(todo => todo.title === '説明なしタスク')
 
       expect(withDesc?.description).toBe('テスト説明')
-      expect(withoutDesc?.description).toBeNull()
+      expect(withoutDesc?.description).toBe('')
     })
 
     it('大量のTodoを正しく処理する', async () => {

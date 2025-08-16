@@ -49,7 +49,7 @@ describe('Todo', () => {
 
         expect(todo.getId()).toBe(todoId)
         expect(todo.getTitle()).toBe(title)
-        expect(todo.getDescription()).toBeNull()
+        expect(todo.getDescription()).toBe('')
         expect(todo.getStatus().isPending()).toBe(true)
       })
     })
@@ -79,7 +79,7 @@ describe('Todo', () => {
         const data = {
           id: 'completed-id',
           title: '完了タスク',
-          description: null,
+          description: '',
           completed: 1,
           created_at: '2024-01-01T00:00:00.000Z',
           updated_at: '2024-01-02T00:00:00.000Z',
@@ -88,7 +88,7 @@ describe('Todo', () => {
         const todo = Todo.fromData(data)
 
         expect(todo.getStatus().isCompleted()).toBe(true)
-        expect(todo.getDescription()).toBeNull()
+        expect(todo.getDescription()).toBe('')
       })
     })
   })
@@ -169,12 +169,12 @@ describe('Todo', () => {
         expect(todo.getUpdatedAt().getTime()).toBeGreaterThan(ORIGINAL_UPDATED_AT.getTime())
       })
 
-      it('説明をnullに設定できる', () => {
+      it('説明を空文字に設定できる', () => {
         const todo = createTodoWithFixedTime()
 
-        todo.updateDescription(null)
+        todo.updateDescription('')
 
-        expect(todo.getDescription()).toBeNull()
+        expect(todo.getDescription()).toBe('')
         expect(todo.getUpdatedAt().getTime()).toBeGreaterThan(ORIGINAL_UPDATED_AT.getTime())
       })
     })

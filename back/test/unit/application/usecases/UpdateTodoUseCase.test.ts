@@ -133,8 +133,8 @@ describe('UpdateTodoUseCase', () => {
       expect(result!.completed).toBe(true)
     })
 
-    it('説明をnullに更新する', async () => {
-      const todoId = TestFactory.createTodoId('null-desc-id')
+    it('説明を空文字に更新する', async () => {
+      const todoId = TestFactory.createTodoId('empty-desc-id')
       const todo = TestFactory.createTodo({
         id: todoId,
         title: 'タイトル',
@@ -144,17 +144,17 @@ describe('UpdateTodoUseCase', () => {
 
       const request = {
         todoId: todoId.getValue(),
-        description: null,
+        description: '',
       }
 
       const result = await useCase.execute(request)
 
       expect(result).not.toBeNull()
-      expect(result!.description).toBeNull()
+      expect(result!.description).toBe('')
 
       // リポジトリの状態も確認
       const updatedTodo = await mockRepository.findById(todoId)
-      expect(updatedTodo!.getDescription()).toBeNull()
+      expect(updatedTodo!.getDescription()).toBe('')
     })
 
     it('存在しないTodoに対してnullを返す', async () => {

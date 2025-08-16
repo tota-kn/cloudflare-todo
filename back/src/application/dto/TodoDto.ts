@@ -3,7 +3,7 @@ import { Todo } from '../../domain/entities/Todo'
 export interface TodoDto {
   id: string
   title: string
-  description: string | null
+  description: string
   completed: boolean
   created_at: string
   updated_at: string

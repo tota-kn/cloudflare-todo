@@ -83,7 +83,7 @@ describe('GetTodoUseCase', () => {
       expect(result!.title).toBe('タスク2')
     })
 
-    it('説明がnullのTodoを正常に取得する', async () => {
+    it('説明が空文字のTodoを正常に取得する', async () => {
       const todoId = TestFactory.createTodoId('no-description-id')
       const todo = TestFactory.createTodo({
         id: todoId,
@@ -95,7 +95,7 @@ describe('GetTodoUseCase', () => {
       const result = await useCase.execute(todoId.getValue())
 
       expect(result).not.toBeNull()
-      expect(result!.description).toBeNull()
+      expect(result!.description).toBe('')
     })
   })
 })

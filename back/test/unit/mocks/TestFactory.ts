@@ -44,7 +44,7 @@ export class TestFactory {
     const dbData = {
       id: data.id,
       title: data.title,
-      description: data.description || null,
+      description: data.description || '',
       completed: data.completed ? 1 : 0,
       created_at: (data.createdAt || new Date()).toISOString(),
       updated_at: (data.updatedAt || new Date()).toISOString(),

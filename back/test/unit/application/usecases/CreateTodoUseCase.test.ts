@@ -51,7 +51,7 @@ describe('CreateTodoUseCase', () => {
       expect(result).toEqual({
         id: mockUUID,
         title: request.title,
-        description: null,
+        description: '',
         completed: false,
         created_at: expect.any(String),
         updated_at: expect.any(String),
