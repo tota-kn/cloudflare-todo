@@ -9,8 +9,11 @@ interface TodoListProps {
 }
 
 export function TodoList({ todos, showNewTodoForm, onCancelNewTodo }: TodoListProps) {
+  const incompleteTodos = todos.filter(todo => !todo.completed);
+  const completedTodos = todos.filter(todo => todo.completed);
+
   return (
-    <div className="space-y-2">
+    <div className="space-y-6">
       {showNewTodoForm && onCancelNewTodo && (
         <NewTodoItem onCancel={onCancelNewTodo} />
       )}
@@ -18,12 +21,33 @@ export function TodoList({ todos, showNewTodoForm, onCancelNewTodo }: TodoListPr
       {todos.length === 0 && !showNewTodoForm ? (
         <p className="text-black text-center py-8">No todos found. Create your first todo!</p>
       ) : (
-        todos.map((todo) => (
-          <TodoItem 
-            key={todo.id} 
-            todo={todo} 
-          />
-        ))
+        <>
+          {incompleteTodos.length > 0 && (
+            <div className="space-y-2">
+              <h2 className="text-lg font-semibold text-foreground">Pending Tasks</h2>
+              {incompleteTodos.map((todo) => (
+                <TodoItem 
+                  key={todo.id} 
+                  todo={todo} 
+                />
+              ))}
+            </div>
+          )}
+          
+          {completedTodos.length > 0 && (
+            <div className="space-y-2">
+              <h2 className="text-lg font-semibold text-foreground/60">Completed Tasks</h2>
+              <div className="opacity-75 space-y-2">
+                {completedTodos.map((todo) => (
+                  <TodoItem 
+                    key={todo.id} 
+                    todo={todo} 
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
