@@ -59,11 +59,14 @@ export function TodoItem({ todo }: TodoItemProps) {
   };
 
   const handleDescriptionSave = () => {
-    if (editingDescription.trim() !== (todo.description || "")) {
+    const trimmedDescription = editingDescription.trim();
+    const currentDescription = todo.description || "";
+    
+    if (trimmedDescription !== currentDescription) {
       updateTodo.mutate({ 
         todoId: todo.id, 
         title: todo.title,
-        description: editingDescription.trim() || undefined
+        description: trimmedDescription
       });
     }
     setIsEditingDescription(false);
