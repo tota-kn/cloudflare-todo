@@ -4,7 +4,7 @@
   "scripts": {
     "lint": "eslint . --fix",
     "dev": "pnpm db:migrate && wrangler dev -e local",
-    "typegen": "wrangler types -e local --env-interface CloudflareEnv ./src/types/env.d.ts &&  rm -rf ./dist/types",
+    "typegen": "wrangler types -e local --env-interface CloudflareEnv ./src/types/env.d.ts",
     "typecheck": "pnpm run typegen && tsc --declaration --emitDeclarationOnly --declarationDir ./dist/types",
     "typecheck:watch": "pnpm run typecheck --watch",
     "test:unit": "vitest run --coverage",
