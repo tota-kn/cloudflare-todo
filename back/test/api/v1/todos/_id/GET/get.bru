@@ -16,8 +16,7 @@ tests {
   });
   
   test("Response contains expected todo", function() {
-    expect(res.getBody()).to.have.property('todo');
-    const todo = res.getBody().todo;
+    const todo = res.getBody();
     expect(todo).to.have.property('id', 'test-get-success-001');
     expect(todo).to.have.property('title', 'Test Todo for GET Success');
     expect(todo).to.have.property('description', 'Description for GET success test');

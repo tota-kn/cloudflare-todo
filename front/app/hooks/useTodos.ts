@@ -24,7 +24,7 @@ export const useTodos = (initialData?: TodoItem[]) => {
         throw new Error(data.error);
       }
       
-      return data.todos;
+      return data;
     },
     initialData,
     staleTime: 5 * 60 * 1000, // 5分間はキャッシュを新鮮とみなす
@@ -45,7 +45,8 @@ export const useCreateTodo = () => {
         throw new Error('Failed to create todo');
       }
       
-      return res.json();
+      const data = await res.json();
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
@@ -90,7 +91,8 @@ export const useUpdateTodo = () => {
         throw new Error('Failed to update todo');
       }
       
-      return res.json();
+      const data = await res.json();
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
@@ -129,7 +131,8 @@ export const useDeleteTodo = () => {
         throw new Error('Failed to delete todo');
       }
       
-      return res.json();
+      const data = await res.json();
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
@@ -165,7 +168,8 @@ export const useToggleTodo = () => {
         throw new Error('Failed to toggle todo');
       }
       
-      return res.json();
+      const data = await res.json();
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });

@@ -24,8 +24,7 @@ tests {
   });
   
   test("Response contains updated todo", function() {
-    expect(res.getBody()).to.have.property('todo');
-    const todo = res.getBody().todo;
+    const todo = res.getBody();
     expect(todo).to.have.property('id', 'test-put-success-001');
     expect(todo).to.have.property('title', 'Updated Test Todo');
     expect(todo).to.have.property('description', 'This todo has been updated');

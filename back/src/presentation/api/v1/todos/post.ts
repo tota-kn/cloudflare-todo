@@ -22,9 +22,7 @@ export function v1TodosPost(dependencies: Dependencies) {
           description: validatedData.description,
         })
 
-        return c.json({
-          todo,
-        }, 201)
+        return c.json(todo, 201)
       }
       catch (error) {
         console.error('Failed to create todo:', error)

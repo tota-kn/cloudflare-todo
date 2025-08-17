@@ -24,8 +24,7 @@ tests {
   });
   
   test("Response contains created todo", function() {
-    expect(res.getBody()).to.have.property('todo');
-    const todo = res.getBody().todo;
+    const todo = res.getBody();
     expect(todo).to.have.property('title');
     expect(todo.title).to.equal('Test Todo Create');
     expect(todo).to.have.property('description');

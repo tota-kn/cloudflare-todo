@@ -16,12 +16,11 @@ tests {
   });
   
   test("Response contains todos array", function() {
-    expect(res.getBody()).to.have.property('todos');
-    expect(res.getBody().todos).to.be.an('array');
+    expect(res.getBody()).to.be.an('array');
   });
   
   test("Response contains expected test data", function() {
-    const todos = res.getBody().todos;
+    const todos = res.getBody();
     expect(todos.length).to.be.greaterThan(0);
     
     // 固定テストデータの存在確認
@@ -32,7 +31,7 @@ tests {
   });
   
   test("Todos have correct structure", function() {
-    const todos = res.getBody().todos;
+    const todos = res.getBody();
     todos.forEach(todo => {
       expect(todo).to.have.property('id');
       expect(todo).to.have.property('title');

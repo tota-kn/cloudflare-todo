@@ -16,9 +16,7 @@ export function v1TodosTodoIdGet(dependencies: Dependencies) {
           return c.json({ error: 'Todo not found' }, 404)
         }
 
-        return c.json({
-          todo,
-        })
+        return c.json(todo)
       }
       catch (error) {
         console.error('Failed to get todo:', error)

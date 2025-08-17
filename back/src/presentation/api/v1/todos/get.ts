@@ -8,9 +8,7 @@ export function v1TodosGet(dependencies: Dependencies) {
     .get('/v1/todos', async (c) => {
       try {
         const todos = await listTodosUseCase.execute()
-        return c.json({
-          todos,
-        })
+        return c.json(todos)
       }
       catch (error) {
         console.error('Failed to list todos:', error)
