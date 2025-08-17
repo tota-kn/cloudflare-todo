@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 このファイルは、このリポジトリでコードを扱う際にClaude Code (claude.ai/code)にガイダンスを提供します。
 
 ## プロジェクト構造
@@ -25,6 +27,12 @@ pnpm f [command]
 
 # 両方の型チェックを実行
 pnpm typecheck
+
+# ルートレベルから直接実行可能な便利コマンド
+pnpm b dev                # バックエンド開発サーバー起動
+pnpm f dev                # フロントエンド開発サーバー起動
+pnpm b test:unit          # バックエンド単体テスト実行
+pnpm b test:api           # API統合テスト実行
 ```
 
 ### バックエンド (back/)
@@ -33,7 +41,7 @@ pnpm typecheck
 pnpm dev              # local envでlocalhost:8787で実行
 
 # 型生成とチェック
-pnpm cf-typegen       # Cloudflare環境の型を生成
+pnpm typegen          # Cloudflare環境の型を生成
 pnpm typecheck        # 型チェックと宣言ファイル生成
 
 # リント & 修正
@@ -43,11 +51,15 @@ pnpm lint
 pnpm deploy:dev       # dev環境にデプロイ
 pnpm deploy:prd       # productionにデプロイ
 
+# テスト
+pnpm test:unit        # 単体テスト実行（カバレッジ付き）
+pnpm test:unit:watch  # 単体テストウォッチモード
+pnpm test:api         # Bruno APIテストを実行
+
 # データベース操作
 pnpm db:migrate       # D1データベースマイグレーションを適用
-
-# API テスト
-pnpm test:api         # Bruno APIテストを実行
+pnpm db:reset         # テストデータでデータベースリセット
+pnpm bucket:reset     # R2バケットリセット
 ```
 
 ### フロントエンド (front/)
@@ -59,7 +71,7 @@ pnpm dev              # local envでlocalhost:5173で実行
 pnpm build
 
 # 型生成とチェック
-pnpm cf-typegen       # Cloudflare環境の型を生成
+pnpm typegen          # Cloudflare環境の型を生成
 pnpm typecheck        # CF types、RR types を生成し、tscを実行
 
 # デプロイ
@@ -85,6 +97,7 @@ pnpm preview
 - **データベース**: `migrations/`でCloudflare D1マイグレーション
 - **ストレージ**: ファイルアップロード用のCloudflare R2
 - **型安全性**: ルートがフロントエンドで使用される型をエクスポート
+- **テスト**: Vitestで単体テスト、Brunoで統合テスト
 
 ### フロントエンドアーキテクチャ
 - **フレームワーク**: SSR付きReact Router v7
@@ -94,7 +107,8 @@ pnpm preview
   - `workers/app.ts` - Cloudflare Workerエントリーポイント
 - **ルーティング**: `app/routes/`でファイルベースルーティング
 - **APIクライアント**: バックエンドルートから完全な型安全性を持つHono RPCクライアント
-- **スタイリング**: TailwindCSS
+- **スタイリング**: TailwindCSS v4
+- **状態管理**: TanStack Query for server state
 
 ### 型共有戦略
 - バックエンドルートが`src/presentation/app.ts`から`AppType`をエクスポート
@@ -116,8 +130,9 @@ pnpm preview
 - `front/workers/app.ts` - Cloudflare Workerリクエストハンドラー
 - `shared/client.ts` - バックエンドとフロントエンド間の型ブリッジ
 - `**/wrangler.jsonc` - Cloudflare Workers設定
-- `back/migrations/0001_initial_schema.sql` - 初期データベーススキーマ
-- `back/migrations/0002_add_todo_attachments.sql` - ファイル添付機能のスキーマ
+- `back/migrations/0001_todos_table.sql` - 初期データベーススキーマ
+- `back/migrations/0002_reset_and_seed_test_data.sql` - テストデータ用のリセット/シードスクリプト
+- `back/eslint.config.mjs` - オニオンアーキテクチャ強制のESLint設定
 
 ## 開発ワークフロー
 
@@ -126,6 +141,7 @@ pnpm preview
 3. 両アプリはホットリロードで同時に開発可能
 4. Cloudflare Workers（バックエンド）とPages（フロントエンド）に別々にデプロイ
 5. `back/test/api/`のテストスイートでBrunoを使用したAPIテスト
+6. 変更前に`pnpm typecheck`で型チェック、`pnpm b lint`でコード品質確認
 
 ## オニオンアーキテクチャ実装
 
@@ -144,9 +160,3 @@ pnpm preview
 - 目標を達成するために絶対に必要でない限り、ファイルを作成しない。
 - 新しいファイルを作成するより、既存のファイルを編集することを常に優先する。
 - ユーザーから明示的に要求されない限り、ドキュメントファイル（*.md）やREADMEファイルを積極的に作成しない。
-
-# important-instruction-reminders
-求められたことを行う。それ以上でも以下でもない。
-目標を達成するために絶対に必要でない限り、ファイルを作成しない。
-新しいファイルを作成するより、既存のファイルを編集することを常に優先する。
-ユーザーから明示的に要求されない限り、ドキュメントファイル（*.md）やREADMEファイルを積極的に作成しない。
