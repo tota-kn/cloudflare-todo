@@ -3,7 +3,6 @@ import { createServerFetcher } from "~/client";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { ThemeToggle } from "~/components/ThemeToggle";
-import { TodoForm } from "~/components/TodoForm";
 import { TodoList } from "~/components/TodoList";
 import { useTodos } from "~/hooks/useTodos";
 import type { Route } from "./+types/todos";
@@ -31,14 +30,14 @@ export async function loader({ context }: Route.LoaderArgs) {
 }
 
 export default function Todos({ loaderData }: Route.ComponentProps) {
-  const [showForm, setShowForm] = useState(false);
+  const [showNewTodoForm, setShowNewTodoForm] = useState(false);
   
   const { data: todos, isLoading, error } = useTodos(loaderData.todos);
   
   const currentTodos = todos || [];
 
-  const handleCancelForm = () => {
-    setShowForm(false);
+  const handleCancelNewTodo = () => {
+    setShowNewTodoForm(false);
   };
 
   return (
@@ -55,11 +54,11 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
         <div className="flex items-center space-x-2">
           <ThemeToggle />
           <button
-            onClick={() => setShowForm(!showForm)}
+            onClick={() => setShowNewTodoForm(!showNewTodoForm)}
             className="bg-primary text-primary-foreground p-3 rounded-full hover:bg-primary/90 transition-colors"
-            title={showForm ? 'Cancel' : 'Add Todo'}
+            title={showNewTodoForm ? 'Cancel' : 'Add Todo'}
           >
-            {showForm ? (
+            {showNewTodoForm ? (
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -73,19 +72,15 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
       </div>
 
 
-      {showForm && (
-        <TodoForm 
-          onCancel={handleCancelForm} 
-        />
-      )}
-      
       {isLoading && <LoadingSpinner />}
       
       {error && <ErrorMessage message={error.message} />}
       
       {!isLoading && (
         <TodoList 
-          todos={currentTodos} 
+          todos={currentTodos}
+          showNewTodoForm={showNewTodoForm}
+          onCancelNewTodo={handleCancelNewTodo}
         />
       )}
     </div>
