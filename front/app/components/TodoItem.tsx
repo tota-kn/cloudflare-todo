@@ -1,14 +1,20 @@
-import { useDeleteTodo, useToggleTodo } from "~/hooks/useTodos";
+import { useState } from "react";
+import { useDeleteTodo, useToggleTodo, useUpdateTodo } from "~/hooks/useTodos";
 import type { TodoItem as TodoItemData } from "../../../shared/client";
 
 interface TodoItemProps {
   todo: TodoItemData;
-  onEdit: (todo: TodoItemData) => void;
 }
 
-export function TodoItem({ todo, onEdit }: TodoItemProps) {
+export function TodoItem({ todo }: TodoItemProps) {
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [editingTitle, setEditingTitle] = useState(todo.title);
+  const [editingDescription, setEditingDescription] = useState(todo.description || "");
+  
   const deleteTodo = useDeleteTodo();
   const toggleTodo = useToggleTodo();
+  const updateTodo = useUpdateTodo();
 
   const handleToggleComplete = () => {
     toggleTodo.mutate({ todoId: todo.id, completed: todo.completed });
@@ -20,6 +26,63 @@ export function TodoItem({ todo, onEdit }: TodoItemProps) {
     }
   };
 
+  const handleTitleEdit = () => {
+    setIsEditingTitle(true);
+  };
+
+  const handleTitleSave = () => {
+    if (editingTitle.trim() !== todo.title) {
+      updateTodo.mutate({ 
+        todoId: todo.id, 
+        title: editingTitle.trim(),
+        description: todo.description
+      });
+    }
+    setIsEditingTitle(false);
+  };
+
+  const handleTitleCancel = () => {
+    setEditingTitle(todo.title);
+    setIsEditingTitle(false);
+  };
+
+  const handleTitleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleTitleSave();
+    } else if (e.key === 'Escape') {
+      handleTitleCancel();
+    }
+  };
+
+  const handleDescriptionEdit = () => {
+    setIsEditingDescription(true);
+  };
+
+  const handleDescriptionSave = () => {
+    if (editingDescription.trim() !== (todo.description || "")) {
+      updateTodo.mutate({ 
+        todoId: todo.id, 
+        title: todo.title,
+        description: editingDescription.trim() || undefined
+      });
+    }
+    setIsEditingDescription(false);
+  };
+
+  const handleDescriptionCancel = () => {
+    setEditingDescription(todo.description || "");
+    setIsEditingDescription(false);
+  };
+
+  const handleDescriptionKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleDescriptionSave();
+    } else if (e.key === 'Escape') {
+      handleDescriptionCancel();
+    }
+  };
+
   return (
     <div 
       className={`border rounded-lg p-4 ${
@@ -28,16 +91,47 @@ export function TodoItem({ todo, onEdit }: TodoItemProps) {
     >
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <h3 className={`text-lg font-semibold ${
-            todo.completed ? 'line-through text-muted-foreground' : 'text-card-foreground'
-          }`}>
-            {todo.title}
-          </h3>
-          {todo.description && (
-            <p className={`mt-1 text-sm ${
-              todo.completed ? 'text-muted-foreground' : 'text-card-foreground'
-            }`}>
-              {todo.description}
+          {isEditingTitle ? (
+            <input
+              type="text"
+              value={editingTitle}
+              onChange={(e) => setEditingTitle(e.target.value)}
+              onBlur={handleTitleSave}
+              onKeyDown={handleTitleKeyDown}
+              className="text-lg font-semibold bg-transparent border-b border-primary focus:outline-none focus:border-primary w-full"
+              autoFocus
+            />
+          ) : (
+            <h3 
+              className={`text-lg font-semibold cursor-pointer hover:bg-accent/20 rounded px-1 py-0.5 -mx-1 transition-colors ${
+                todo.completed ? 'line-through text-muted-foreground' : 'text-card-foreground'
+              }`}
+              onClick={handleTitleEdit}
+              title="Click to edit"
+            >
+              {todo.title}
+            </h3>
+          )}
+          {isEditingDescription ? (
+            <textarea
+              value={editingDescription}
+              onChange={(e) => setEditingDescription(e.target.value)}
+              onBlur={handleDescriptionSave}
+              onKeyDown={handleDescriptionKeyDown}
+              className="mt-1 text-sm bg-transparent border border-primary focus:outline-none focus:border-primary w-full resize-none"
+              rows={2}
+              autoFocus
+              placeholder="Add description..."
+            />
+          ) : (
+            <p 
+              className={`mt-1 text-sm cursor-pointer hover:bg-accent/20 rounded px-1 py-0.5 -mx-1 transition-colors ${
+                todo.completed ? 'text-muted-foreground' : 'text-card-foreground'
+              } ${!todo.description ? 'text-muted-foreground italic' : ''}`}
+              onClick={handleDescriptionEdit}
+              title="Click to edit"
+            >
+              {todo.description || "Add description..."}
             </p>
           )}
           <div className="mt-2 text-xs text-muted-foreground">
@@ -71,15 +165,6 @@ export function TodoItem({ todo, onEdit }: TodoItemProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             )}
-          </button>
-          <button
-            onClick={() => onEdit(todo)}
-            className="p-2 rounded-full bg-accent text-accent-foreground hover:bg-accent/80 transition-colors"
-            title="Edit"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
           </button>
           <button
             onClick={handleDelete}

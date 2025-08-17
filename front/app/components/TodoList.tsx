@@ -3,10 +3,9 @@ import { TodoItem } from "./TodoItem";
 
 interface TodoListProps {
   todos: TodoItemData[];
-  onEdit: (todo: TodoItemData) => void;
 }
 
-export function TodoList({ todos, onEdit }: TodoListProps) {
+export function TodoList({ todos }: TodoListProps) {
   if (todos.length === 0) {
     return (
       <p className="text-black text-center py-8">No todos found. Create your first todo!</p>
@@ -19,7 +18,6 @@ export function TodoList({ todos, onEdit }: TodoListProps) {
         <TodoItem 
           key={todo.id} 
           todo={todo} 
-          onEdit={onEdit}
         />
       ))}
     </div>

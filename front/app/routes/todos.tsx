@@ -6,7 +6,6 @@ import { ThemeToggle } from "~/components/ThemeToggle";
 import { TodoForm } from "~/components/TodoForm";
 import { TodoList } from "~/components/TodoList";
 import { useTodos } from "~/hooks/useTodos";
-import type { TodoItem as TodoDto } from "../../../shared/client";
 import type { Route } from "./+types/todos";
 
 export function meta({}: Route.MetaArgs) {
@@ -26,26 +25,19 @@ export async function loader({ context }: Route.LoaderArgs) {
   }
 
   return {
-    todos: res.todos,
+    todos: res.items,
     apiBaseUrl: context.cloudflare.env.API_BASE_URL,
   };
 }
 
 export default function Todos({ loaderData }: Route.ComponentProps) {
   const [showForm, setShowForm] = useState(false);
-  const [editingTodo, setEditingTodo] = useState<TodoDto | null>(null);
   
   const { data: todos, isLoading, error } = useTodos(loaderData.todos);
   
   const currentTodos = todos || [];
 
-  const handleEdit = (todo: TodoDto) => {
-    setEditingTodo(todo);
-    setShowForm(true);
-  };
-
-  const handleCancelEdit = () => {
-    setEditingTodo(null);
+  const handleCancelForm = () => {
     setShowForm(false);
   };
 
@@ -83,8 +75,7 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
 
       {showForm && (
         <TodoForm 
-          editingTodo={editingTodo} 
-          onCancel={handleCancelEdit} 
+          onCancel={handleCancelForm} 
         />
       )}
       
@@ -95,7 +86,6 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
       {!isLoading && (
         <TodoList 
           todos={currentTodos} 
-          onEdit={handleEdit} 
         />
       )}
     </div>
