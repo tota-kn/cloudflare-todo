@@ -19,4 +19,27 @@ tests {
     expect(res.getBody()).to.have.property('todos');
     expect(res.getBody().todos).to.be.an('array');
   });
+  
+  test("Response contains expected test data", function() {
+    const todos = res.getBody().todos;
+    expect(todos.length).to.be.greaterThan(0);
+    
+    // 固定テストデータの存在確認
+    const testTodoIds = todos.map(todo => todo.id);
+    expect(testTodoIds).to.include('test-list-item-001');
+    expect(testTodoIds).to.include('test-list-item-002');
+    expect(testTodoIds).to.include('test-list-item-003');
+  });
+  
+  test("Todos have correct structure", function() {
+    const todos = res.getBody().todos;
+    todos.forEach(todo => {
+      expect(todo).to.have.property('id');
+      expect(todo).to.have.property('title');
+      expect(todo).to.have.property('description');
+      expect(todo).to.have.property('completed');
+      expect(todo).to.have.property('created_at');
+      expect(todo).to.have.property('updated_at');
+    });
+  });
 }

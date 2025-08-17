@@ -5,7 +5,11 @@
       "label": "Backend Dev Server",
       "type": "shell",
       "command": "pnpm",
-      "args": ["-F", "back", "dev"],
+      "args": [
+        "-F",
+        "back",
+        "dev"
+      ],
       "group": "build",
       "presentation": {
         "echo": true,
@@ -19,7 +23,7 @@
         "cwd": "${workspaceFolder}"
       },
       "runOptions": {
-        "runOn": "folderOpen"
+        "runOn": "default"
       },
       "problemMatcher": [],
       "detail": "バックエンド開発サーバーを起動 (localhost:8787)"
@@ -28,7 +32,11 @@
       "label": "Frontend Dev Server",
       "type": "shell",
       "command": "pnpm",
-      "args": ["-F", "front", "dev"],
+      "args": [
+        "-F",
+        "front",
+        "dev"
+      ],
       "group": "build",
       "presentation": {
         "echo": true,
@@ -42,7 +50,7 @@
         "cwd": "${workspaceFolder}"
       },
       "runOptions": {
-        "runOn": "folderOpen"
+        "runOn": "default"
       },
       "problemMatcher": [],
       "detail": "フロントエンド開発サーバーを起動 (localhost:5173)"
@@ -50,7 +58,10 @@
     {
       "label": "Start All Dev Servers",
       "dependsOrder": "parallel",
-      "dependsOn": ["Backend Dev Server", "Frontend Dev Server"],
+      "dependsOn": [
+        "Backend Dev Server",
+        "Frontend Dev Server"
+      ],
       "group": {
         "kind": "build",
         "isDefault": true
@@ -65,105 +76,5 @@
       },
       "detail": "フロントエンドとバックエンドの両方の開発サーバーを並行起動"
     },
-    {
-      "label": "Install Dependencies",
-      "type": "shell",
-      "command": "pnpm",
-      "args": ["install"],
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "new",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "problemMatcher": [],
-      "detail": "プロジェクトの依存関係をインストール"
-    },
-    {
-      "label": "Backend Lint",
-      "type": "shell",
-      "command": "pnpm",
-      "args": ["-F", "back", "lint"],
-      "group": "test",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "new",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "problemMatcher": ["$eslint-stylish"],
-      "detail": "バックエンドのコードをlint"
-    },
-    {
-      "label": "Frontend Typecheck",
-      "type": "shell",
-      "command": "pnpm",
-      "args": ["-F", "front", "typecheck"],
-      "group": "test",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "new",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "problemMatcher": ["$tsc"],
-      "detail": "フロントエンドの型チェック"
-    },
-    {
-      "label": "Database Migrate",
-      "type": "shell",
-      "command": "pnpm",
-      "args": ["-F", "back", "db:migrate"],
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "new",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "problemMatcher": [],
-      "detail": "D1データベースマイグレーションを実行"
-    },
-    {
-      "label": "Run API Tests",
-      "type": "shell",
-      "command": "pnpm",
-      "args": ["-F", "back", "test:api"],
-      "group": "test",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "new",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "problemMatcher": [],
-      "detail": "Bruno APIテストを実行"
-    }
   ]
 }

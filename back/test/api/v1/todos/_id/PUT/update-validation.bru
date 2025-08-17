@@ -1,11 +1,11 @@
 meta {
-  name: todos-validation
+  name: todos-update-validation
   type: http
-  seq: 2
+  seq: 3
 }
 
-post {
-  url: {{BASE_URL}}/v1/todos
+put {
+  url: {{BASE_URL}}/v1/todos/test-put-success-001
   body: json
   auth: none
 }
@@ -13,7 +13,8 @@ post {
 body:json {
   {
     "title": "",
-    "description": "This should fail validation at {{Date.now()}}"
+    "description": "This update should fail validation",
+    "completed": true
   }
 }
 

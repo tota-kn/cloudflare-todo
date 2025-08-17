@@ -6,8 +6,7 @@
     "back"
   ],
   "scripts": {
-    "back": "pnpm --filter \"back\" run",
-    "front": "pnpm --filter \"front\" run",
-    "typecheck": "pnpm back typecheck && pnpm front typecheck"
+    "b": "pnpm --filter \"back\" run",
+    "f": "pnpm --filter \"front\" run"
   }
 }

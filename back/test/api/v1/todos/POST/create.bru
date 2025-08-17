@@ -12,8 +12,8 @@ post {
 
 body:json {
   {
-    "title": "Test Todo",
-    "description": "This is a test todo item",
+    "title": "Test Todo Create",
+    "description": "This is a test todo item created",
     "completed": false
   }
 }
@@ -25,8 +25,14 @@ tests {
   
   test("Response contains created todo", function() {
     expect(res.getBody()).to.have.property('todo');
-    expect(res.getBody().todo).to.have.property('title', 'Test Todo');
-    expect(res.getBody().todo).to.have.property('description', 'This is a test todo item');
-    expect(res.getBody().todo).to.have.property('completed', false);
+    const todo = res.getBody().todo;
+    expect(todo).to.have.property('title');
+    expect(todo.title).to.equal('Test Todo Create');
+    expect(todo).to.have.property('description');
+    expect(todo.description).to.equal('This is a test todo item created');
+    expect(todo).to.have.property('completed', false);
+    expect(todo).to.have.property('id');
+    expect(todo).to.have.property('created_at');
+    expect(todo).to.have.property('updated_at');
   });
 }

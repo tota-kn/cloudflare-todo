@@ -5,7 +5,7 @@ import { Dependencies } from '../../../../Dependencies'
 
 const createTodoSchema = z.object({
   title: z.string().min(1, 'Title is required'),
-  description: z.string().optional(),
+  description: z.string().default(''),
   completed: z.boolean().optional().default(false),
 })
 

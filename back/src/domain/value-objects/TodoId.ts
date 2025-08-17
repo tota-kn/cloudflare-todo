@@ -9,6 +9,10 @@ export class TodoId {
     }
   }
 
+  getValue(): string {
+    return this.value
+  }
+
   toString(): string {
     return this.value
   }

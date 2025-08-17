@@ -1,0 +1,29 @@
+meta {
+  name: todos-update-not-found
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{BASE_URL}}/v1/todos/nonexistent-todo-id
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "This update should fail",
+    "description": "Todo does not exist",
+    "completed": true
+  }
+}
+
+tests {
+  test("Response status is 404", function() {
+    expect(res.getStatus()).to.equal(404);
+  });
+  
+  test("Response contains error message", function() {
+    expect(res.getBody()).to.have.property('error', 'Todo not found');
+  });
+}

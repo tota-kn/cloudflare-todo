@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS todos;
 CREATE TABLE IF NOT EXISTS todos (
   id TEXT PRIMARY KEY,  -- UUID as string
   title TEXT NOT NULL,
-  description TEXT,
+  description TEXT NOT NULL DEFAULT '',
   completed INTEGER NOT NULL DEFAULT 0,  -- SQLite boolean as integer
   created_at TEXT NOT NULL,  -- ISO string timestamp
   updated_at TEXT NOT NULL   -- ISO string timestamp
