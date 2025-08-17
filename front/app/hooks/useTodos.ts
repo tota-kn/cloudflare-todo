@@ -58,7 +58,7 @@ export const useCreateTodo = () => {
       const optimisticTodo: TodoItem = {
         id: `temp-${Date.now()}`,
         title: newTodo.title,
-        description: newTodo.description ?? null,
+        description: newTodo.description ?? '',
         completed: false,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),

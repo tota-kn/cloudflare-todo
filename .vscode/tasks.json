@@ -11,21 +11,9 @@
         "dev"
       ],
       "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "new",
-        "showReuseMessage": true,
-        "clear": false
-      },
       "options": {
         "cwd": "${workspaceFolder}"
       },
-      "runOptions": {
-        "runOn": "default"
-      },
-      "problemMatcher": [],
       "detail": "バックエンド開発サーバーを起動 (localhost:8787)"
     },
     {
@@ -38,21 +26,9 @@
         "dev"
       ],
       "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "new",
-        "showReuseMessage": true,
-        "clear": false
-      },
       "options": {
         "cwd": "${workspaceFolder}"
       },
-      "runOptions": {
-        "runOn": "default"
-      },
-      "problemMatcher": [],
       "detail": "フロントエンド開発サーバーを起動 (localhost:5173)"
     },
     {
@@ -65,14 +41,6 @@
       "group": {
         "kind": "build",
         "isDefault": true
-      },
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "new",
-        "showReuseMessage": true,
-        "clear": false
       },
       "detail": "フロントエンドとバックエンドの両方の開発サーバーを並行起動"
     },

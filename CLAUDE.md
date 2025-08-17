@@ -18,10 +18,10 @@
 pnpm install
 
 # バックエンドで作業
-pnpm back [command]
+pnpm b [command]
 
 # フロントエンドで作業
-pnpm front [command]
+pnpm f [command]
 
 # 両方の型チェックを実行
 pnpm typecheck
