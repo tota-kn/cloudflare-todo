@@ -13,7 +13,7 @@
       },
       "options": {
         "cwd": "${workspaceFolder}/back"
-      },
+      }
     },
     {
       "label": "back unit test",
@@ -27,7 +27,7 @@
       },
       "options": {
         "cwd": "${workspaceFolder}/back"
-      },
+      }
     },
     {
       "label": "back typecheck",
@@ -41,7 +41,7 @@
       },
       "options": {
         "cwd": "${workspaceFolder}/back"
-      },
+      }
     },
     {
       "label": "back all",
@@ -50,7 +50,7 @@
         "back dev",
         "back unit test",
         "back typecheck"
-      ],
+      ]
     },
     {
       "label": "front dev",
@@ -64,7 +64,7 @@
       },
       "options": {
         "cwd": "${workspaceFolder}/front"
-      },
+      }
     },
     {
       "label": "front typecheck",
@@ -78,7 +78,7 @@
       },
       "options": {
         "cwd": "${workspaceFolder}/front"
-      },
+      }
     },
     {
       "label": "front all",
@@ -86,7 +86,7 @@
       "dependsOn": [
         "front dev",
         "front typecheck"
-      ],
+      ]
     },
     {
       "label": "all",
@@ -99,6 +99,7 @@
         "kind": "build",
         "isDefault": true
       },
-    },
+      "problemMatcher": []
+    }
   ]
 }
