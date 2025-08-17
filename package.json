@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "workspaces": [
     "front",
-    "back"
+    "back",
+    "e2e"
   ],
   "scripts": {
     "b": "pnpm --filter \"back\" run",
