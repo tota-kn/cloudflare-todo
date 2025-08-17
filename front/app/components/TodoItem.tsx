@@ -85,12 +85,12 @@ export function TodoItem({ todo }: TodoItemProps) {
 
   return (
     <div 
-      className={`border rounded-lg p-4 ${
+      className={`border rounded-lg py-2 px-4 ${
         todo.completed ? 'bg-muted border-border' : 'bg-card border-border'
       }`}
     >
       <div className="flex items-center justify-between">
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           {isEditingTitle ? (
             <input
               type="text"
@@ -98,12 +98,12 @@ export function TodoItem({ todo }: TodoItemProps) {
               onChange={(e) => setEditingTitle(e.target.value)}
               onBlur={handleTitleSave}
               onKeyDown={handleTitleKeyDown}
-              className="text-lg font-semibold bg-transparent border-b border-primary focus:outline-none focus:border-primary w-full"
+              className="text-base font-semibold bg-transparent border-b border-primary focus:outline-none focus:border-primary w-full"
               autoFocus
             />
           ) : (
             <h3 
-              className={`text-lg font-semibold cursor-pointer hover:bg-accent/20 rounded px-1 py-0.5 -mx-1 transition-colors ${
+              className={`text-base font-semibold cursor-pointer hover:bg-accent/20 rounded px-1 py-0.5 -mx-1 transition-colors ${
                 todo.completed ? 'line-through text-muted-foreground' : 'text-card-foreground'
               }`}
               onClick={handleTitleEdit}
@@ -118,32 +118,45 @@ export function TodoItem({ todo }: TodoItemProps) {
               onChange={(e) => setEditingDescription(e.target.value)}
               onBlur={handleDescriptionSave}
               onKeyDown={handleDescriptionKeyDown}
-              className="mt-1 text-sm bg-transparent border border-primary focus:outline-none focus:border-primary w-full resize-none"
+              className="mt-0.5 text-sm bg-transparent border border-primary focus:outline-none focus:border-primary w-full resize-none"
               rows={2}
               autoFocus
               placeholder="Add description..."
             />
           ) : (
-            <p 
-              className={`mt-1 text-sm cursor-pointer hover:bg-accent/20 rounded px-1 py-0.5 -mx-1 transition-colors ${
-                todo.completed ? 'text-muted-foreground' : 'text-card-foreground'
-              } ${!todo.description ? 'text-muted-foreground italic' : ''}`}
-              onClick={handleDescriptionEdit}
-              title="Click to edit"
-            >
-              {todo.description || "Add description..."}
-            </p>
+            <>
+              {todo.description && (
+                <p 
+                  className={`mt-0.5 text-sm cursor-pointer hover:bg-accent/20 rounded px-1 py-0.5 -mx-1 transition-colors ${
+                    todo.completed ? 'text-muted-foreground' : 'text-card-foreground'
+                  }`}
+                  onClick={handleDescriptionEdit}
+                  title="Click to edit"
+                >
+                  {todo.description}
+                </p>
+              )}
+              {!todo.description && (
+                <p 
+                  className="mt-0.5 text-sm cursor-pointer hover:bg-accent/20 rounded px-1 py-0.5 -mx-1 transition-colors text-muted-foreground italic"
+                  onClick={handleDescriptionEdit}
+                  title="Click to add description"
+                >
+                  Add description...
+                </p>
+              )}
+            </>
           )}
-          <div className="mt-2 text-xs text-muted-foreground">
-            Created: {new Date(todo.created_at).toLocaleDateString()}
+        </div>
+        <div className="flex items-center space-x-2 ml-3">
+          <div className="text-xs text-muted-foreground text-right">
+            <div>Created: {new Date(todo.created_at).toLocaleDateString()}</div>
             {todo.updated_at !== todo.created_at && (
-              <span className="ml-2">
+              <div className="mt-0.5">
                 Updated: {new Date(todo.updated_at).toLocaleDateString()}
-              </span>
+              </div>
             )}
           </div>
-        </div>
-        <div className="flex items-center space-x-2">
           <button
             onClick={handleToggleComplete}
             disabled={toggleTodo.isPending}

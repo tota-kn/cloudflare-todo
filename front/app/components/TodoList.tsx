@@ -10,7 +10,7 @@ interface TodoListProps {
 
 export function TodoList({ todos, showNewTodoForm, onCancelNewTodo }: TodoListProps) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       {showNewTodoForm && onCancelNewTodo && (
         <NewTodoItem onCancel={onCancelNewTodo} />
       )}

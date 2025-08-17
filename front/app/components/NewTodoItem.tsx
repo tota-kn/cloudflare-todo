@@ -8,7 +8,6 @@ interface NewTodoItemProps {
 export function NewTodoItem({ onCancel }: NewTodoItemProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [isFocused, setIsFocused] = useState(true);
   
   const createTodo = useCreateTodo();
 
@@ -66,7 +65,7 @@ export function NewTodoItem({ onCancel }: NewTodoItemProps) {
   };
 
   return (
-    <div className="border-2 border-primary rounded-lg p-4 bg-card border-border animate-in slide-in-from-top-1 duration-200">
+    <div className="border-2 rounded-lg p-4 bg-card border-border animate-in slide-in-from-top-1 duration-200">
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <input
@@ -74,8 +73,6 @@ export function NewTodoItem({ onCancel }: NewTodoItemProps) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onKeyDown={handleTitleKeyDown}
-            onBlur={() => setIsFocused(false)}
-            onFocus={() => setIsFocused(true)}
             className="text-lg font-semibold bg-transparent border-b border-primary focus:outline-none focus:border-primary w-full"
             placeholder="Todo title..."
             autoFocus
@@ -85,8 +82,6 @@ export function NewTodoItem({ onCancel }: NewTodoItemProps) {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             onKeyDown={handleDescriptionKeyDown}
-            onBlur={() => setIsFocused(false)}
-            onFocus={() => setIsFocused(true)}
             className="mt-1 text-sm bg-transparent border border-primary focus:outline-none focus:border-primary w-full resize-none"
             rows={2}
             placeholder="Add description..."
