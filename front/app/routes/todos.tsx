@@ -52,7 +52,14 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-foreground">Todo List</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-3xl font-bold text-foreground">Todo List</h1>
+          <img 
+            src={`${loaderData.apiBaseUrl}/v1/assets/test.png`}
+            alt="Test"
+            className="w-8 h-8 object-contain"
+          />
+        </div>
         <div className="flex items-center space-x-2">
           <ThemeToggle />
           <button
@@ -73,14 +80,6 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
         </div>
       </div>
 
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">Logo Image:</h2>
-        <img 
-          src={`${loaderData.apiBaseUrl}/v1/assets/logo.jpg`}
-          alt="Logo"
-          className="max-w-xs h-auto border rounded shadow"
-        />
-      </div>
 
       {showForm && (
         <TodoForm 
