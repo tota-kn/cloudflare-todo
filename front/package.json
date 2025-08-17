@@ -4,11 +4,12 @@
 	"type": "module",
 	"scripts": {
 		"dev": "CLOUDFLARE_ENV=local react-router dev",
-		"typecheck": "pnpm run cf-typegen && react-router typegen && tsc -b",
+		"typecheck": "pnpm run typegen && react-router typegen && tsc -b",
+		"typecheck:watch": "pnpm typecheck --watch",
 		"deploy:dev": "CLOUDFLARE_ENV=dev pnpm run build && wrangler deploy",
 		"deploy:prd": "CLOUDFLARE_ENV=prd pnpm run build && wrangler deploy",
 		"build": "react-router build",
-		"cf-typegen": "wrangler types -e local",
+		"typegen": "wrangler types -e local",
 		"postinstall": "npm run cf-typegen",
 		"preview": "pnpm run build && vite preview"
 	},

@@ -2,47 +2,103 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Backend Dev Server",
+      "label": "back dev",
       "type": "shell",
       "command": "pnpm",
       "args": [
-        "-F",
-        "back",
         "dev"
       ],
-      "group": "build",
-      "options": {
-        "cwd": "${workspaceFolder}"
+      "presentation": {
+        "group": "back"
       },
-      "detail": "バックエンド開発サーバーを起動 (localhost:8787)"
+      "options": {
+        "cwd": "${workspaceFolder}/back"
+      },
     },
     {
-      "label": "Frontend Dev Server",
+      "label": "back unit test",
       "type": "shell",
       "command": "pnpm",
       "args": [
-        "-F",
-        "front",
-        "dev"
+        "test:unit:watch"
       ],
-      "group": "build",
-      "options": {
-        "cwd": "${workspaceFolder}"
+      "presentation": {
+        "group": "back"
       },
-      "detail": "フロントエンド開発サーバーを起動 (localhost:5173)"
+      "options": {
+        "cwd": "${workspaceFolder}/back"
+      },
     },
     {
-      "label": "Start All Dev Servers",
+      "label": "back typecheck",
+      "type": "shell",
+      "command": "pnpm",
+      "args": [
+        "typecheck:watch"
+      ],
+      "presentation": {
+        "group": "back"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/back"
+      },
+    },
+    {
+      "label": "back all",
       "dependsOrder": "parallel",
       "dependsOn": [
-        "Backend Dev Server",
-        "Frontend Dev Server"
+        "back dev",
+        "back unit test",
+        "back typecheck"
+      ],
+    },
+    {
+      "label": "front dev",
+      "type": "shell",
+      "command": "pnpm",
+      "args": [
+        "dev"
+      ],
+      "presentation": {
+        "group": "front"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/front"
+      },
+    },
+    {
+      "label": "front typecheck",
+      "type": "shell",
+      "command": "pnpm",
+      "args": [
+        "typecheck:watch"
+      ],
+      "presentation": {
+        "group": "front"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/front"
+      },
+    },
+    {
+      "label": "front all",
+      "dependsOrder": "parallel",
+      "dependsOn": [
+        "front dev",
+        "front typecheck"
+      ],
+    },
+    {
+      "label": "all",
+      "dependsOrder": "parallel",
+      "dependsOn": [
+        "back all",
+        "front all"
       ],
       "group": {
         "kind": "build",
         "isDefault": true
       },
-      "detail": "フロントエンドとバックエンドの両方の開発サーバーを並行起動"
     },
   ]
 }
