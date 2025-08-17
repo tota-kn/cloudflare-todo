@@ -6,77 +6,146 @@ class TodoHelpers {
 
   // Todo作成フロー
   async createTodo(title: string, description: string) {
-    await this.page.getByRole('button', { name: /add todo/i }).click();
-    await expect(this.page.locator('input[data-new-todo-title]')).toBeVisible();
+    // "Add Todo"や"+"などのボタンを探してクリック
+    await this.page.getByRole('button', { name: /add todo|add|create|\+/i }).click();
     
-    await this.page.locator('input[data-new-todo-title]').fill(title);
-    await this.page.locator('textarea[data-new-todo-description]').fill(description);
-    await this.page.getByRole('button', { name: /save/i }).click();
+    // タイトル入力フィールドを探す（プレースホルダーやラベルから）
+    const titleInput = this.page.getByPlaceholder(/title|todo.*title/i).or(
+      this.page.getByRole('textbox', { name: /title/i })
+    );
+    await expect(titleInput).toBeVisible();
+    
+    // 説明入力フィールドを探す
+    const descriptionInput = this.page.getByPlaceholder(/description|todo.*description/i).or(
+      this.page.getByRole('textbox', { name: /description/i })
+    );
+    
+    await titleInput.fill(title);
+    await descriptionInput.fill(description);
+    
+    // 保存ボタンをクリック
+    await this.page.getByRole('button', { name: /save|submit|create/i }).click();
     
     // 作成されたことを確認
-    await expect(this.page.locator(`text=${title}`)).toBeVisible();
-    await expect(this.page.locator(`text=${description}`)).toBeVisible();
+    await expect(this.page.getByText(title)).toBeVisible();
+    await expect(this.page.getByText(description)).toBeVisible();
   }
 
   // Todoタイトル編集
   async editTodoTitle(currentTitle: string, newTitle: string) {
-    await this.page.locator(`text=${currentTitle}`).click();
-    await this.page.locator('input[type="text"]').filter({ hasValue: currentTitle }).fill(newTitle);
+    // 現在のタイトルをクリックして編集モードに
+    await this.page.getByText(currentTitle).click();
+    
+    // 編集可能なタイトル入力フィールドを探して編集
+    const editInput = this.page.locator('input[type="text"]').filter({ hasText: currentTitle }).or(
+      this.page.getByRole('textbox')
+    );
+    await editInput.fill(newTitle);
     await this.page.keyboard.press('Enter');
-    await expect(this.page.locator(`text=${newTitle}`)).toBeVisible();
+    
+    // 変更されたことを確認
+    await expect(this.page.getByText(newTitle)).toBeVisible();
   }
 
   // Todo説明編集
   async editTodoDescription(currentDescription: string, newDescription: string) {
-    await this.page.locator(`text=${currentDescription}`).click();
-    await this.page.locator('textarea').filter({ hasValue: currentDescription }).fill(newDescription);
+    // 現在の説明をクリックして編集モードに
+    await this.page.getByText(currentDescription).click();
+    
+    // 編集可能な説明入力フィールドを探して編集
+    const editTextarea = this.page.locator('textarea').filter({ hasText: currentDescription }).or(
+      this.page.getByRole('textbox')
+    );
+    await editTextarea.fill(newDescription);
     await this.page.keyboard.press('Enter');
-    await expect(this.page.locator(`text=${newDescription}`)).toBeVisible();
+    
+    // 変更されたことを確認
+    await expect(this.page.getByText(newDescription)).toBeVisible();
   }
 
   // Todo完了状態に変更
   async completeTodo(title: string) {
-    await this.page.locator(`text=${title}`).locator('..').locator('button[title*="Complete"]').click();
+    // Todoのタイトルを見つけてその親要素から完了ボタンを探す
+    const todoCard = this.page.getByText(title).locator('..');
+    const completeButton = todoCard.getByTitle('Mark Complete');
+    
+    await completeButton.click();
+    
     // 完了セクションに移動していることを確認
-    await expect(this.page.locator('h2:has-text("Completed Tasks")').locator('..').locator(`text=${title}`)).toBeVisible();
+    const completedSection = this.page.getByRole('heading', { name: /completed|done|finished/i });
+    await expect(completedSection.locator('..').getByText(title)).toBeVisible();
+  }
+
+  // Todo未完了状態に変更
+  async markTodoPending(title: string) {
+    // Todoのタイトルを見つけてその親要素から未完了ボタンを探す
+    const todoCard = this.page.getByText(title).locator('..');
+    const pendingButton = todoCard.getByTitle('Mark Pending');
+    
+    await pendingButton.click();
+    
+    // 未完了セクションに移動していることを確認
+    const pendingSection = this.page.getByRole('heading', { name: /pending|incomplete/i });
+    await expect(pendingSection.locator('..').getByText(title)).toBeVisible();
   }
 
   // Todo削除
   async deleteTodo(title: string) {
-    await this.page.locator(`text=${title}`).locator('..').locator('button[title*="Delete"]').click();
+    // Todoのタイトルを見つけてその親要素から削除ボタンを探す
+    const todoCard = this.page.getByText(title).locator('..');
+    const deleteButton = todoCard.getByTitle('Delete');
+    
+    await deleteButton.click();
+    
     // 確認ダイアログで削除を承認
     this.page.on('dialog', dialog => dialog.accept());
+    
     // Todoが削除されたことを確認
-    await expect(this.page.locator(`text=${title}`)).not.toBeVisible();
+    await expect(this.page.getByText(title)).not.toBeVisible();
   }
 
   // 新規作成フォーム表示
   async showCreateForm() {
-    await this.page.getByRole('button', { name: /add todo/i }).click();
-    await expect(this.page.locator('input[data-new-todo-title]')).toBeVisible();
+    await this.page.getByRole('button', { name: /add todo|add|create|\+/i }).click();
+    
+    // フォームが表示されたことを確認（タイトル入力フィールドの存在で判定）
+    const titleInput = this.page.getByPlaceholder(/title|todo.*title/i).or(
+      this.page.getByRole('textbox', { name: /title/i })
+    );
+    await expect(titleInput).toBeVisible();
   }
 
   // 新規作成フォームキャンセル
   async cancelCreateForm() {
-    await this.page.getByRole('button', { name: /cancel/i }).click();
-    await expect(this.page.locator('input[data-new-todo-title]')).not.toBeVisible();
+    await this.page.getByRole('button', { name: /cancel|close|×/i }).click();
+    
+    // フォームが閉じられたことを確認
+    const titleInput = this.page.getByPlaceholder(/title|todo.*title/i).or(
+      this.page.getByRole('textbox', { name: /title/i })
+    );
+    await expect(titleInput).not.toBeVisible();
   }
 
   // 全Todoを削除（空の状態作成用）
   async deleteAllTodos() {
-    const todoItems = this.page.locator('[data-testid="todo-item"], .border.rounded-lg').filter({ hasNotText: 'Todo title...' });
-    const count = await todoItems.count();
+    // 削除ボタンがある限り削除を続ける
+    let deleteButtons = this.page.getByTitle('Delete');
     
-    for (let i = 0; i < count; i++) {
-      const firstTodo = todoItems.first();
-      await firstTodo.locator('button[title*="Delete"]').click();
+    let count = await deleteButtons.count();
+    while (count > 0) {
+      await deleteButtons.first().click();
       this.page.on('dialog', dialog => dialog.accept());
+      
+      // 少し待機してからカウントを再取得
+      await this.page.waitForTimeout(100);
+      count = await deleteButtons.count();
     }
   }
 
   // セクション内のTodo存在確認
   async expectTodoInSection(sectionTitle: string, todoTitle: string) {
-    await expect(this.page.locator(`h2:has-text("${sectionTitle}")`).locator('..').locator(`text=${todoTitle}`)).toBeVisible();
+    const section = this.page.getByRole('heading', { name: new RegExp(sectionTitle, 'i') });
+    await expect(section.locator('..').getByText(todoTitle)).toBeVisible();
   }
 }
 
