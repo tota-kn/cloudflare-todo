@@ -10,7 +10,7 @@
 		"deploy:prd": "CLOUDFLARE_ENV=prd pnpm run build && wrangler deploy",
 		"build": "react-router build",
 		"typegen": "wrangler types -e local",
-		"postinstall": "npm run cf-typegen",
+		"postinstall": "npm run typegen",
 		"preview": "pnpm run build && vite preview"
 	},
 	"dependencies": {
