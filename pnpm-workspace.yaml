@@ -1,3 +1,4 @@
 packages:
   - "back"
   - "front"
+  - "e2e"
