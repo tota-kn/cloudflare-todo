@@ -150,12 +150,24 @@ export function TodoItem({ todo }: TodoItemProps) {
         </div>
         <div className="flex items-center space-x-2 ml-3">
           <div className="text-xs text-muted-foreground text-right">
-            <div>Created: {new Date(todo.created_at).toLocaleDateString()}</div>
             {todo.updated_at !== todo.created_at && (
-              <div className="mt-0.5">
-                Updated: {new Date(todo.updated_at).toLocaleDateString()}
+              <div>
+                Updated: {new Date(todo.updated_at).toLocaleString('ja-JP', { 
+                  year: 'numeric', 
+                  month: '2-digit', 
+                  day: '2-digit', 
+                  hour: '2-digit', 
+                  minute: '2-digit' 
+                })}
               </div>
             )}
+            <div className={todo.updated_at !== todo.created_at ? "mt-0.5" : ""}>Created: {new Date(todo.created_at).toLocaleString('ja-JP', { 
+              year: 'numeric', 
+              month: '2-digit', 
+              day: '2-digit', 
+              hour: '2-digit', 
+              minute: '2-digit' 
+            })}</div>
           </div>
           <button
             onClick={handleToggleComplete}
