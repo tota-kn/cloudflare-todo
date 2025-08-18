@@ -1,4 +1,4 @@
-import { SaveIcon, CheckIcon, XIcon, DeleteIcon, ResetIcon } from './Icon';
+import { CheckIcon, DeleteIcon, ResetIcon, SaveIcon, XIcon } from './Icon';
 
 interface ActionButtonProps {
   onClick: () => void;
@@ -26,7 +26,7 @@ export function ActionButton({
       case 'toggle-complete':
         return 'bg-primary text-primary-foreground hover:bg-primary/90';
       case 'toggle-pending':
-        return 'bg-secondary text-secondary-foreground hover:bg-secondary/80';
+        return 'bg-primary text-primary-foreground hover:bg-primary/90';
     }
   };
 

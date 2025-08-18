@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDeleteTodo, useToggleTodo, useUpdateTodo } from "~/hooks/useTodos";
 import type { TodoItem as TodoItemData } from "../../../shared/client";
 import { TodoEditor } from "./TodoEditor";
-import { CheckIcon, ResetIcon, DeleteIcon } from "./ui/Icon";
+import { CheckIcon, DeleteIcon, ResetIcon } from "./ui/Icon";
 
 interface TodoItemProps {
   todo: TodoItemData;
@@ -67,11 +67,7 @@ export function TodoItem({ todo }: TodoItemProps) {
         <button
           onClick={handleToggleComplete}
           disabled={toggleTodo.isPending}
-          className={`p-2 rounded-full transition-colors disabled:opacity-50 mr-3 ${
-            todo.completed
-              ? 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-              : 'bg-primary text-primary-foreground hover:bg-primary/90'
-          }`}
+          className={`p-2 rounded-full transition-colors disabled:opacity-50 mr-3 bg-primary text-primary-foreground hover:bg-primary/90`}
           title={toggleTodo.isPending ? 'Updating...' : (todo.completed ? 'Mark Pending' : 'Mark Complete')}
         >
           {toggleTodo.isPending ? (
