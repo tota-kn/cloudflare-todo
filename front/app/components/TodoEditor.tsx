@@ -71,9 +71,9 @@ export function TodoEditor({
   );
 
   return (
-    <div className={`border rounded-lg ${mode === 'create' ? 'p-4' : 'py-2 px-4'} ${
+    <div className={`border rounded-lg py-2 px-4 ${
       mode === 'create' 
-        ? 'border-2 bg-card border-border animate-in slide-in-from-top-1 duration-200'
+        ? 'bg-card border-border animate-in slide-in-from-top-1 duration-200'
         : todo?.completed ? 'bg-muted border-border' : 'bg-card border-border'
     }`}>
       <div className="flex items-center justify-between">

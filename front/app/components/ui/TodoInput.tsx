@@ -66,9 +66,7 @@ export function TodoInput({
         value={title}
         onChange={(e) => onTitleChange(e.target.value)}
         onKeyDown={handleTitleKeyDown}
-        className={`font-semibold bg-transparent border-b border-primary focus:outline-none focus:border-primary w-full ${
-          mode === 'create' ? 'text-lg' : 'text-base'
-        }`}
+        className="font-semibold bg-transparent border-b border-primary focus:outline-none focus:border-primary w-full text-base"
         placeholder={titlePlaceholder}
         autoFocus={autoFocusTitle}
         data-todo-title
@@ -78,18 +76,11 @@ export function TodoInput({
         value={description}
         onChange={(e) => onDescriptionChange(e.target.value)}
         onKeyDown={handleDescriptionKeyDown}
-        className={`mt-1 text-sm bg-transparent focus:outline-none w-full resize-none ${
-          mode === 'edit' ? 'border-b border-primary focus:border-primary pb-0 leading-tight' : 'border border-primary focus:border-primary'
-        }`}
+        className="mt-1 text-sm bg-transparent focus:outline-none w-full resize-none border-b border-primary focus:border-primary pb-0 leading-tight"
         rows={1}
         placeholder={descriptionPlaceholder}
         data-todo-description
       />
-      {showHelpText && (
-        <div className="mt-2 text-xs text-muted-foreground">
-          Press Enter to save, Escape to cancel, Tab to navigate
-        </div>
-      )}
     </div>
   );
 }
