@@ -1,16 +1,14 @@
 import { useState } from "react";
 import { useDeleteTodo, useToggleTodo, useUpdateTodo } from "~/hooks/useTodos";
 import type { TodoItem as TodoItemData } from "../../../shared/client";
+import { TodoEditor } from "./TodoEditor";
 
 interface TodoItemProps {
   todo: TodoItemData;
 }
 
 export function TodoItem({ todo }: TodoItemProps) {
-  const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const [isEditingDescription, setIsEditingDescription] = useState(false);
-  const [editingTitle, setEditingTitle] = useState(todo.title);
-  const [editingDescription, setEditingDescription] = useState(todo.description || "");
+  const [isEditing, setIsEditing] = useState(false);
   
   const deleteTodo = useDeleteTodo();
   const toggleTodo = useToggleTodo();
@@ -26,65 +24,37 @@ export function TodoItem({ todo }: TodoItemProps) {
     }
   };
 
-  const handleTitleEdit = () => {
-    setIsEditingTitle(true);
+  const handleEdit = () => {
+    setIsEditing(true);
   };
 
-  const handleTitleSave = () => {
-    if (editingTitle.trim() !== todo.title) {
-      updateTodo.mutate({ 
-        todoId: todo.id, 
-        title: editingTitle.trim(),
-        description: todo.description
-      });
-    }
-    setIsEditingTitle(false);
+  const handleSave = (title: string, description?: string) => {
+    updateTodo.mutate(
+      { todoId: todo.id, title, description },
+      { onSuccess: () => setIsEditing(false) }
+    );
   };
 
-  const handleTitleCancel = () => {
-    setEditingTitle(todo.title);
-    setIsEditingTitle(false);
+  const handleCancel = () => {
+    setIsEditing(false);
   };
 
-  const handleTitleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleTitleSave();
-    } else if (e.key === 'Escape') {
-      handleTitleCancel();
-    }
-  };
-
-  const handleDescriptionEdit = () => {
-    setIsEditingDescription(true);
-  };
-
-  const handleDescriptionSave = () => {
-    const trimmedDescription = editingDescription.trim();
-    const currentDescription = todo.description || "";
-    
-    if (trimmedDescription !== currentDescription) {
-      updateTodo.mutate({ 
-        todoId: todo.id, 
-        title: todo.title,
-        description: trimmedDescription
-      });
-    }
-    setIsEditingDescription(false);
-  };
-
-  const handleDescriptionCancel = () => {
-    setEditingDescription(todo.description || "");
-    setIsEditingDescription(false);
-  };
-
-  const handleDescriptionKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleDescriptionSave();
-    } else if (e.key === 'Escape') {
-      handleDescriptionCancel();
-    }
-  };
+  if (isEditing) {
+    return (
+      <TodoEditor
+        mode="edit"
+        initialTitle={todo.title}
+        initialDescription={todo.description || ""}
+        todo={todo}
+        onSave={handleSave}
+        onCancel={handleCancel}
+        onToggleComplete={handleToggleComplete}
+        isSaving={updateTodo.isPending}
+        isToggling={toggleTodo.isPending}
+        showTimestamps={true}
+      />
+    );
+  }
 
   return (
     <div 
@@ -93,62 +63,53 @@ export function TodoItem({ todo }: TodoItemProps) {
       }`}
     >
       <div className="flex items-center justify-between">
-        <div className="flex-1 min-w-0">
-          {isEditingTitle ? (
-            <input
-              type="text"
-              value={editingTitle}
-              onChange={(e) => setEditingTitle(e.target.value)}
-              onBlur={handleTitleSave}
-              onKeyDown={handleTitleKeyDown}
-              className="text-base font-semibold bg-transparent border-b border-primary focus:outline-none focus:border-primary w-full"
-              autoFocus
-            />
+        <button
+          onClick={handleToggleComplete}
+          disabled={toggleTodo.isPending}
+          className={`p-2 rounded-full transition-colors disabled:opacity-50 mr-3 ${
+            todo.completed
+              ? 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+              : 'bg-primary text-primary-foreground hover:bg-primary/90'
+          }`}
+          title={toggleTodo.isPending ? 'Updating...' : (todo.completed ? 'Mark Pending' : 'Mark Complete')}
+        >
+          {toggleTodo.isPending ? (
+            <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+          ) : todo.completed ? (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
           ) : (
-            <h3 
-              className={`text-base font-semibold cursor-pointer hover:bg-accent/20 rounded px-1 py-0.5 -mx-1 transition-colors ${
-                todo.completed ? 'line-through text-muted-foreground' : 'text-card-foreground'
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          )}
+        </button>
+        <div className="flex-1 min-w-0" onClick={handleEdit}>
+          <h3 
+            className={`text-base font-semibold cursor-pointer hover:bg-accent/20 rounded px-1 py-0.5 -mx-1 transition-colors ${
+              todo.completed ? 'line-through text-muted-foreground' : 'text-card-foreground'
+            }`}
+            title="Click to edit"
+          >
+            {todo.title}
+          </h3>
+          {todo.description ? (
+            <p 
+              className={`mt-0.5 text-sm cursor-pointer hover:bg-accent/20 rounded px-1 py-0.5 -mx-1 transition-colors ${
+                todo.completed ? 'text-muted-foreground' : 'text-card-foreground'
               }`}
-              onClick={handleTitleEdit}
               title="Click to edit"
             >
-              {todo.title}
-            </h3>
-          )}
-          {isEditingDescription ? (
-            <textarea
-              value={editingDescription}
-              onChange={(e) => setEditingDescription(e.target.value)}
-              onBlur={handleDescriptionSave}
-              onKeyDown={handleDescriptionKeyDown}
-              className="mt-0.5 text-sm bg-transparent border border-primary focus:outline-none focus:border-primary w-full resize-none"
-              rows={2}
-              autoFocus
-              placeholder="Add description..."
-            />
+              {todo.description}
+            </p>
           ) : (
-            <>
-              {todo.description && (
-                <p 
-                  className={`mt-0.5 text-sm cursor-pointer hover:bg-accent/20 rounded px-1 py-0.5 -mx-1 transition-colors ${
-                    todo.completed ? 'text-muted-foreground' : 'text-card-foreground'
-                  }`}
-                  onClick={handleDescriptionEdit}
-                  title="Click to edit"
-                >
-                  {todo.description}
-                </p>
-              )}
-              {!todo.description && (
-                <p 
-                  className="mt-0.5 text-sm cursor-pointer hover:bg-accent/20 rounded px-1 py-0.5 -mx-1 transition-colors text-muted-foreground italic"
-                  onClick={handleDescriptionEdit}
-                  title="Click to add description"
-                >
-                  Add description...
-                </p>
-              )}
-            </>
+            <p 
+              className="mt-0.5 text-sm cursor-pointer hover:bg-accent/20 rounded px-1 py-0.5 -mx-1 transition-colors text-muted-foreground italic"
+              title="Click to add description"
+            >
+              Add description...
+            </p>
           )}
         </div>
         <div className="flex items-center space-x-2 ml-3">
@@ -164,36 +125,16 @@ export function TodoItem({ todo }: TodoItemProps) {
                 })}
               </div>
             )}
-            <div className={todo.updated_at !== todo.created_at ? "mt-0.5" : ""}>Created: {new Date(todo.created_at).toLocaleString('ja-JP', { 
-              year: 'numeric', 
-              month: '2-digit', 
-              day: '2-digit', 
-              hour: '2-digit', 
-              minute: '2-digit' 
-            })}</div>
+            <div className={todo.updated_at !== todo.created_at ? "mt-0.5" : ""}>
+              Created: {new Date(todo.created_at).toLocaleString('ja-JP', { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit', 
+                hour: '2-digit', 
+                minute: '2-digit' 
+              })}
+            </div>
           </div>
-          <button
-            onClick={handleToggleComplete}
-            disabled={toggleTodo.isPending}
-            className={`p-2 rounded-full transition-colors disabled:opacity-50 ${
-              todo.completed
-                ? 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                : 'bg-primary text-primary-foreground hover:bg-primary/90'
-            }`}
-            title={toggleTodo.isPending ? 'Updating...' : (todo.completed ? 'Mark Pending' : 'Mark Complete')}
-          >
-            {toggleTodo.isPending ? (
-              <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-            ) : todo.completed ? (
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-            ) : (
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            )}
-          </button>
           <button
             onClick={handleDelete}
             disabled={deleteTodo.isPending}
