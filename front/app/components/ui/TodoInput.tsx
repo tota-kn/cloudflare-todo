@@ -78,8 +78,10 @@ export function TodoInput({
         value={description}
         onChange={(e) => onDescriptionChange(e.target.value)}
         onKeyDown={handleDescriptionKeyDown}
-        className="mt-1 text-sm bg-transparent border border-primary focus:outline-none focus:border-primary w-full resize-none"
-        rows={2}
+        className={`mt-1 text-sm bg-transparent focus:outline-none w-full resize-none ${
+          mode === 'edit' ? 'border-b border-primary focus:border-primary pb-0 leading-tight' : 'border border-primary focus:border-primary'
+        }`}
+        rows={1}
         placeholder={descriptionPlaceholder}
         data-todo-description
       />
