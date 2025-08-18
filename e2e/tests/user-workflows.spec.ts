@@ -1,101 +1,110 @@
-import { expect, test } from '@playwright/test';
-import { TodoHelpers } from '../helpers/todo-helpers';
-
+import { test, expect } from '@playwright/test';
+import { TodoItemSelectors } from '../helpers/todo-item-selectors';
 
 test.describe('User Workflows', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/todos');
   });
 
-  test('完全なTodoワークフロー: 作成→編集→完了→削除', async ({ page }) => {
-    const helpers = new TodoHelpers(page);
+  test('Todoアイテムの作成', async ({ page }) => {
+    const selectors = new TodoItemSelectors(page);
     
-    await expect(page.locator('[data-testid="todo-item"], .border.rounded-lg').filter({ hasNotText: 'Todo title...' })).toHaveCount(9);
-
-    await helpers.Todoを作成('E2E Test Todo', 'Created by E2E test');
-
-    await helpers.Todoタイトルを編集('E2E Test Todo', 'Updated E2E Test Todo');
-
-    await helpers.Todo説明を編集('Updated E2E Test Todo', 'Updated by E2E test');
-
-    await helpers.Todoを完了にする('Updated E2E Test Todo');
-
-    await helpers.Todoを削除('Updated E2E Test Todo');
-  });
-
-  test('既存テストデータの操作', async ({ page }) => {
-    const helpers = new TodoHelpers(page);
-    
-    await helpers.Todoタイトルを編集('Original Todo for Update', 'Updated Original Todo');
-
-    await helpers.Todoを完了にする('Incomplete Test Todo');
-
-    await helpers.Todoを削除('Test Todo for DELETE Success');
-  });
-
-  test('複数Todoの管理ワークフロー', async ({ page }) => {
-    const helpers = new TodoHelpers(page);
-    
-    const todos = [
-      { title: 'First E2E Todo', description: 'First todo description' },
-      { title: 'Second E2E Todo', description: 'Second todo description' },
-      { title: 'Third E2E Todo', description: 'Third todo description' }
-    ];
-
-    for (const todo of todos) {
-      await helpers.Todoを作成(todo.title, todo.description);
-    }
-
-    await helpers.Todoを完了にする('First E2E Todo');
-    await helpers.Todoを完了にする('Third E2E Todo');
-
-    await helpers.セクション内のTodoを確認('Pending Tasks', 'Second E2E Todo');
-    await helpers.セクション内のTodoを確認('Completed Tasks', 'First E2E Todo');
-    await helpers.セクション内のTodoを確認('Completed Tasks', 'Third E2E Todo');
-
-    for (const todo of todos) {
-      await helpers.Todoを削除(todo.title);
-    }
-  });
-
-  test('UI操作とキーボードショートカット', async ({ page }) => {
-    const helpers = new TodoHelpers(page);
-    
-    await helpers.作成フォームを表示();
-    
-    await helpers.作成フォームをキャンセル();
-
-    await helpers.作成フォームを表示();
-    
-    await page.locator('input[data-new-todo-title]').fill('Keyboard Test Todo');
-    
-    await page.keyboard.press('Tab');
-    await page.locator('textarea[data-new-todo-description]').fill('Created with keyboard shortcuts');
-    
+    // 新しいTodoを作成
+    await page.getByPlaceholder('Add a new todo...').fill('テストTodo');
     await page.keyboard.press('Enter');
     
-    await expect(page.locator('text=Keyboard Test Todo')).toBeVisible();
-    
-    await helpers.作成フォームを表示();
-    await page.locator('input[data-new-todo-title]').fill('This will be cancelled');
-    await page.keyboard.press('Escape');
-    
-    await expect(page.locator('input[data-new-todo-title]')).not.toBeVisible();
-    await expect(page.locator('text=This will be cancelled')).not.toBeVisible();
-    
-    await helpers.Todoを削除('Keyboard Test Todo');
+    // Todoが作成されたことを確認
+    await selectors.Todoアイテムが表示されているか確認('テストTodo');
   });
 
-  test('空の状態からのワークフロー', async ({ page }) => {
-    const helpers = new TodoHelpers(page);
+  test('Todoアイテムの完了切り替え', async ({ page }) => {
+    const selectors = new TodoItemSelectors(page);
     
-    await helpers.全Todoを削除();
+    // 新しいTodoを作成
+    await page.getByPlaceholder('Add a new todo...').fill('完了テスト');
+    await page.keyboard.press('Enter');
     
-    await expect(page.locator('text=No todos found. Create your first todo!')).toBeVisible();
+    // 完了状態を確認（初期状態は未完了）
+    const initialState = await selectors.完了ボタンの状態を取得('完了テスト');
+    expect(initialState).toBe('未完了');
     
-    await helpers.Todoを作成('My First Todo', 'Starting fresh');
+    // 完了ボタンをクリック
+    await selectors.完了ボタンを取得('完了テスト').click();
     
-    await expect(page.locator('text=No todos found. Create your first todo!')).not.toBeVisible();
-    await expect(page.locator('h2:has-text("Pending Tasks")')).toBeVisible();
+    // 完了状態に変わったことを確認
+    const completedState = await selectors.完了ボタンの状態を取得('完了テスト');
+    expect(completedState).toBe('完了');
+    
+    // 再度クリックして未完了に戻す
+    await selectors.完了ボタンを取得('完了テスト').click();
+    
+    const pendingState = await selectors.完了ボタンの状態を取得('完了テスト');
+    expect(pendingState).toBe('未完了');
+  });
+
+  test('Todoアイテムの削除', async ({ page }) => {
+    const selectors = new TodoItemSelectors(page);
+    
+    // 新しいTodoを作成
+    await page.getByPlaceholder('Add a new todo...').fill('削除テスト');
+    await page.keyboard.press('Enter');
+    
+    // 作成されたことを確認
+    await selectors.Todoアイテムが表示されているか確認('削除テスト');
+    
+    // 削除ボタンをクリック
+    await selectors.削除ボタンを取得('削除テスト').click();
+    
+    // 削除されたことを確認
+    await selectors.Todoアイテムが表示されていないか確認('削除テスト');
+  });
+
+  test('Todoタイトルの編集', async ({ page }) => {
+    const selectors = new TodoItemSelectors(page);
+    
+    // 新しいTodoを作成
+    await page.getByPlaceholder('Add a new todo...').fill('編集前タイトル');
+    await page.keyboard.press('Enter');
+    
+    // タイトルをクリックして編集モードにする
+    await selectors.Todoタイトルを取得('編集前タイトル').click();
+    
+    // 編集モードになったことを確認
+    const isEditMode = await selectors.タイトルが編集モードか確認('編集前タイトル');
+    expect(isEditMode).toBe(true);
+    
+    // 新しいタイトルを入力
+    const editInput = selectors.タイトル編集入力フィールドを取得('編集前タイトル');
+    await editInput.clear();
+    await editInput.fill('編集後タイトル');
+    await editInput.press('Enter');
+    
+    // 編集後のタイトルが表示されることを確認
+    await selectors.Todoアイテムが表示されているか確認('編集後タイトル');
+    await selectors.Todoアイテムが表示されていないか確認('編集前タイトル');
+  });
+
+  test('Todo説明の編集', async ({ page }) => {
+    const selectors = new TodoItemSelectors(page);
+    
+    // 新しいTodoを作成
+    await page.getByPlaceholder('Add a new todo...').fill('説明編集テスト');
+    await page.keyboard.press('Enter');
+    
+    // 説明部分をクリックして編集モードにする
+    await selectors.Todo説明を取得('説明編集テスト').click();
+    
+    // 編集モードになったことを確認
+    const isEditMode = await selectors.説明が編集モードか確認('説明編集テスト');
+    expect(isEditMode).toBe(true);
+    
+    // 説明を入力
+    const editTextarea = selectors.説明編集入力フィールドを取得('説明編集テスト');
+    await editTextarea.fill('これはテスト用の説明です');
+    await editTextarea.press('Escape');
+    
+    // 説明が保存されたことを確認
+    const descriptionText = await selectors.説明テキストを取得('説明編集テスト');
+    expect(descriptionText).toBe('これはテスト用の説明です');
   });
 });
