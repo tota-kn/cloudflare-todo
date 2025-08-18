@@ -1,7 +1,6 @@
 import { type RouteConfig, route } from "@react-router/dev/routes";
 
 export default [  
-  route("/test","routes/home.tsx"),
   route("/", "routes/todos.tsx"),
 
   // Chrome DevToolsが自動的にリクエストしてエラーログが出てくるため抑制
