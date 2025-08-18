@@ -5,6 +5,7 @@ import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { ThemeToggle } from "~/components/ThemeToggle";
 import { TodoList } from "~/components/TodoList";
 import { useTodos } from "~/hooks/useTodos";
+import { PlusIcon, XIcon } from "~/components/ui/Icon";
 import type { Route } from "./+types/todos";
 
 export function meta({}: Route.MetaArgs) {
@@ -58,15 +59,7 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
             className="bg-primary text-primary-foreground p-3 rounded-full hover:bg-primary/90 transition-colors"
             title={showNewTodoForm ? 'Cancel' : 'Add Todo'}
           >
-            {showNewTodoForm ? (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-            )}
+{showNewTodoForm ? <XIcon /> : <PlusIcon />}
           </button>
         </div>
       </div>
