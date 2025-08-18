@@ -1,29 +1,33 @@
 import { expect, Page } from '@playwright/test';
 import { TodoItemSelectors } from './todo-item-selectors';
+import { TodoFormSelectors } from './todo-form-selectors';
 
 /**
  * Todoアプリケーションの高レベル操作を提供するヘルパークラス
  */
 export class TodoHelpers {
   private selectors: TodoItemSelectors;
+  private formSelectors: TodoFormSelectors;
 
   constructor(private page: Page) {
     this.selectors = new TodoItemSelectors(page);
+    this.formSelectors = new TodoFormSelectors(page);
   }
 
   async Todoを作成(title: string, description: string) {
-    await this.page.getByRole('button', { name: /add todo|add|create|\+/i }).click();
-    const titleInput = this.page.getByPlaceholder(/title|todo.*title/i).or(
-      this.page.getByRole('textbox', { name: /title/i })
-    );
-    await expect(titleInput).toBeVisible();
-    const descriptionInput = this.page.getByPlaceholder(/description|todo.*description/i).or(
-      this.page.getByRole('textbox', { name: /description/i })
-    );
+    const createButton = this.formSelectors.Todo作成ボタンを取得();
+    await createButton.click();
     
+    const titleInput = this.formSelectors.新規作成タイトル入力フィールドを取得();
+    await expect(titleInput).toBeVisible();
+    
+    const descriptionInput = this.formSelectors.新規作成説明入力フィールドを取得();
     await titleInput.fill(title);
     await descriptionInput.fill(description);
-    await this.page.getByRole('button', { name: /save|submit|create/i }).click();
+    
+    const saveButton = this.formSelectors.保存ボタンを取得();
+    await saveButton.click();
+    
     await expect(this.page.getByText(title)).toBeVisible();
     await expect(this.page.getByText(description)).toBeVisible();
   }
@@ -68,19 +72,18 @@ export class TodoHelpers {
   }
 
   async 作成フォームを表示() {
-    await this.page.getByRole('button', { name: /add todo|add|create|\+/i }).click();
-    const titleInput = this.page.getByPlaceholder(/title|todo.*title/i).or(
-      this.page.getByRole('textbox', { name: /title/i })
-    );
+    const createButton = this.formSelectors.Todo作成ボタンを取得();
+    await createButton.click();
+    
+    const titleInput = this.formSelectors.新規作成タイトル入力フィールドを取得();
     await expect(titleInput).toBeVisible();
   }
 
   async 作成フォームをキャンセル() {
-    await this.page.getByRole('button', { name: /cancel|close|×/i }).click();
-    const titleInput = this.page.getByPlaceholder(/title|todo.*title/i).or(
-      this.page.getByRole('textbox', { name: /title/i })
-    );
-    await expect(titleInput).not.toBeVisible();
+    const cancelButton = this.formSelectors.キャンセルボタンを取得();
+    await cancelButton.click();
+    
+    await this.formSelectors.新規作成フォームが表示されていないか確認();
   }
 
   async 全Todoを削除() {
