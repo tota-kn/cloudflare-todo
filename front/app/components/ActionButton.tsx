@@ -1,9 +1,9 @@
-import { CheckIcon, DeleteIcon, ResetIcon, SaveIcon, XIcon } from './Icon';
+import { CheckIcon, DeleteIcon, ResetIcon, SaveIcon, XIcon, MoonIcon, SunIcon } from './Icon';
 
 interface ActionButtonProps {
   onClick: () => void;
   disabled?: boolean;
-  variant: 'save' | 'cancel' | 'delete' | 'toggle-complete' | 'toggle-pending';
+  variant: 'save' | 'cancel' | 'delete' | 'toggle-complete' | 'toggle-pending' | 'theme-light' | 'theme-dark';
   isLoading?: boolean;
   title?: string;
 }
@@ -13,7 +13,7 @@ export function ActionButton({
   disabled = false, 
   variant, 
   isLoading = false,
-  title 
+  title
 }: ActionButtonProps) {
   const getVariantStyles = () => {
     switch (variant) {
@@ -27,6 +27,9 @@ export function ActionButton({
         return 'bg-primary text-primary-foreground hover:bg-primary/90';
       case 'toggle-pending':
         return 'bg-primary text-primary-foreground hover:bg-primary/90';
+      case 'theme-light':
+      case 'theme-dark':
+        return 'bg-secondary text-secondary-foreground hover:bg-secondary/80';
     }
   };
 
@@ -48,6 +51,10 @@ export function ActionButton({
         return <DeleteIcon />;
       case 'toggle-pending':
         return <ResetIcon />;
+      case 'theme-light':
+        return <MoonIcon />;
+      case 'theme-dark':
+        return <SunIcon />;
     }
   };
 
@@ -69,6 +76,8 @@ export function ActionButton({
       case 'delete': return 'Delete';
       case 'toggle-complete': return 'Mark Complete';
       case 'toggle-pending': return 'Mark Pending';
+      case 'theme-light': return 'Switch to dark mode';
+      case 'theme-dark': return 'Switch to light mode';
     }
   };
 

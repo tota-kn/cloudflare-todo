@@ -1,16 +1,13 @@
 import { useTheme } from '~/contexts/ThemeContext';
-import { MoonIcon, SunIcon } from './Icon';
+import { ActionButton } from './ActionButton';
 
 export function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <button
+    <ActionButton
       onClick={toggleTheme}
-      className="p-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
-      title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-    >
-      {theme === 'light' ? <MoonIcon /> : <SunIcon />}
-    </button>
+      variant={theme === 'light' ? 'theme-light' : 'theme-dark'}
+    />
   );
 }
