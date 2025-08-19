@@ -1,5 +1,6 @@
 import type { TodoItem as TodoItemData } from "../../../shared/client";
-import { NewTodoItem } from "./NewTodoItem";
+import { useCreateTodo } from "~/hooks/useTodos";
+import { TodoEditor } from "./TodoEditor";
 import { TodoItem } from "./TodoItem";
 
 interface TodoSectionProps {
@@ -32,15 +33,29 @@ interface TodoListProps {
 }
 
 export function TodoList({ todos, showNewTodoForm, onCancelNewTodo }: TodoListProps) {
+  const createTodo = useCreateTodo();
+  
   const incompleteTodos = todos.filter(todo => !todo.completed)
     .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
   const completedTodos = todos.filter(todo => todo.completed)
     .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
 
+  const handleSave = (title: string, description?: string) => {
+    createTodo.mutate(
+      { title, description },
+      { onSuccess: onCancelNewTodo }
+    );
+  };
+
   return (
     <div className="space-y-6">
       {showNewTodoForm && onCancelNewTodo && (
-        <NewTodoItem onCancel={onCancelNewTodo} />
+        <TodoEditor
+          mode="create"
+          onSave={handleSave}
+          onCancel={onCancelNewTodo}
+          isSaving={createTodo.isPending}
+        />
       )}
       
       {todos.length === 0 && !showNewTodoForm ? (
