@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { TodoItem as TodoItemData } from "../../../shared/client";
-import { ActionButton } from "./ActionButton";
+import { ActionButton } from "./CircleButton";
 import { TodoInput } from "./TodoInput";
 
 interface TodoEditorProps {

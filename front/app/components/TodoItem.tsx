@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDeleteTodo, useToggleTodo, useUpdateTodo } from "~/hooks/useTodos";
 import type { TodoItem as TodoItemData } from "../../../shared/client";
-import { ActionButton } from "./ActionButton";
+import { ActionButton } from "./CircleButton";
 import { TodoEditor } from "./TodoEditor";
 
 interface TodoItemProps {

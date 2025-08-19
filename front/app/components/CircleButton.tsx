@@ -1,4 +1,4 @@
-import { CheckIcon, DeleteIcon, ResetIcon, SaveIcon, XIcon, MoonIcon, SunIcon, PlusIcon } from './Icon';
+import { CheckIcon, DeleteIcon, ResetIcon, SaveIcon, XIcon, MoonIcon, SunIcon, PlusIcon } from './CustomIcon';
 
 interface ActionButtonProps {
   onClick: () => void;
