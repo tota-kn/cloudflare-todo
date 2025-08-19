@@ -38,8 +38,8 @@ export function TodoList({ todos, showNewTodoForm, onCancelNewTodo }: TodoListPr
           
           {completedTodos.length > 0 && (
             <div className="space-y-2">
-              <h2 className="text-lg font-semibold text-foreground/60">Completed Tasks</h2>
-              <div className="opacity-75 space-y-2">
+              <h2 className="text-lg font-semibold text-foreground">Completed Tasks</h2>
+              <div className="space-y-2">
                 {completedTodos.map((todo) => (
                   <TodoItem 
                     key={todo.id} 
