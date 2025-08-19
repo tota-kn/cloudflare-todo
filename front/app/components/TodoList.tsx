@@ -2,6 +2,29 @@ import type { TodoItem as TodoItemData } from "../../../shared/client";
 import { NewTodoItem } from "./NewTodoItem";
 import { TodoItem } from "./TodoItem";
 
+interface TodoSectionProps {
+  title: string;
+  todos: TodoItemData[];
+}
+
+function TodoSection({ title, todos }: TodoSectionProps) {
+  if (todos.length === 0) return null;
+
+  return (
+    <div className="space-y-2">
+      <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+      <div className="space-y-2">
+        {todos.map((todo) => (
+          <TodoItem 
+            key={todo.id} 
+            todo={todo} 
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 interface TodoListProps {
   todos: TodoItemData[];
   showNewTodoForm?: boolean;
@@ -24,31 +47,8 @@ export function TodoList({ todos, showNewTodoForm, onCancelNewTodo }: TodoListPr
         <p className="text-black text-center py-8">No todos found. Create your first todo!</p>
       ) : (
         <>
-          {incompleteTodos.length > 0 && (
-            <div className="space-y-2">
-              <h2 className="text-lg font-semibold text-foreground">Pending Tasks</h2>
-              {incompleteTodos.map((todo) => (
-                <TodoItem 
-                  key={todo.id} 
-                  todo={todo} 
-                />
-              ))}
-            </div>
-          )}
-          
-          {completedTodos.length > 0 && (
-            <div className="space-y-2">
-              <h2 className="text-lg font-semibold text-foreground">Completed Tasks</h2>
-              <div className="space-y-2">
-                {completedTodos.map((todo) => (
-                  <TodoItem 
-                    key={todo.id} 
-                    todo={todo} 
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+          <TodoSection title="Pending Tasks" todos={incompleteTodos} />
+          <TodoSection title="Completed Tasks" todos={completedTodos} />
         </>
       )}
     </div>
