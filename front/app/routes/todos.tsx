@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { createServerFetcher } from "~/client";
 import { ErrorMessage } from "~/components/ErrorMessage";
+import { PlusIcon, XIcon } from "~/components/Icon";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { ThemeToggle } from "~/components/ThemeToggle";
 import { TodoList } from "~/components/TodoList";
 import { useTodos } from "~/hooks/useTodos";
-import { PlusIcon, XIcon } from "~/components/ui/Icon";
 import type { Route } from "./+types/todos";
 
 export function meta({}: Route.MetaArgs) {

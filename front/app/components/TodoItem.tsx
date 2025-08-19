@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDeleteTodo, useToggleTodo, useUpdateTodo } from "~/hooks/useTodos";
 import type { TodoItem as TodoItemData } from "../../../shared/client";
+import { CheckIcon, DeleteIcon, ResetIcon } from "./Icon";
 import { TodoEditor } from "./TodoEditor";
-import { CheckIcon, DeleteIcon, ResetIcon } from "./ui/Icon";
 
 interface TodoItemProps {
   todo: TodoItemData;
