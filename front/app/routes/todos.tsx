@@ -3,8 +3,8 @@ import { createServerFetcher } from "~/client";
 import { ActionButton } from "~/components/ActionButton";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
-import { ThemeToggle } from "~/components/ThemeToggle";
 import { TodoList } from "~/components/TodoList";
+import { useTheme } from '~/contexts/ThemeContext';
 import { useTodos } from "~/hooks/useTodos";
 import type { Route } from "./+types/todos";
 
@@ -32,6 +32,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 
 export default function Todos({ loaderData }: Route.ComponentProps) {
   const [showNewTodoForm, setShowNewTodoForm] = useState(false);
+  const { theme, toggleTheme } = useTheme();
   
   const { data: todos, isLoading, error } = useTodos(loaderData.todos);
   
@@ -53,7 +54,10 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
           />
         </div>
         <div className="flex items-center space-x-2">
-          <ThemeToggle />
+          <ActionButton
+            onClick={toggleTheme}
+            variant={theme === 'light' ? 'theme-light' : 'theme-dark'}
+          />
           <div className="p-1">
             <ActionButton
               onClick={() => setShowNewTodoForm(!showNewTodoForm)}
