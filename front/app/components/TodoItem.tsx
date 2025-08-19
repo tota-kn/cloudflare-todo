@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDeleteTodo, useToggleTodo, useUpdateTodo } from "~/hooks/useTodos";
 import type { TodoItem as TodoItemData } from "../../../shared/client";
-import { CheckIcon, DeleteIcon, ResetIcon } from "./Icon";
+import { ActionButton } from "./ActionButton";
 import { TodoEditor } from "./TodoEditor";
 
 interface TodoItemProps {
@@ -64,20 +64,14 @@ export function TodoItem({ todo }: TodoItemProps) {
       }`}
     >
       <div className="flex items-center justify-between">
-        <button
-          onClick={handleToggleComplete}
-          disabled={toggleTodo.isPending}
-          className={`p-2 rounded-full transition-colors disabled:opacity-50 mr-3 bg-primary text-primary-foreground hover:bg-primary/90`}
-          title={toggleTodo.isPending ? 'Updating...' : (todo.completed ? 'Mark Pending' : 'Mark Complete')}
-        >
-          {toggleTodo.isPending ? (
-            <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-          ) : todo.completed ? (
-            <ResetIcon />
-          ) : (
-            <CheckIcon />
-          )}
-        </button>
+        <div className="mr-3">
+          <ActionButton
+            onClick={handleToggleComplete}
+            disabled={toggleTodo.isPending}
+            variant={todo.completed ? 'toggle-pending' : 'toggle-complete'}
+            isLoading={toggleTodo.isPending}
+          />
+        </div>
         <div className="flex-1 min-w-0" onClick={handleEdit}>
           <h3 
             className={`text-base font-semibold cursor-pointer hover:bg-accent/20 rounded px-1 py-0.5 -mx-1 transition-colors ${
@@ -128,18 +122,12 @@ export function TodoItem({ todo }: TodoItemProps) {
               })}
             </div>
           </div>
-          <button
+          <ActionButton
             onClick={handleDelete}
             disabled={deleteTodo.isPending}
-            className="p-2 rounded-full bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors disabled:opacity-50"
-            title={deleteTodo.isPending ? 'Deleting...' : 'Delete'}
-          >
-            {deleteTodo.isPending ? (
-              <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-            ) : (
-              <DeleteIcon />
-            )}
-          </button>
+            variant="delete"
+            isLoading={deleteTodo.isPending}
+          />
         </div>
       </div>
     </div>

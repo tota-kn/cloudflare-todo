@@ -1,11 +1,12 @@
-import { CheckIcon, DeleteIcon, ResetIcon, SaveIcon, XIcon, MoonIcon, SunIcon } from './Icon';
+import { CheckIcon, DeleteIcon, ResetIcon, SaveIcon, XIcon, MoonIcon, SunIcon, PlusIcon } from './Icon';
 
 interface ActionButtonProps {
   onClick: () => void;
   disabled?: boolean;
-  variant: 'save' | 'cancel' | 'delete' | 'toggle-complete' | 'toggle-pending' | 'theme-light' | 'theme-dark';
+  variant: 'save' | 'cancel' | 'delete' | 'toggle-complete' | 'toggle-pending' | 'theme-light' | 'theme-dark' | 'add' | 'add-cancel';
   isLoading?: boolean;
   title?: string;
+  showCancel?: boolean;
 }
 
 export function ActionButton({ 
@@ -13,7 +14,8 @@ export function ActionButton({
   disabled = false, 
   variant, 
   isLoading = false,
-  title
+  title,
+  showCancel = false
 }: ActionButtonProps) {
   const getVariantStyles = () => {
     switch (variant) {
@@ -30,6 +32,9 @@ export function ActionButton({
       case 'theme-light':
       case 'theme-dark':
         return 'bg-secondary text-secondary-foreground hover:bg-secondary/80';
+      case 'add':
+      case 'add-cancel':
+        return 'bg-primary text-primary-foreground hover:bg-primary/90';
     }
   };
 
@@ -55,6 +60,10 @@ export function ActionButton({
         return <MoonIcon />;
       case 'theme-dark':
         return <SunIcon />;
+      case 'add':
+        return <PlusIcon />;
+      case 'add-cancel':
+        return showCancel ? <XIcon /> : <PlusIcon />;
     }
   };
 
@@ -78,6 +87,8 @@ export function ActionButton({
       case 'toggle-pending': return 'Mark Pending';
       case 'theme-light': return 'Switch to dark mode';
       case 'theme-dark': return 'Switch to light mode';
+      case 'add': return 'Add Todo';
+      case 'add-cancel': return showCancel ? 'Cancel' : 'Add Todo';
     }
   };
 

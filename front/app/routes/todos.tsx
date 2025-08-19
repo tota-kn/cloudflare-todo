@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createServerFetcher } from "~/client";
+import { ActionButton } from "~/components/ActionButton";
 import { ErrorMessage } from "~/components/ErrorMessage";
-import { PlusIcon, XIcon } from "~/components/Icon";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { ThemeToggle } from "~/components/ThemeToggle";
 import { TodoList } from "~/components/TodoList";
@@ -54,13 +54,13 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
         </div>
         <div className="flex items-center space-x-2">
           <ThemeToggle />
-          <button
-            onClick={() => setShowNewTodoForm(!showNewTodoForm)}
-            className="bg-primary text-primary-foreground p-3 rounded-full hover:bg-primary/90 transition-colors"
-            title={showNewTodoForm ? 'Cancel' : 'Add Todo'}
-          >
-{showNewTodoForm ? <XIcon /> : <PlusIcon />}
-          </button>
+          <div className="p-1">
+            <ActionButton
+              onClick={() => setShowNewTodoForm(!showNewTodoForm)}
+              variant="add-cancel"
+              showCancel={showNewTodoForm}
+            />
+          </div>
         </div>
       </div>
 
