@@ -34,3 +34,11 @@ TODO
 - [ ] PWA化
 - [ ] Cookie
 - [ ] 多言語
+
+--- 
+# 環境構築
+1. pnpm install
+2. pnpx playwright install
+3. Run Task: all
+4. pnpm b test:api
+5. pnpm test:e2e
