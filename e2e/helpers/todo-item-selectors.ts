@@ -1,4 +1,4 @@
-import { expect, Page, Locator } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 
 /**
  * Todoアイテムの各要素（タイトル、説明、ボタン）を選択するヘルパークラス
@@ -27,11 +27,7 @@ export class TodoItemSelectors {
 
   完了ボタンを取得(todoTitle: string): Locator {
     const todoItem = this.タイトルでTodoアイテムを取得(todoTitle);
-    return todoItem.getByRole('button').filter({ 
-      hasText: /Mark Complete|Mark Pending/
-    }).or(
-      todoItem.getByTitle(/Mark Complete|Mark Pending/)
-    );
+    return todoItem.getByTitle("Updating...")
   }
 
   削除ボタンを取得(todoTitle: string): Locator {
