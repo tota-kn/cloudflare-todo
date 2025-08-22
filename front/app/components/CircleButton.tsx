@@ -1,4 +1,4 @@
-import { CheckIcon, DeleteIcon, ResetIcon, SaveIcon, XIcon, MoonIcon, SunIcon, PlusIcon } from './CustomIcon';
+import { CheckIcon, DeleteIcon, MoonIcon, PlusIcon, ResetIcon, SaveIcon, SunIcon, XIcon } from './CustomIcon';
 
 interface ActionButtonProps {
   onClick: () => void;
@@ -18,6 +18,10 @@ export function ActionButton({
   showCancel = false
 }: ActionButtonProps) {
   const getVariantStyles = () => {
+    if (disabled || isLoading) {
+      return 'bg-muted text-muted-foreground cursor-not-allowed';
+    }
+
     switch (variant) {
       case 'save':
         return 'bg-primary text-primary-foreground hover:bg-primary/90';
@@ -96,7 +100,7 @@ export function ActionButton({
     <button
       onClick={onClick}
       disabled={disabled || isLoading}
-      className={`p-2 rounded-full transition-colors disabled:opacity-50 ${getVariantStyles()}`}
+      className={`p-2 rounded-full transition-colors ${getVariantStyles()}`}
       title={getTitle()}
     >
       {getIcon()}
