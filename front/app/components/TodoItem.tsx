@@ -1,8 +1,6 @@
-import { useState } from "react";
-import { useDeleteTodo, useToggleTodo, useUpdateTodo } from "~/hooks/useTodos";
+import { useDeleteTodo, useToggleTodo } from "~/hooks/useTodos";
 import type { TodoItem as TodoItemData } from "../../../shared/client";
 import { ActionButton } from "./CircleButton";
-import { TodoEditor } from "./TodoEditor";
 import { useNavigate } from "react-router";
 
 interface TodoItemProps {
@@ -11,7 +9,6 @@ interface TodoItemProps {
 
 export function TodoItem({ todo }: TodoItemProps) {
   const navigate = useNavigate();
-  
   const deleteTodo = useDeleteTodo();
   const toggleTodo = useToggleTodo();
 
@@ -31,12 +28,14 @@ export function TodoItem({ todo }: TodoItemProps) {
 
   return (
     <div 
-      className={`border rounded-lg py-2 px-4 ${
+      className={`border rounded-lg py-2 px-4 cursor-pointer hover:bg-accent/10 transition-colors ${
         todo.completed ? 'bg-muted border-border' : 'bg-card border-border'
       }`}
+      onClick={handleEdit}
+      title="Click to edit"
     >
       <div className="flex items-center justify-between">
-        <div className="mr-3">
+        <div className="mr-3" onClick={(e) => e.stopPropagation()}>
           <ActionButton
             onClick={handleToggleComplete}
             disabled={toggleTodo.isPending}
@@ -44,40 +43,31 @@ export function TodoItem({ todo }: TodoItemProps) {
             isLoading={toggleTodo.isPending}
           />
         </div>
-        <div className="flex-1 min-w-0" onClick={handleEdit}>
+        <div className="flex-1 min-w-0">
           <h3 
-            className={`text-base font-semibold cursor-pointer hover:bg-accent/20 rounded px-1 py-0.5 -mx-1 transition-colors ${
+            className={`text-base font-semibold ${
               todo.completed ? 'line-through text-muted-foreground' : 'text-card-foreground'
             }`}
-            title="Click to edit"
           >
             {todo.title}
           </h3>
-          {todo.description ? (
+          {todo.description && (
             <p 
-              className={`mt-0.5 text-sm cursor-pointer hover:bg-accent/20 rounded px-1 py-0.5 -mx-1 transition-colors ${
+              className={`mt-0.5 text-sm ${
                 todo.completed ? 'text-muted-foreground' : 'text-card-foreground'
               }`}
-              title="Click to edit"
             >
               {todo.description}
             </p>
-          ) : (
-            <p 
-              className="mt-0.5 text-sm cursor-pointer hover:bg-accent/20 rounded px-1 py-0.5 -mx-1 transition-colors text-muted-foreground italic"
-              title="Click to add description"
-            >
-              Add description...
-            </p>
           )}
         </div>
-        <div className="flex items-center space-x-2 ml-3">
+        <div className="flex items-center space-x-2 ml-3" onClick={(e) => e.stopPropagation()}>
           <div className="text-xs text-muted-foreground text-right">
             {todo.updated_at !== todo.created_at && (
               <div>
                 Updated: {new Date(todo.updated_at).toLocaleString('ja-JP', { 
                   year: 'numeric', 
-                  month: '2-digit', 
+                                    month: '2-digit', 
                   day: '2-digit', 
                   hour: '2-digit', 
                   minute: '2-digit' 
