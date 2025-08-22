@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { TodoItem as TodoItemData } from "../../../shared/client";
 import { ActionButton } from "./CircleButton";
 import { TodoInput } from "./TodoInput";
@@ -10,9 +10,7 @@ interface TodoEditorProps {
   todo?: TodoItemData;
   onSave: (title: string, description?: string) => void;
   onCancel: () => void;
-  onToggleComplete?: () => void;
   isSaving?: boolean;
-  isToggling?: boolean;
   showTimestamps?: boolean;
 }
 
@@ -23,18 +21,31 @@ export function TodoEditor({
   todo,
   onSave,
   onCancel,
-  onToggleComplete,
   isSaving = false,
-  isToggling = false,
   showTimestamps = false
 }: TodoEditorProps) {
   const [title, setTitle] = useState(initialTitle);
   const [description, setDescription] = useState(initialDescription);
 
+  useEffect(() => {
+    setTitle(initialTitle);
+    setDescription(initialDescription);
+  }, [initialTitle, initialDescription]);
+
   const handleSave = () => {
     if (canSave) {
       onSave(title, description || undefined);
     }
+  };
+
+  const handleTitleChange = (newTitle: string) => {
+    setTitle(newTitle);
+    onSave(newTitle, description || undefined);
+  };
+
+  const handleDescriptionChange = (newDescription: string) => {
+    setDescription(newDescription);
+    onSave(title, newDescription || undefined);
   };
 
   const handleCancel = () => {
@@ -68,13 +79,12 @@ export function TodoEditor({
       : todo?.completed ? 'bg-muted border-border' : 'bg-card border-border'
       }`}>
       <div className="flex items-center justify-between">
-        {mode === 'edit' && onToggleComplete && (
+        {mode === 'edit' && (
           <div className="mr-3">
             <ActionButton
-              onClick={onToggleComplete}
+              onClick={() => {}}
               variant={todo?.completed ? 'toggle-pending' : 'toggle-complete'}
-              isLoading={isToggling}
-              disabled={isToggling}
+              disabled={true}
             />
           </div>
         )}
@@ -82,8 +92,8 @@ export function TodoEditor({
         <TodoInput
           title={title}
           description={description}
-          onTitleChange={setTitle}
-          onDescriptionChange={setDescription}
+          onTitleChange={handleTitleChange}
+          onDescriptionChange={handleDescriptionChange}
           onTitleKeyDown={handleTitleKeyDown}
           onDescriptionKeyDown={handleDescriptionKeyDown}
           autoFocusTitle={true}
@@ -91,9 +101,9 @@ export function TodoEditor({
           mode={mode}
         />
 
-        <div className="flex items-center space-x-2 ml-4">
+        <div className="flex items-center space-x-2 ml-3">
           {showTimestamps && todo && (
-            <div className="text-xs text-muted-foreground text-right mr-1">
+            <div className="text-xs text-muted-foreground text-right">
               {todo.updated_at !== todo.created_at && (
                 <div>
                   Updated: {new Date(todo.updated_at).toLocaleString('ja-JP', {
@@ -116,18 +126,15 @@ export function TodoEditor({
               </div>
             </div>
           )}
-
-          <ActionButton
-            onClick={handleCancel}
-            variant="cancel"
-          />
-
-          <ActionButton
-            onClick={handleSave}
-            variant="save"
-            disabled={!canSave || isSaving}
-            isLoading={isSaving}
-          />
+          {mode === 'edit' && (
+            <div>
+              <ActionButton
+                onClick={() => {}}
+                disabled={true}
+                variant="delete"
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

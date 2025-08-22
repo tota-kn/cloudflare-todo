@@ -1,7 +1,7 @@
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { createServerFetcher } from "~/client";
 import { TodoEditor } from "~/components/TodoEditor";
-import { useTheme } from '~/contexts/ThemeContext';
 import { useCreateTodo } from "~/hooks/useTodos";
 import type { Route } from "./+types/new";
 
@@ -38,29 +38,29 @@ export async function action({ request, context }: Route.ActionArgs) {
   return { todo: res };
 }
 
-export default function TodoNew({ loaderData }: Route.ComponentProps) {
-  const { theme } = useTheme();
+export default function TodoNew(_: Route.ComponentProps) {
   const navigate = useNavigate();
   const createTodo = useCreateTodo();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
-  const handleSave = (title: string, description?: string) => {
-    createTodo.mutate(
-      { title, description },
-      {
-        onSuccess: () => {
-          navigate("/todos");
+  const handleSave = () => {
+    if (title.length > 0) {
+      createTodo.mutate(
+        { title, description },
+        {
+          onSuccess: () => {
+            navigate("/todos");
+          }
         }
-      }
-    );
+      );
+    }
   };
 
   const handleCancel = () => {
+    setTitle("");
+    setDescription("");
     navigate("/todos");
-  };
-
-  // 新規作成では完了状態のトグルは不要
-  const handleToggleComplete = () => {
-    // No-op for new todos
   };
 
   return (
@@ -77,16 +77,32 @@ export default function TodoNew({ loaderData }: Route.ComponentProps) {
 
       <TodoEditor
         mode="create"
-        initialTitle=""
-        initialDescription=""
+        initialTitle={title}
+        initialDescription={description}
         todo={undefined}
-        onSave={handleSave}
-        onCancel={handleCancel}
-        onToggleComplete={handleToggleComplete}
-        isSaving={createTodo.isPending}
-        isToggling={false}
+        onSave={(newTitle: string, newDescription?: string) => {
+          setTitle(newTitle);
+          setDescription(newDescription || "");
+        }}
+        onCancel={() => {}}
         showTimestamps={false}
       />
+      
+      <div className="flex justify-end space-x-2 mt-4">
+        <button
+          onClick={handleCancel}
+          className="px-4 py-2 text-sm bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleSave}
+          disabled={title.length === 0 || createTodo.isPending}
+          className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {createTodo.isPending ? "Saving..." : "Save"}
+        </button>
+      </div>
     </div>
   );
 }
