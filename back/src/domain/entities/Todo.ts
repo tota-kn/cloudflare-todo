@@ -48,7 +48,7 @@ export class Todo {
   }
 
   private validateTitle(): void {
-    if (!this.title || this.title.trim() === '') {
+    if (!this.title || this.title === '') {
       throw new Error('Todo title cannot be empty')
     }
   }

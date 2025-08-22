@@ -4,7 +4,7 @@ export class TodoId {
   }
 
   private validate(): void {
-    if (!this.value || this.value.trim() === '') {
+    if (!this.value || this.value === '') {
       throw new Error('TodoId cannot be empty')
     }
   }

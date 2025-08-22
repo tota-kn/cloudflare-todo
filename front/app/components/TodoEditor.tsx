@@ -36,8 +36,8 @@ export function TodoEditor({
   const [description, setDescription] = useState(initialDescription);
 
   const handleSave = () => {
-    if (title.trim()) {
-      onSave(title.trim(), description.trim() || undefined);
+    if (canSave) {
+      onSave(title, description || undefined);
     }
   };
 
@@ -48,7 +48,7 @@ export function TodoEditor({
   };
 
   const handleTitleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && title.trim()) {
+    if (e.key === 'Enter' && title) {
       handleSave();
     } else if (e.key === 'Escape') {
       handleCancel();
@@ -56,7 +56,7 @@ export function TodoEditor({
   };
 
   const handleDescriptionKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey && title.trim()) {
+    if (e.key === 'Enter' && !e.shiftKey && title) {
       e.preventDefault();
       handleSave();
     } else if (e.key === 'Escape') {
@@ -64,11 +64,7 @@ export function TodoEditor({
     }
   };
 
-  const canSave = title.trim() && (
-    mode === 'create' ||
-    title.trim() !== initialTitle ||
-    (description.trim() || "") !== (initialDescription || "")
-  );
+  const canSave = title.length > 0;
 
   return (
     <div className={`border rounded-lg py-2 px-4 ${mode === 'create'
@@ -94,7 +90,7 @@ export function TodoEditor({
           onDescriptionChange={setDescription}
           onTitleKeyDown={handleTitleKeyDown}
           onDescriptionKeyDown={handleDescriptionKeyDown}
-          autoFocusTitle={mode === 'create'}
+          autoFocusTitle={true}
           showHelpText={mode === 'create'}
           mode={mode}
         />
