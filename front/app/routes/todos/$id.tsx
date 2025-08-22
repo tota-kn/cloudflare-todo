@@ -15,7 +15,7 @@ export function meta({ params }: Route.MetaArgs) {
 export async function loader({ params, context }: Route.LoaderArgs) {
   const client = createServerFetcher(context.cloudflare.env);
   const todoId = params.id;
-  
+
   if (!todoId) {
     throw new Error("Todo ID is required");
   }
@@ -36,7 +36,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 export async function action({ params, request, context }: Route.ActionArgs) {
   const client = createServerFetcher(context.cloudflare.env);
   const todoId = params.id;
-  
+
   if (!todoId) {
     throw new Error("Todo ID is required");
   }
@@ -49,7 +49,7 @@ export async function action({ params, request, context }: Route.ActionArgs) {
     param: { todoId },
     json: { title, description: description || undefined }
   });
-  
+
   const res = await req.json();
 
   if ('error' in res) {
@@ -68,7 +68,7 @@ export default function TodoEdit({ loaderData }: Route.ComponentProps) {
   const handleSave = (title: string, description?: string) => {
     updateTodo.mutate(
       { todoId: loaderData.todo.id, title, description },
-      { 
+      {
         onSuccess: () => {
           navigate("/todos");
         }
@@ -96,20 +96,18 @@ export default function TodoEdit({ loaderData }: Route.ComponentProps) {
         </button>
       </div>
 
-      <div className="bg-card border border-border rounded-lg p-6">
-        <TodoEditor
-          mode="edit"
-          initialTitle={loaderData.todo.title}
-          initialDescription={loaderData.todo.description || ""}
-          todo={loaderData.todo}
-          onSave={handleSave}
-          onCancel={handleCancel}
-          onToggleComplete={handleToggleComplete}
-          isSaving={updateTodo.isPending}
-          isToggling={toggleTodo.isPending}
-          showTimestamps={true}
-        />
-      </div>
+      <TodoEditor
+        mode="edit"
+        initialTitle={loaderData.todo.title}
+        initialDescription={loaderData.todo.description || ""}
+        todo={loaderData.todo}
+        onSave={handleSave}
+        onCancel={handleCancel}
+        onToggleComplete={handleToggleComplete}
+        isSaving={updateTodo.isPending}
+        isToggling={toggleTodo.isPending}
+        showTimestamps={true}
+      />
     </div>
   );
 }

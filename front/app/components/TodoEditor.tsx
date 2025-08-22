@@ -65,17 +65,16 @@ export function TodoEditor({
   };
 
   const canSave = title.trim() && (
-    mode === 'create' || 
-    title.trim() !== initialTitle || 
+    mode === 'create' ||
+    title.trim() !== initialTitle ||
     (description.trim() || "") !== (initialDescription || "")
   );
 
   return (
-    <div className={`border rounded-lg py-2 px-4 ${
-      mode === 'create' 
-        ? 'bg-card border-border animate-in slide-in-from-top-1 duration-200'
-        : todo?.completed ? 'bg-muted border-border' : 'bg-card border-border'
-    }`}>
+    <div className={`border rounded-lg py-2 px-4 ${mode === 'create'
+      ? 'bg-card border-border animate-in slide-in-from-top-1 duration-200'
+      : todo?.completed ? 'bg-muted border-border' : 'bg-card border-border'
+      }`}>
       <div className="flex items-center justify-between">
         {mode === 'edit' && onToggleComplete && (
           <div className="mr-3">
@@ -87,7 +86,7 @@ export function TodoEditor({
             />
           </div>
         )}
-        
+
         <TodoInput
           title={title}
           description={description}
@@ -99,43 +98,43 @@ export function TodoEditor({
           showHelpText={mode === 'create'}
           mode={mode}
         />
-        
+
         <div className="flex items-center space-x-2 ml-4">
           {showTimestamps && todo && (
             <div className="text-xs text-muted-foreground text-right mr-1">
               {todo.updated_at !== todo.created_at && (
                 <div>
-                  Updated: {new Date(todo.updated_at).toLocaleString('ja-JP', { 
-                    year: 'numeric', 
-                    month: '2-digit', 
-                    day: '2-digit', 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
+                  Updated: {new Date(todo.updated_at).toLocaleString('ja-JP', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
                   })}
                 </div>
               )}
               <div className={todo.updated_at !== todo.created_at ? "mt-0.5" : ""}>
-                Created: {new Date(todo.created_at).toLocaleString('ja-JP', { 
-                  year: 'numeric', 
-                  month: '2-digit', 
-                  day: '2-digit', 
-                  hour: '2-digit', 
-                  minute: '2-digit' 
+                Created: {new Date(todo.created_at).toLocaleString('ja-JP', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit'
                 })}
               </div>
             </div>
           )}
-          
+
+          <ActionButton
+            onClick={handleCancel}
+            variant="cancel"
+          />
+
           <ActionButton
             onClick={handleSave}
             variant="save"
             disabled={!canSave || isSaving}
             isLoading={isSaving}
-          />
-          
-          <ActionButton
-            onClick={handleCancel}
-            variant="cancel"
           />
         </div>
       </div>

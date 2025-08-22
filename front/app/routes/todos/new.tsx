@@ -5,7 +5,7 @@ import { useTheme } from '~/contexts/ThemeContext';
 import { useCreateTodo } from "~/hooks/useTodos";
 import type { Route } from "./+types/new";
 
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return [
     { title: "Create New Todo" },
     { name: "description", content: "Create a new todo item" },
@@ -20,7 +20,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 
 export async function action({ request, context }: Route.ActionArgs) {
   const client = createServerFetcher(context.cloudflare.env);
-  
+
   const formData = await request.formData();
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
@@ -28,7 +28,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   const req = await client.v1.todos.$post({
     json: { title, description: description || undefined }
   });
-  
+
   const res = await req.json();
 
   if ('error' in res) {
@@ -46,7 +46,7 @@ export default function TodoNew({ loaderData }: Route.ComponentProps) {
   const handleSave = (title: string, description?: string) => {
     createTodo.mutate(
       { title, description },
-      { 
+      {
         onSuccess: () => {
           navigate("/todos");
         }
@@ -75,20 +75,18 @@ export default function TodoNew({ loaderData }: Route.ComponentProps) {
         </button>
       </div>
 
-      <div className="bg-card border border-border rounded-lg p-6">
-        <TodoEditor
-          mode="create"
-          initialTitle=""
-          initialDescription=""
-          todo={undefined}
-          onSave={handleSave}
-          onCancel={handleCancel}
-          onToggleComplete={handleToggleComplete}
-          isSaving={createTodo.isPending}
-          isToggling={false}
-          showTimestamps={false}
-        />
-      </div>
+      <TodoEditor
+        mode="create"
+        initialTitle=""
+        initialDescription=""
+        todo={undefined}
+        onSave={handleSave}
+        onCancel={handleCancel}
+        onToggleComplete={handleToggleComplete}
+        isSaving={createTodo.isPending}
+        isToggling={false}
+        showTimestamps={false}
+      />
     </div>
   );
 }
