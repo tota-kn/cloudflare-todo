@@ -1,7 +1,7 @@
+import { useNavigate } from "react-router";
 import { useDeleteTodo, useToggleTodo } from "~/hooks/useTodos";
 import type { TodoItem as TodoItemData } from "../../../shared/client";
 import { ActionButton } from "./CircleButton";
-import { useNavigate } from "react-router";
 
 interface TodoItemProps {
   todo: TodoItemData;
@@ -61,7 +61,7 @@ export function TodoItem({ todo }: TodoItemProps) {
             </p>
           )}
         </div>
-        <div className="flex items-center space-x-2 ml-3" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center space-x-2 ml-3">
           <div className="text-xs text-muted-foreground text-right">
             {todo.updated_at !== todo.created_at && (
               <div>
@@ -84,12 +84,14 @@ export function TodoItem({ todo }: TodoItemProps) {
               })}
             </div>
           </div>
-          <ActionButton
-            onClick={handleDelete}
-            disabled={deleteTodo.isPending}
-            variant="delete"
-            isLoading={deleteTodo.isPending}
-          />
+          <div  onClick={(e) => e.stopPropagation()}>
+            <ActionButton
+              onClick={handleDelete}
+              disabled={deleteTodo.isPending}
+              variant="delete"
+              isLoading={deleteTodo.isPending}
+            />
+          </div>
         </div>
       </div>
     </div>
