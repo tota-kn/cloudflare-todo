@@ -10,10 +10,8 @@ interface TodoEditorProps {
   todo?: TodoItemData;
   onSave: (title: string, description?: string) => void;
   onCancel: () => void;
-  onDelete?: () => void;
   onToggleComplete?: () => void;
   isSaving?: boolean;
-  isDeleting?: boolean;
   isToggling?: boolean;
   showTimestamps?: boolean;
 }
@@ -25,10 +23,8 @@ export function TodoEditor({
   todo,
   onSave,
   onCancel,
-  onDelete,
   onToggleComplete,
   isSaving = false,
-  isDeleting = false,
   isToggling = false,
   showTimestamps = false
 }: TodoEditorProps) {

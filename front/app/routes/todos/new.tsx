@@ -5,7 +5,7 @@ import { useTheme } from '~/contexts/ThemeContext';
 import { useCreateTodo } from "~/hooks/useTodos";
 import type { Route } from "./+types/new";
 
-export function meta({ }: Route.MetaArgs) {
+export function meta(_: Route.MetaArgs) {
   return [
     { title: "Create New Todo" },
     { name: "description", content: "Create a new todo item" },

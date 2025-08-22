@@ -11,9 +11,6 @@ export const createServerFetcher = (env: Env) => {
   }
 };
 
-export const createClientFetcher = (baseUrl: string) => {
-  return hc<ClientType>(baseUrl);
-};
 
 export const createBrowserClient = () => {
   const baseUrl = typeof window !== "undefined" 
