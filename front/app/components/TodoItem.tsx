@@ -3,17 +3,17 @@ import { useDeleteTodo, useToggleTodo, useUpdateTodo } from "~/hooks/useTodos";
 import type { TodoItem as TodoItemData } from "../../../shared/client";
 import { ActionButton } from "./CircleButton";
 import { TodoEditor } from "./TodoEditor";
+import { useNavigate } from "react-router";
 
 interface TodoItemProps {
   todo: TodoItemData;
 }
 
 export function TodoItem({ todo }: TodoItemProps) {
-  const [isEditing, setIsEditing] = useState(false);
+  const navigate = useNavigate();
   
   const deleteTodo = useDeleteTodo();
   const toggleTodo = useToggleTodo();
-  const updateTodo = useUpdateTodo();
 
   const handleToggleComplete = () => {
     toggleTodo.mutate({ todoId: todo.id, completed: todo.completed });
@@ -26,36 +26,8 @@ export function TodoItem({ todo }: TodoItemProps) {
   };
 
   const handleEdit = () => {
-    setIsEditing(true);
+    navigate(`/todos/${todo.id}`);
   };
-
-  const handleSave = (title: string, description?: string) => {
-    updateTodo.mutate(
-      { todoId: todo.id, title, description },
-      { onSuccess: () => setIsEditing(false) }
-    );
-  };
-
-  const handleCancel = () => {
-    setIsEditing(false);
-  };
-
-  if (isEditing) {
-    return (
-      <TodoEditor
-        mode="edit"
-        initialTitle={todo.title}
-        initialDescription={todo.description || ""}
-        todo={todo}
-        onSave={handleSave}
-        onCancel={handleCancel}
-        onToggleComplete={handleToggleComplete}
-        isSaving={updateTodo.isPending}
-        isToggling={toggleTodo.isPending}
-        showTimestamps={true}
-      />
-    );
-  }
 
   return (
     <div 

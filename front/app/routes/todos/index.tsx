@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useNavigate } from "react-router";
 import { createServerFetcher } from "~/client";
 import { ActionButton } from "~/components/CircleButton";
 import { ErrorMessage } from "~/components/ErrorMessage";
@@ -6,7 +6,7 @@ import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { TodoList } from "~/components/TodoList";
 import { useTheme } from '~/contexts/ThemeContext';
 import { useTodos } from "~/hooks/useTodos";
-import type { Route } from "./+types/todos";
+import type { Route } from "./+types/index";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -31,16 +31,12 @@ export async function loader({ context }: Route.LoaderArgs) {
 }
 
 export default function Todos({ loaderData }: Route.ComponentProps) {
-  const [showNewTodoForm, setShowNewTodoForm] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
   
   const { data: todos, isLoading, error } = useTodos(loaderData.todos);
   
   const currentTodos = todos || [];
-
-  const handleCancelNewTodo = () => {
-    setShowNewTodoForm(false);
-  };
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -60,9 +56,9 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
           />
           <div className="p-1">
             <ActionButton
-              onClick={() => setShowNewTodoForm(!showNewTodoForm)}
+              onClick={() => navigate("/todos/new")}
               variant="add-cancel"
-              showCancel={showNewTodoForm}
+              showCancel={false}
             />
           </div>
         </div>
@@ -76,8 +72,8 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
       {!isLoading && (
         <TodoList 
           todos={currentTodos}
-          showNewTodoForm={showNewTodoForm}
-          onCancelNewTodo={handleCancelNewTodo}
+          showNewTodoForm={false}
+          onCancelNewTodo={() => {}}
         />
       )}
     </div>
