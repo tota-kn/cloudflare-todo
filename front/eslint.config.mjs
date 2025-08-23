@@ -14,10 +14,10 @@ const gitignorePath = path.resolve(__dirname, '.gitignore')
 export default tseslint.config(
   eslint.configs.recommended,
   tseslint.configs.recommended,
-  stylistic.configs.recommended,
   reactPlugin.configs.flat.recommended,
   reactPlugin.configs.flat['jsx-runtime'],
   reactHooksPlugin.configs['recommended-latest'],
+  stylistic.configs.recommended,
   includeIgnoreFile(gitignorePath),
   {
     settings: {

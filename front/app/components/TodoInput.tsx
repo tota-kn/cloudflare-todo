@@ -1,17 +1,17 @@
-import React from 'react';
+import React from 'react'
 
 interface TodoInputProps {
-  title: string;
-  description: string;
-  onTitleChange: (value: string) => void;
-  onDescriptionChange: (value: string) => void;
-  onTitleKeyDown?: (e: React.KeyboardEvent) => void;
-  onDescriptionKeyDown?: (e: React.KeyboardEvent) => void;
-  titlePlaceholder?: string;
-  descriptionPlaceholder?: string;
-  autoFocusTitle?: boolean;
-  showHelpText?: boolean;
-  mode?: 'create' | 'edit';
+  title: string
+  description: string
+  onTitleChange: (value: string) => void
+  onDescriptionChange: (value: string) => void
+  onTitleKeyDown?: (e: React.KeyboardEvent) => void
+  onDescriptionKeyDown?: (e: React.KeyboardEvent) => void
+  titlePlaceholder?: string
+  descriptionPlaceholder?: string
+  autoFocusTitle?: boolean
+  showHelpText?: boolean
+  mode?: 'create' | 'edit'
 }
 
 export function TodoInput({
@@ -21,42 +21,42 @@ export function TodoInput({
   onDescriptionChange,
   onTitleKeyDown,
   onDescriptionKeyDown,
-  titlePlaceholder = "Todo title...",
-  descriptionPlaceholder = "Add description...",
+  titlePlaceholder = 'Todo title...',
+  descriptionPlaceholder = 'Add description...',
   autoFocusTitle = false,
-  showHelpText = false,
-  mode = 'create'
+  showHelpText: _showHelpText = false,
+  mode: _mode = 'create',
 }: TodoInputProps) {
-  const titleInputRef = React.useRef<HTMLInputElement>(null);
-  const descriptionTextareaRef = React.useRef<HTMLTextAreaElement>(null);
+  const titleInputRef = React.useRef<HTMLInputElement>(null)
+  const descriptionTextareaRef = React.useRef<HTMLTextAreaElement>(null)
 
   React.useEffect(() => {
     if (autoFocusTitle && titleInputRef.current) {
-      titleInputRef.current.focus();
+      titleInputRef.current.focus()
     }
-  }, [autoFocusTitle]);
+  }, [autoFocusTitle])
 
   const handleTitleKeyDown = (e: React.KeyboardEvent) => {
     if (onTitleKeyDown) {
-      onTitleKeyDown(e);
+      onTitleKeyDown(e)
     }
-    
+
     if (e.key === 'Tab' && !e.shiftKey) {
-      e.preventDefault();
-      descriptionTextareaRef.current?.focus();
+      e.preventDefault()
+      descriptionTextareaRef.current?.focus()
     }
-  };
+  }
 
   const handleDescriptionKeyDown = (e: React.KeyboardEvent) => {
     if (onDescriptionKeyDown) {
-      onDescriptionKeyDown(e);
+      onDescriptionKeyDown(e)
     }
-    
+
     if (e.key === 'Tab' && e.shiftKey) {
-      e.preventDefault();
-      titleInputRef.current?.focus();
+      e.preventDefault()
+      titleInputRef.current?.focus()
     }
-  };
+  }
 
   return (
     <div className="flex-1">
@@ -64,7 +64,7 @@ export function TodoInput({
         ref={titleInputRef}
         type="text"
         value={title}
-        onChange={(e) => onTitleChange(e.target.value)}
+        onChange={e => onTitleChange(e.target.value)}
         onKeyDown={handleTitleKeyDown}
         className="font-semibold bg-transparent border-b border-primary focus:outline-none focus:border-primary w-full text-base"
         placeholder={titlePlaceholder}
@@ -74,7 +74,7 @@ export function TodoInput({
       <textarea
         ref={descriptionTextareaRef}
         value={description}
-        onChange={(e) => onDescriptionChange(e.target.value)}
+        onChange={e => onDescriptionChange(e.target.value)}
         onKeyDown={handleDescriptionKeyDown}
         className="mt-1 text-sm bg-transparent focus:outline-none w-full resize-none border-b border-primary focus:border-primary pb-0 leading-tight"
         rows={1}
@@ -82,5 +82,5 @@ export function TodoInput({
         data-todo-description
       />
     </div>
-  );
+  )
 }
