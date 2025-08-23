@@ -25,5 +25,9 @@ export default tseslint.config(
         version: 'detect',
       },
     },
+    rules: {
+      '@stylistic/indent': 'off', // @stylistic/eslint-plugin v4.4.1にバグがあるため無効化
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }], // _で始まる未使用パラメータを許可
+    },
   },
 )
