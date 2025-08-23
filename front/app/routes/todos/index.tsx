@@ -1,17 +1,17 @@
-import { useNavigate } from 'react-router'
-import { createServerFetcher } from '~/client'
-import { ActionButton } from '~/components/CircleButton'
-import { ErrorMessage } from '~/components/ErrorMessage'
-import { LoadingSpinner } from '~/components/LoadingSpinner'
-import { TodoList } from '~/components/TodoList'
-import { useTheme } from '~/contexts/ThemeContext'
-import { useTodos } from '~/hooks/useTodos'
-import type { Route } from './+types/index'
+import { useNavigate } from "react-router"
+import { createServerFetcher } from "~/client"
+import { ActionButton } from "~/components/CircleButton"
+import { ErrorMessage } from "~/components/ErrorMessage"
+import { LoadingSpinner } from "~/components/LoadingSpinner"
+import { TodoList } from "~/components/TodoList"
+import { useTheme } from "~/contexts/ThemeContext"
+import { useTodos } from "~/hooks/useTodos"
+import type { Route } from "./+types/index"
 
 export function meta() {
   return [
-    { title: 'Todo List' },
-    { name: 'description', content: 'Todo list page' },
+    { title: "Todo List" },
+    { name: "description", content: "Todo list page" },
   ]
 }
 
@@ -20,7 +20,7 @@ export async function loader({ context }: Route.LoaderArgs) {
   const req = await client.v1.todos.$get()
   const res = await req.json()
 
-  if ('error' in res) {
+  if ("error" in res) {
     throw new Error(res.error)
   }
 
@@ -52,11 +52,11 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
         <div className="flex items-center space-x-2">
           <ActionButton
             onClick={toggleTheme}
-            variant={theme === 'light' ? 'theme-light' : 'theme-dark'}
+            variant={theme === "light" ? "theme-light" : "theme-dark"}
           />
           <div className="p-1">
             <ActionButton
-              onClick={() => navigate('/todos/new')}
+              onClick={() => navigate("/todos/new")}
               variant="add-cancel"
               showCancel={false}
             />

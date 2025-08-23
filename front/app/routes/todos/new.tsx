@@ -1,14 +1,14 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router'
-import { createServerFetcher } from '~/client'
-import { TodoEditor } from '~/components/TodoEditor'
-import { useCreateTodo } from '~/hooks/useTodos'
-import type { Route } from './+types/new'
+import { useState } from "react"
+import { useNavigate } from "react-router"
+import { createServerFetcher } from "~/client"
+import { TodoEditor } from "~/components/TodoEditor"
+import { useCreateTodo } from "~/hooks/useTodos"
+import type { Route } from "./+types/new"
 
 export function meta() {
   return [
-    { title: 'Create New Todo' },
-    { name: 'description', content: 'Create a new todo item' },
+    { title: "Create New Todo" },
+    { name: "description", content: "Create a new todo item" },
   ]
 }
 
@@ -22,8 +22,8 @@ export async function action({ request, context }: Route.ActionArgs) {
   const client = createServerFetcher(context.cloudflare.env)
 
   const formData = await request.formData()
-  const title = formData.get('title') as string
-  const description = formData.get('description') as string
+  const title = formData.get("title") as string
+  const description = formData.get("description") as string
 
   const req = await client.v1.todos.$post({
     json: { title, description: description || undefined },
@@ -31,7 +31,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 
   const res = await req.json()
 
-  if ('error' in res) {
+  if ("error" in res) {
     throw new Error(res.error)
   }
 
@@ -41,8 +41,8 @@ export async function action({ request, context }: Route.ActionArgs) {
 export default function TodoNew() {
   const navigate = useNavigate()
   const createTodo = useCreateTodo()
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
 
   const handleSave = () => {
     if (title.length > 0) {
@@ -50,17 +50,17 @@ export default function TodoNew() {
         { title, description },
         {
           onSuccess: () => {
-            navigate('/todos')
+            navigate("/todos")
           },
-        },
+        }
       )
     }
   }
 
   const handleCancel = () => {
-    setTitle('')
-    setDescription('')
-    navigate('/todos')
+    setTitle("")
+    setDescription("")
+    navigate("/todos")
   }
 
   return (
@@ -68,7 +68,7 @@ export default function TodoNew() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold text-foreground">Create New Todo</h1>
         <button
-          onClick={() => navigate('/todos')}
+          onClick={() => navigate("/todos")}
           className="px-4 py-2 text-sm bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors"
         >
           ← Back to List
@@ -82,7 +82,7 @@ export default function TodoNew() {
         todo={undefined}
         onSave={(newTitle: string, newDescription?: string) => {
           setTitle(newTitle)
-          setDescription(newDescription || '')
+          setDescription(newDescription || "")
         }}
         onCancel={() => {}}
         showTimestamps={false}
@@ -100,7 +100,7 @@ export default function TodoNew() {
           disabled={title.length === 0 || createTodo.isPending}
           className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {createTodo.isPending ? 'Saving...' : 'Save'}
+          {createTodo.isPending ? "Saving..." : "Save"}
         </button>
       </div>
     </div>

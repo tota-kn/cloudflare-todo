@@ -5,9 +5,10 @@
 ## アーキテクチャ
 
 ### フロントエンドアーキテクチャ
+
 - **フレームワーク**: SSR付きReact Router v7
 - **デプロイ**: Workers統合によるCloudflare Pages
-- **エントリーポイント**: 
+- **エントリーポイント**:
   - `app/root.tsx` - ルートレイアウトとエラーバウンダリー
   - `workers/app.ts` - Cloudflare Workerエントリーポイント
 - **ルーティング**: `app/routes/`でファイルベースルーティング
@@ -16,12 +17,14 @@
 - **状態管理**: TanStack Query for server state
 
 ### ルーティング構造
+
 - `app/routes/` - ファイルベースルーティング
 - React Router v7のSSR機能を活用
 - 各ルートでローダー/アクションパターンを使用
 - 型安全なAPIクライアントで完全なIntelliSense
 
 ### スタイリング
+
 - TailwindCSS v4を使用
 - ユーティリティファーストアプローチ
 - レスポンシブデザイン対応
@@ -29,28 +32,33 @@
 ## 開発コマンド
 
 ### 開発サーバー
+
 ```bash
 pnpm dev              # local envでlocalhost:5173で実行
 ```
 
 ### ビルド
+
 ```bash
 pnpm build            # アプリケーションをビルド
 pnpm preview          # プロダクションビルドをプレビュー
 ```
 
 ### 型生成とチェック
+
 ```bash
 pnpm typegen          # Cloudflare環境の型を生成
 pnpm typecheck        # CF types、RR types を生成し、tscを実行
 ```
 
 ### リント
+
 ```bash
 pnpm lint             # ESLintでコード品質チェック
 ```
 
 ### デプロイ
+
 ```bash
 pnpm deploy:dev       # ビルドしてdevにデプロイ
 pnpm deploy:prd       # ビルドしてproductionにデプロイ

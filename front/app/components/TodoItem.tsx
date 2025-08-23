@@ -1,8 +1,8 @@
-import { useNavigate } from 'react-router'
-import { useDeleteTodo, useToggleTodo } from '~/hooks/useTodos'
-import { formatDateTime } from '~/utils/dateFormat'
-import type { TodoItem as TodoItemData } from '../../../shared/client'
-import { ActionButton } from './CircleButton'
+import { useNavigate } from "react-router"
+import { useDeleteTodo, useToggleTodo } from "~/hooks/useTodos"
+import { formatDateTime } from "~/utils/dateFormat"
+import type { TodoItem as TodoItemData } from "../../../shared/client"
+import { ActionButton } from "./CircleButton"
 
 interface TodoItemProps {
   todo: TodoItemData
@@ -18,7 +18,7 @@ export function TodoItem({ todo }: TodoItemProps) {
   }
 
   const handleDelete = () => {
-    if (confirm('Are you sure you want to delete this todo?')) {
+    if (confirm("Are you sure you want to delete this todo?")) {
       deleteTodo.mutate(todo.id)
     }
   }
@@ -30,24 +30,26 @@ export function TodoItem({ todo }: TodoItemProps) {
   return (
     <div
       className={`border rounded-lg py-2 px-4 cursor-pointer hover:bg-accent/10 transition-colors ${
-        todo.completed ? 'bg-muted border-border' : 'bg-card border-border'
+        todo.completed ? "bg-muted border-border" : "bg-card border-border"
       }`}
       onClick={handleEdit}
       title="Click to edit"
     >
       <div className="flex items-center justify-between">
-        <div className="mr-3" onClick={e => e.stopPropagation()}>
+        <div className="mr-3" onClick={(e) => e.stopPropagation()}>
           <ActionButton
             onClick={handleToggleComplete}
             disabled={toggleTodo.isPending}
-            variant={todo.completed ? 'toggle-pending' : 'toggle-complete'}
+            variant={todo.completed ? "toggle-pending" : "toggle-complete"}
             isLoading={toggleTodo.isPending}
           />
         </div>
         <div className="flex-1 min-w-0">
           <h3
             className={`text-base font-semibold ${
-              todo.completed ? 'line-through text-muted-foreground' : 'text-card-foreground'
+              todo.completed
+                ? "line-through text-muted-foreground"
+                : "text-card-foreground"
             }`}
           >
             {todo.title}
@@ -55,7 +57,9 @@ export function TodoItem({ todo }: TodoItemProps) {
           {todo.description && (
             <p
               className={`mt-0.5 text-sm ${
-                todo.completed ? 'text-muted-foreground' : 'text-card-foreground'
+                todo.completed
+                  ? "text-muted-foreground"
+                  : "text-card-foreground"
               }`}
             >
               {todo.description}
@@ -65,15 +69,15 @@ export function TodoItem({ todo }: TodoItemProps) {
         <div className="flex items-center space-x-2 ml-3">
           <div className="text-xs text-muted-foreground text-right">
             {todo.updated_at !== todo.created_at && (
-              <div>
-                {`Updated: ${formatDateTime(todo.updated_at)}`}
-              </div>
+              <div>{`Updated: ${formatDateTime(todo.updated_at)}`}</div>
             )}
-            <div className={todo.updated_at !== todo.created_at ? 'mt-0.5' : ''}>
-               {`Created: ${formatDateTime(todo.created_at)}`}
+            <div
+              className={todo.updated_at !== todo.created_at ? "mt-0.5" : ""}
+            >
+              {`Created: ${formatDateTime(todo.created_at)}`}
             </div>
           </div>
-          <div onClick={e => e.stopPropagation()}>
+          <div onClick={(e) => e.stopPropagation()}>
             <ActionButton
               onClick={handleDelete}
               disabled={deleteTodo.isPending}

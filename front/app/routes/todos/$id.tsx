@@ -1,14 +1,14 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router'
-import { createServerFetcher } from '~/client'
-import { TodoEditor } from '~/components/TodoEditor'
-import { useUpdateTodo } from '~/hooks/useTodos'
-import type { Route } from './+types/$id'
+import { useState } from "react"
+import { useNavigate } from "react-router"
+import { createServerFetcher } from "~/client"
+import { TodoEditor } from "~/components/TodoEditor"
+import { useUpdateTodo } from "~/hooks/useTodos"
+import type { Route } from "./+types/$id"
 
 export function meta({ params }: Route.MetaArgs) {
   return [
     { title: `Edit Todo ${params.id}` },
-    { name: 'description', content: 'Edit todo item' },
+    { name: "description", content: "Edit todo item" },
   ]
 }
 
@@ -17,13 +17,13 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   const todoId = params.id
 
   if (!todoId) {
-    throw new Error('Todo ID is required')
+    throw new Error("Todo ID is required")
   }
 
-  const req = await client.v1.todos[':todoId'].$get({ param: { todoId } })
+  const req = await client.v1.todos[":todoId"].$get({ param: { todoId } })
   const res = await req.json()
 
-  if ('error' in res) {
+  if ("error" in res) {
     throw new Error(res.error)
   }
 
@@ -38,21 +38,21 @@ export async function action({ params, request, context }: Route.ActionArgs) {
   const todoId = params.id
 
   if (!todoId) {
-    throw new Error('Todo ID is required')
+    throw new Error("Todo ID is required")
   }
 
   const formData = await request.formData()
-  const title = formData.get('title') as string
-  const description = formData.get('description') as string
+  const title = formData.get("title") as string
+  const description = formData.get("description") as string
 
-  const req = await client.v1.todos[':todoId'].$put({
+  const req = await client.v1.todos[":todoId"].$put({
     param: { todoId },
     json: { title, description: description || undefined },
   })
 
   const res = await req.json()
 
-  if ('error' in res) {
+  if ("error" in res) {
     throw new Error(res.error)
   }
 
@@ -63,7 +63,9 @@ export default function TodoEdit({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate()
   const updateTodo = useUpdateTodo()
   const [title, setTitle] = useState(loaderData.todo.title)
-  const [description, setDescription] = useState(loaderData.todo.description || '')
+  const [description, setDescription] = useState(
+    loaderData.todo.description || ""
+  )
 
   const handleSave = () => {
     if (title.length > 0) {
@@ -71,17 +73,17 @@ export default function TodoEdit({ loaderData }: Route.ComponentProps) {
         { todoId: loaderData.todo.id, title, description },
         {
           onSuccess: () => {
-            navigate('/todos')
+            navigate("/todos")
           },
-        },
+        }
       )
     }
   }
 
   const handleCancel = () => {
     setTitle(loaderData.todo.title)
-    setDescription(loaderData.todo.description || '')
-    navigate('/todos')
+    setDescription(loaderData.todo.description || "")
+    navigate("/todos")
   }
 
   return (
@@ -97,7 +99,7 @@ export default function TodoEdit({ loaderData }: Route.ComponentProps) {
         todo={loaderData.todo}
         onSave={(newTitle: string, newDescription?: string) => {
           setTitle(newTitle)
-          setDescription(newDescription || '')
+          setDescription(newDescription || "")
         }}
         onCancel={() => {}}
         showTimestamps={true}
@@ -115,7 +117,7 @@ export default function TodoEdit({ loaderData }: Route.ComponentProps) {
           disabled={title.length === 0 || updateTodo.isPending}
           className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {updateTodo.isPending ? 'Saving...' : 'Save'}
+          {updateTodo.isPending ? "Saving..." : "Save"}
         </button>
       </div>
     </div>

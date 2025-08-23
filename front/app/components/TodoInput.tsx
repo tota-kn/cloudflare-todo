@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 
 interface TodoInputProps {
   title: string
@@ -11,7 +11,7 @@ interface TodoInputProps {
   descriptionPlaceholder?: string
   autoFocusTitle?: boolean
   showHelpText?: boolean
-  mode?: 'create' | 'edit'
+  mode?: "create" | "edit"
 }
 
 export function TodoInput({
@@ -21,8 +21,8 @@ export function TodoInput({
   onDescriptionChange,
   onTitleKeyDown,
   onDescriptionKeyDown,
-  titlePlaceholder = 'Todo title...',
-  descriptionPlaceholder = 'Add description...',
+  titlePlaceholder = "Todo title...",
+  descriptionPlaceholder = "Add description...",
   autoFocusTitle = false,
 }: TodoInputProps) {
   const titleInputRef = React.useRef<HTMLInputElement>(null)
@@ -39,7 +39,7 @@ export function TodoInput({
       onTitleKeyDown(e)
     }
 
-    if (e.key === 'Tab' && !e.shiftKey) {
+    if (e.key === "Tab" && !e.shiftKey) {
       e.preventDefault()
       descriptionTextareaRef.current?.focus()
     }
@@ -50,7 +50,7 @@ export function TodoInput({
       onDescriptionKeyDown(e)
     }
 
-    if (e.key === 'Tab' && e.shiftKey) {
+    if (e.key === "Tab" && e.shiftKey) {
       e.preventDefault()
       titleInputRef.current?.focus()
     }
@@ -62,7 +62,7 @@ export function TodoInput({
         ref={titleInputRef}
         type="text"
         value={title}
-        onChange={e => onTitleChange(e.target.value)}
+        onChange={(e) => onTitleChange(e.target.value)}
         onKeyDown={handleTitleKeyDown}
         className="font-semibold bg-transparent border-b border-primary focus:outline-none focus:border-primary w-full text-base"
         placeholder={titlePlaceholder}
@@ -72,7 +72,7 @@ export function TodoInput({
       <textarea
         ref={descriptionTextareaRef}
         value={description}
-        onChange={e => onDescriptionChange(e.target.value)}
+        onChange={(e) => onDescriptionChange(e.target.value)}
         onKeyDown={handleDescriptionKeyDown}
         className="mt-1 text-sm bg-transparent focus:outline-none w-full resize-none border-b border-primary focus:border-primary pb-0 leading-tight"
         rows={1}

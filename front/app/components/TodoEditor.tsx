@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
-import { formatDateTime } from '~/utils/dateFormat'
-import type { TodoItem as TodoItemData } from '../../../shared/client'
-import { ActionButton } from './CircleButton'
-import { TodoInput } from './TodoInput'
+import { useEffect, useState } from "react"
+import { formatDateTime } from "~/utils/dateFormat"
+import type { TodoItem as TodoItemData } from "../../../shared/client"
+import { ActionButton } from "./CircleButton"
+import { TodoInput } from "./TodoInput"
 
 interface TodoEditorProps {
-  mode: 'create' | 'edit'
+  mode: "create" | "edit"
   initialTitle?: string
   initialDescription?: string
   todo?: TodoItemData
@@ -17,8 +17,8 @@ interface TodoEditorProps {
 
 export function TodoEditor({
   mode,
-  initialTitle = '',
-  initialDescription = '',
+  initialTitle = "",
+  initialDescription = "",
   todo,
   onSave,
   onCancel,
@@ -55,20 +55,18 @@ export function TodoEditor({
   }
 
   const handleTitleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && title) {
+    if (e.key === "Enter" && title) {
       handleSave()
-    }
- else if (e.key === 'Escape') {
+    } else if (e.key === "Escape") {
       handleCancel()
     }
   }
 
   const handleDescriptionKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey && title) {
+    if (e.key === "Enter" && !e.shiftKey && title) {
       e.preventDefault()
       handleSave()
-    }
- else if (e.key === 'Escape') {
+    } else if (e.key === "Escape") {
       handleCancel()
     }
   }
@@ -76,17 +74,21 @@ export function TodoEditor({
   const canSave = title.length > 0
 
   return (
-    <div className={`border rounded-lg py-2 px-4 ${mode === 'create'
-      ? 'bg-card border-border animate-in slide-in-from-top-1 duration-200'
-      : todo?.completed ? 'bg-muted border-border' : 'bg-card border-border'
+    <div
+      className={`border rounded-lg py-2 px-4 ${
+        mode === "create"
+          ? "bg-card border-border animate-in slide-in-from-top-1 duration-200"
+          : todo?.completed
+            ? "bg-muted border-border"
+            : "bg-card border-border"
       }`}
     >
       <div className="flex items-center justify-between">
-        {mode === 'edit' && (
+        {mode === "edit" && (
           <div className="mr-3">
             <ActionButton
               onClick={() => {}}
-              variant={todo?.completed ? 'toggle-pending' : 'toggle-complete'}
+              variant={todo?.completed ? "toggle-pending" : "toggle-complete"}
               disabled={true}
             />
           </div>
@@ -100,7 +102,7 @@ export function TodoEditor({
           onTitleKeyDown={handleTitleKeyDown}
           onDescriptionKeyDown={handleDescriptionKeyDown}
           autoFocusTitle={true}
-          showHelpText={mode === 'create'}
+          showHelpText={mode === "create"}
           mode={mode}
         />
 
@@ -108,16 +110,16 @@ export function TodoEditor({
           {showTimestamps && todo && (
             <div className="text-xs text-muted-foreground text-right">
               {todo.updated_at !== todo.created_at && (
-                <div>
-                  {`Updated: ${formatDateTime(todo.updated_at)}`}
-                </div>
+                <div>{`Updated: ${formatDateTime(todo.updated_at)}`}</div>
               )}
-              <div className={todo.updated_at !== todo.created_at ? 'mt-0.5' : ''}>
+              <div
+                className={todo.updated_at !== todo.created_at ? "mt-0.5" : ""}
+              >
                 {`Created: ${formatDateTime(todo.created_at)}`}
               </div>
             </div>
           )}
-          {mode === 'edit' && (
+          {mode === "edit" && (
             <div>
               <ActionButton
                 onClick={() => {}}

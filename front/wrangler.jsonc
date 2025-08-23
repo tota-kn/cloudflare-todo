@@ -1,53 +1,53 @@
 {
-	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "todo-front",
-	"compatibility_date": "2025-04-04",
-	"main": "./workers/app.ts",
-	"observability": {
-		"enabled": true
-	},
-	"env": {
-		"local": {
-			"name": "todo-front-local",
-			"vars": {
-				"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare Local",
-				"API_BASE_URL": "http://localhost:8787",
-				"IS_LOCAL": true
-			},
-			"services": [
-				{
-					"binding": "BACKEND_API",
-					"service": "todo-back-local"
-				}
-			]
-		},
-		"dev": {
-			"name": "todo-front-dev",
-			"vars": {
-				"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare Dev",
-				"API_BASE_URL": "https://todo-back-dev.omen-bt.workers.dev",
-				"IS_LOCAL": false
-			},
-			"services": [
-				{
-					"binding": "BACKEND_API",
-					"service": "todo-back-dev"
-				}
-			]
-		},
-		"prd": {
-			"name": "todo-front-prd",
-			"vars": {
-				"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare Production",
-				"API_BASE_URL": "https://todo-back-prd.omen-bt.workers.dev",
-				"IS_LOCAL": false
-			},
-			"services": [
-				{
-					"binding": "BACKEND_API",
-					"service": "todo-back-prd"
-				}
-			]
-		}
-	}
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "todo-front",
+  "compatibility_date": "2025-04-04",
+  "main": "./workers/app.ts",
+  "observability": {
+    "enabled": true,
+  },
+  "env": {
+    "local": {
+      "name": "todo-front-local",
+      "vars": {
+        "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare Local",
+        "API_BASE_URL": "http://localhost:8787",
+        "IS_LOCAL": true,
+      },
+      "services": [
+        {
+          "binding": "BACKEND_API",
+          "service": "todo-back-local",
+        },
+      ],
+    },
+    "dev": {
+      "name": "todo-front-dev",
+      "vars": {
+        "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare Dev",
+        "API_BASE_URL": "https://todo-back-dev.omen-bt.workers.dev",
+        "IS_LOCAL": false,
+      },
+      "services": [
+        {
+          "binding": "BACKEND_API",
+          "service": "todo-back-dev",
+        },
+      ],
+    },
+    "prd": {
+      "name": "todo-front-prd",
+      "vars": {
+        "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare Production",
+        "API_BASE_URL": "https://todo-back-prd.omen-bt.workers.dev",
+        "IS_LOCAL": false,
+      },
+      "services": [
+        {
+          "binding": "BACKEND_API",
+          "service": "todo-back-prd",
+        },
+      ],
+    },
+  },
 }
