@@ -1,33 +1,65 @@
-# オニオンアーキテクチャ実装
+# オニオンアーキテクチャ実装詳細
 
-## レイヤー構成
-1. **Domain層** (`src/domain/`)
-   - エンティティ（Todo）
-   - 値オブジェクト（TodoId, TodoStatus）
-   - 純粋なビジネスロジック、他の層に依存しない
+## 層の定義と責務
 
-2. **Application層** (`src/application/`)
-   - ユースケース（Create/Get/List/Update/DeleteTodoUseCase）
-   - DTO（TodoDto）
-   - リポジトリインターフェース（ITodoRepository）
-   - ドメイン層にのみ依存
+### Domain層（`src/domain/`）
+- **責務**: 純粋なビジネスロジック、ドメインルール
+- **含むもの**:
+  - `entities/`: ビジネスエンティティ（例: `Todo.ts`）
+  - `value-objects/`: 値オブジェクト（例: `TodoId.ts`, `TodoStatus.ts`）
+- **依存関係**: 他の層に依存しない（最も内側の層）
+- **ESLint制御**: 他の層のimportを完全に禁止
 
-3. **Infrastructure層** (`src/infrastructure/`)
-   - リポジトリ実装（D1TodoRepository）
-   - データベーステーブル定義
-   - ドメイン層・アプリケーション層に依存
+### Application層（`src/application/`）
+- **責務**: ユースケース実装、ビジネスフローの調整
+- **含むもの**:
+  - `usecases/`: ビジネスユースケース（例: `CreateTodoUseCase.ts`）
+  - `repositories/`: リポジトリインターフェース（例: `ITodoRepository.ts`）
+  - `dto/`: データ転送オブジェクト（例: `TodoDto.ts`）
+- **依存関係**: Domain層のみ依存可能
+- **ESLint制御**: Presentation/Infrastructure層のimportを禁止
 
-4. **Presentation層** (`src/presentation/`)
-   - コントローラー・ルート
-   - バリデーションスキーマ
-   - HTTP関連の処理
-   - 他の層に直接依存しない（Dependencies経由）
+### Infrastructure層（`src/infrastructure/`）
+- **責務**: 外部システム（DB、ストレージ）との具体的な接続
+- **含むもの**:
+  - `repositories/`: リポジトリ実装（例: `D1TodoRepository.ts`）
+  - `database/`: データベーステーブル定義（Drizzle）
+  - `storage/`: ファイルストレージ実装
+- **依存関係**: Domain, Application層に依存可能
+- **ESLint制御**: Presentation層のimportを禁止
 
-## 依存性注入
-- `Dependencies.ts`クラスで一元管理
-- CloudflareEnvからD1Database、R2Bucketを注入
-- 各ユースケースはリポジトリインターフェースに依存
+### Presentation層（`src/presentation/`）
+- **責務**: HTTPリクエスト/レスポンス処理、API定義
+- **含むもの**:
+  - `api/v1/`: RESTful APIルート定義
+  - バリデーション、シリアライゼーション
+- **依存関係**: 他の層に依存しない（最も外側の層）
+- **特徴**: 依存性注入コンテナ経由で他の層を利用
 
-## ESLint強制ルール
-- `eslint-plugin-boundaries`と`import/no-restricted-paths`で依存方向を強制
-- 各層が適切な依存関係のみ持つことを保証
+## 依存性注入パターン
+```typescript
+// Dependencies.ts でコンテナ定義
+export class Dependencies {
+  public readonly todoRepository: ITodoRepository
+  public readonly createTodoUseCase: CreateTodoUseCase
+  
+  constructor(env: CloudflareEnv) {
+    this.todoRepository = new D1TodoRepository(env.DB)
+    this.createTodoUseCase = new CreateTodoUseCase(this.todoRepository)
+  }
+}
+```
+
+## ESLintによる依存方向制御
+- `eslint-plugin-boundaries`: 層間の依存関係を制御
+- `import/no-restricted-paths`: 具体的なファイルパスレベルでの制御
+- 違反時にビルドエラーで即座に検出
+
+## 実装パターン
+1. **新機能追加時**:
+   - Domain → Application → Infrastructure → Presentation の順で実装
+   - 各層で必要なインターフェースを先に定義
+2. **テスト戦略**:
+   - Domain/Application層: 単体テスト（純粋関数のテスト）
+   - Infrastructure層: カバレッジ対象外（外部依存が多いため）
+   - Presentation層: 統合テスト（Bruno API テスト）

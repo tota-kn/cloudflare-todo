@@ -1,69 +1,68 @@
-# 推奨コマンド
+# 開発コマンド一覧
 
-## 依存関係インストール
+## インストール・初期化
 ```bash
-pnpm install
+pnpm install                  # 依存関係をインストール
+pnpx playwright install       # Playwrightブラウザをインストール
 ```
 
 ## 開発サーバー起動
 ```bash
-# バックエンド開発サーバー（localhost:8787）
-pnpm back dev
-
-# フロントエンド開発サーバー（localhost:5173）
-pnpm front dev
+pnpm b dev                    # バックエンド開発サーバー起動（localhost:8787）
+pnpm f dev                    # フロントエンド開発サーバー起動（localhost:5173）
 ```
 
-## 型チェック・生成
+## 型チェック・リント・フォーマット
 ```bash
-# 両方の型チェック
-pnpm typecheck
-
-# バックエンドのみ
-pnpm back typecheck
-pnpm back cf-typegen
-
-# フロントエンドのみ
-pnpm front typecheck
-pnpm front cf-typegen
+pnpm typecheck               # 両方の型チェック実行
+pnpm b typecheck             # バックエンド型チェック
+pnpm f typecheck             # フロントエンド型チェック
+pnpm b lint                  # バックエンドリント・フォーマット
+pnpm f lint                  # フロントエンドリント・フォーマット
 ```
 
-## リント・フォーマット
+## テスト実行
 ```bash
-# バックエンドリント（自動修正付き）
-pnpm back lint
+pnpm b test:unit             # バックエンド単体テスト実行
+pnpm b test:unit:watch       # バックエンド単体テストウォッチモード
+pnpm b test:api              # API統合テスト実行（Bruno）
+pnpm test:e2e                # E2Eテスト実行
+pnpm e2e test:ui             # PlaywrightのUIモードでテスト
 ```
 
-## テスト
+## データベース・バケット操作
 ```bash
-# Bruno APIテスト実行
-pnpm back test:api
-```
-
-## データベース
-```bash
-# D1マイグレーション適用
-pnpm back db:migrate
+pnpm b db:migrate            # D1データベースマイグレーション適用
+pnpm b db:reset              # テストデータでデータベースリセット
+pnpm b bucket:reset          # R2バケットリセット
 ```
 
 ## ビルド・デプロイ
 ```bash
-# バックエンドデプロイ
-pnpm back deploy:dev  # dev環境
-pnpm back deploy:prd  # production環境
-
-# フロントエンドデプロイ
-pnpm front deploy:dev # dev環境
-pnpm front deploy:prd # production環境
-
-# フロントエンドビルド・プレビュー
-pnpm front build
-pnpm front preview
+pnpm f build                 # フロントエンドビルド
+pnpm f preview               # ビルド結果のプレビュー
+pnpm b deploy:dev            # バックエンドをdev環境にデプロイ
+pnpm b deploy:prd            # バックエンドをproduction環境にデプロイ
+pnpm f deploy:dev            # フロントエンドをdev環境にデプロイ
+pnpm f deploy:prd            # フロントエンドをproduction環境にデプロイ
 ```
 
-## ワークスペース操作
+## 型生成
 ```bash
-# 特定パッケージでコマンド実行
-pnpm back [command]  # back/でコマンド実行
-pnpm front [command] # front/でコマンド実行
+pnpm b typegen               # Cloudflare環境の型を生成（バックエンド）
+pnpm f typegen               # Cloudflare環境の型を生成（フロントエンド）
 ```
+
+## 便利なワークスペースコマンド
+```bash
+pnpm b [command]             # バックエンドでコマンド実行
+pnpm f [command]             # フロントエンドでコマンド実行
+pnpm e2e [command]           # E2Eでコマンド実行
+```
+
+## 推奨開発ワークフロー
+1. `pnpm b dev` & `pnpm f dev` で両方の開発サーバー起動
+2. コード変更後は `pnpm typecheck` で型チェック
+3. `pnpm b lint` でコード品質確認
+4. テスト実行: `pnpm b test:unit` → `pnpm b test:api`
+5. E2Eテスト: `pnpm test:e2e`

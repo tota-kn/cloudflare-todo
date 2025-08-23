@@ -1,30 +1,38 @@
 # プロジェクト概要
 
 ## プロジェクトの目的
-Cloudflare Todo - Cloudflare Workers/PagesとReact Router v7を使用したフルスタックTodoアプリケーション
-
-## アーキテクチャ
-- **モノレポ構成**: pnpmワークスペースを使用
-- **バックエンド**: Cloudflare Workersで動作するHono APIサーバー
-- **フロントエンド**: Cloudflare PagesにデプロイされるReact Router v7 SSRアプリケーション
-- **共有**: フロントエンドとバックエンド間の型定義
+Cloudflare TodoアプリケーションはCloudflareのサーバーレス技術を活用したフルスタックTodoアプリケーションです。
 
 ## 技術スタック
-### バックエンド
+### 全体
+- **モノレポ管理**: pnpm workspace
+- **デプロイメント**: Cloudflare Workers（バックエンド）& Cloudflare Pages（フロントエンド）
+
+### バックエンド（back/）
 - **フレームワーク**: Hono with TypeScript
-- **アーキテクチャ**: オニオンアーキテクチャ（Domain/Application/Infrastructure/Presentation）
-- **データベース**: Cloudflare D1 with Drizzle ORM
-- **ストレージ**: Cloudflare R2
-- **バリデーション**: Zod with @hono/zod-validator
-- **API文書**: @hono/swagger-ui
-- **テスト**: Bruno APIテスト
+- **アーキテクチャパターン**: オニオンアーキテクチャ（Clean Architecture）
+- **データベース**: Cloudflare D1（SQLite）
+- **ORM**: Drizzle ORM
+- **ストレージ**: Cloudflare R2（ファイルアップロード）
+- **バリデーション**: Zod + @hono/zod-validator
+- **API仕様**: OpenAPI（@hono/zod-openapi）
+- **テスト**: Vitest（単体テスト）+ Bruno（API統合テスト）
 
-### フロントエンド
-- **フレームワーク**: React Router v7 with SSR
-- **スタイリング**: TailwindCSS
-- **状態管理**: TanStack Query
-- **テーマ**: ライト/ダークモード対応
-- **型安全性**: Hono RPCクライアントによるエンドツーエンド型安全性
+### フロントエンド（front/）
+- **フレームワーク**: React Router v7（SSR対応）
+- **スタイリング**: TailwindCSS v4
+- **状態管理**: TanStack Query（サーバー状態）+ React Context（テーマ）
+- **型安全性**: Hono RPC Client（バックエンドとの型共有）
 
-### 共有
-- 型定義の共有によるフロントエンド・バックエンド間の型安全性確保
+### 型共有（shared/）
+- バックエンドの型をフロントエンドに橋渡しするclient.ts
+
+### E2Eテスト（e2e/）
+- **テストフレームワーク**: Playwright
+
+## 主要な特徴
+- エンドツーエンドの型安全性（バックエンド→フロントエンド）
+- オニオンアーキテクチャによる関心の分離
+- Cloudflareエコシステムの活用
+- ダークモード対応
+- ファイルアップロード機能

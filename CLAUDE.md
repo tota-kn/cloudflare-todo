@@ -11,6 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **back/**: Cloudflare Workersにデプロイされる Hono ベースのAPIサーバー
 - **front/**: Cloudflare Pagesにデプロイされる React Router v7 SSRアプリケーション
 - **shared/**: フロントエンドとバックエンド間で共有される型定義
+- **e2e/**: Playwrightを使用したE2Eテスト
 
 ## 開発コマンド
 
@@ -25,6 +26,9 @@ pnpm b [command]
 # フロントエンドで作業
 pnpm f [command]
 
+# E2Eテストで作業
+pnpm e2e [command]
+
 # 両方の型チェックを実行
 pnpm typecheck
 
@@ -33,6 +37,7 @@ pnpm b dev                # バックエンド開発サーバー起動
 pnpm f dev                # フロントエンド開発サーバー起動
 pnpm b test:unit          # バックエンド単体テスト実行
 pnpm b test:api           # API統合テスト実行
+pnpm test:e2e             # E2Eテスト実行（DB/バケットリセット含む）
 ```
 
 ### バックエンド (back/)
@@ -82,6 +87,15 @@ pnpm deploy:prd       # ビルドしてproductionにデプロイ
 pnpm preview
 ```
 
+### E2Eテスト (e2e/)
+```bash
+# E2Eテスト実行
+pnpm test              # Playwrightテスト実行
+
+# UIモードでテスト実行
+pnpm test:ui           # ブラウザUIでインタラクティブにテスト実行
+```
+
 ## アーキテクチャ
 
 ### バックエンドアーキテクチャ
@@ -124,7 +138,8 @@ pnpm preview
 
 ## 重要なファイル
 
-- `back/src/index.ts` - メインバックエンドエントリーポイントとルート構成
+- `back/src/index.ts` - メインバックエンドエントリーポイントとWorker設定
+- `back/src/presentation/app.ts` - Honoアプリケーション構成、AppType型エクスポート
 - `back/src/Dependencies.ts` - 依存性注入コンテナ
 - `front/app/client.ts` - 型付きAPIクライアント設定
 - `front/workers/app.ts` - Cloudflare Workerリクエストハンドラー
@@ -133,15 +148,23 @@ pnpm preview
 - `back/migrations/0001_todos_table.sql` - 初期データベーススキーマ
 - `back/migrations/0002_reset_and_seed_test_data.sql` - テストデータ用のリセット/シードスクリプト
 - `back/eslint.config.mjs` - オニオンアーキテクチャ強制のESLint設定
+- `e2e/playwright.config.ts` - Playwrightテスト設定
 
 ## 開発ワークフロー
 
-1. バックエンドの変更: `back/src/presentation/routes/`でルートを編集、型は自動的にフロントエンドに流れる
+1. バックエンドの変更: `back/src/presentation/api/v1/`でルートを編集、型は自動的にフロントエンドに流れる
 2. フロントエンドの変更: ローダー/アクションで型付きクライアントを使用、完全なIntelliSenseが利用可能
 3. 両アプリはホットリロードで同時に開発可能
 4. Cloudflare Workers（バックエンド）とPages（フロントエンド）に別々にデプロイ
 5. `back/test/api/`のテストスイートでBrunoを使用したAPIテスト
 6. 変更前に`pnpm typecheck`で型チェック、`pnpm b lint`でコード品質確認
+
+### タスク完了時のチェックリスト
+1. `pnpm typecheck` - 型エラーがないこと
+2. `pnpm b lint` && `pnpm f lint` - リントエラーがないこと  
+3. `pnpm b test:unit` - 単体テストが通ること
+4. `pnpm b test:api` - API統合テストが通ること
+5. `pnpm test:e2e` - E2Eテストが通ること（UI変更時）
 
 ## オニオンアーキテクチャ実装
 

@@ -1,55 +1,50 @@
 # コードスタイル・規約
 
-## TypeScript設定
-- 厳格なTypeScript設定
-- 宣言ファイル生成有効（`--declaration --emitDeclarationOnly`）
+## ESLint設定
 
-## ESLint設定（バックエンド）
-- `@eslint/js` + `typescript-eslint` + `@stylistic/eslint-plugin`
-- オニオンアーキテクチャ依存関係強制ルール
-- Import/Exportパス制限
-
-## コーディング規約
 ### バックエンド
-- **ファイル命名**: PascalCase（クラス）、camelCase（関数・変数）
-- **ディレクトリ構造**: 層別に明確に分離
-- **依存性注入**: Dependenciesクラス経由で管理
-- **バリデーション**: Zodスキーマ使用
-- **エラーハンドリング**: 適切なHTTPステータスコード
+- **ベース設定**: @eslint/js, typescript-eslint, @stylistic/eslint-plugin
+- **オニオンアーキテクチャ強制**: eslint-plugin-boundaries + import/no-restricted-paths
+- **依存方向制御**:
+  - Domain層: 他の層をimport不可
+  - Application層: Presentation/Infrastructure層をimport不可
+  - Infrastructure層: Presentation層をimport不可
+- **インポート制御**: eslint-plugin-import with TypeScript resolver
 
 ### フロントエンド
-- **コンポーネント**: PascalCaseでファイル名・コンポーネント名
-- **フック**: `use`プレフィックス
-- **型定義**: インターフェース・型エイリアス適切に使い分け
-- **スタイリング**: TailwindCSSクラス使用
+- **ベース設定**: @eslint/js, typescript-eslint, @stylistic/eslint-plugin
+- **React設定**: eslint-plugin-react + eslint-plugin-react-hooks
+- **特別ルール**: 
+  - `@stylistic/indent`: バグのため無効化
+  - `@typescript-eslint/no-unused-vars`: アンダースコア接頭辞の未使用パラメータ許可
 
-## ファイル構成パターン
-### バックエンドルート
-```typescript
-// バリデーションスキーマ定義
-export const createTodoSchema = z.object({...})
+## TypeScript設定
+- **strict mode**: 有効
+- **型生成**: Wranglerによる自動生成（CloudflareEnv）
+- **パスエイリアス**: `@` → `src/`（バックエンド）
 
-// ルートハンドラー関数
-export const v1TodosPost = (deps: Dependencies) => 
-  createRoute({
-    // OpenAPI仕様
-    // バリデーション
-    // ハンドラー実装
-  })
-```
+## コーディング規約
+- **関数名**: camelCase
+- **クラス名**: PascalCase
+- **ファイル名**: PascalCase（コンポーネント）、camelCase（その他）
+- **型定義**: 
+  - インターフェース: `I`接頭辞（例: `ITodoRepository`）
+  - DTO: `Dto`接尾辞（例: `TodoDto`）
+  - 値オブジェクト: 対象名（例: `TodoId`, `TodoStatus`）
 
-### フロントエンドコンポーネント
-```typescript
-interface ComponentProps {
-  // props定義
-}
+## ディレクトリ・ファイル構造規約
+- **コンポーネント**: 1ファイル1コンポーネント
+- **ユースケース**: 1ファイル1ユースケース（`*UseCase.ts`）
+- **リポジトリ**: インターフェース（`I*.ts`）と実装（`*Repository.ts`）を分離
+- **ルート**: RESTfulなディレクトリ構造（`/api/v1/todos/_todoId/get.ts`）
 
-export function Component({ ...props }: ComponentProps) {
-  // 実装
-}
-```
+## テスト規約
+- **単体テスト**: `*.test.ts`
+- **API統合テスト**: Brunoコレクション
+- **E2Eテスト**: Playwright（`*.spec.ts`）
+- **テストデータ**: `migrations/0002_reset_and_seed_test_data.sql`でリセット
 
-## 命名規則
-- **API エンドポイント**: RESTful（GET /v1/todos, POST /v1/todos, etc.）
-- **データベーステーブル**: スネークケース（`todos_table`）
-- **TypeScript**: camelCase（変数・関数）、PascalCase（型・クラス・インターフェース）
+## その他の規約
+- **環境設定**: `wrangler.jsonc`で環境別設定管理
+- **型安全性**: バックエンド→フロントエンドのエンドツーエンド型安全性を必須
+- **依存性注入**: `Dependencies.ts`で一元管理
