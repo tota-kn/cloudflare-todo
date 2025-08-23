@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router'
 import { useDeleteTodo, useToggleTodo } from '~/hooks/useTodos'
+import { formatDateTime } from '~/utils/dateFormat'
 import type { TodoItem as TodoItemData } from '../../../shared/client'
 import { ActionButton } from './CircleButton'
 
@@ -65,27 +66,11 @@ export function TodoItem({ todo }: TodoItemProps) {
           <div className="text-xs text-muted-foreground text-right">
             {todo.updated_at !== todo.created_at && (
               <div>
-                Updated:
-{' '}
-{new Date(todo.updated_at).toLocaleString('ja-JP', {
-                  year: 'numeric',
-                  month: '2-digit',
-                  day: '2-digit',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
+                {`Updated: ${formatDateTime(todo.updated_at)}`}
               </div>
             )}
             <div className={todo.updated_at !== todo.created_at ? 'mt-0.5' : ''}>
-              Created:
-{' '}
-{new Date(todo.created_at).toLocaleString('ja-JP', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
+               {`Created: ${formatDateTime(todo.created_at)}`}
             </div>
           </div>
           <div onClick={e => e.stopPropagation()}>

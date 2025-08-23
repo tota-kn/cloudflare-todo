@@ -2,6 +2,7 @@ import type { TodoItem as TodoItemData } from '../../../shared/client'
 import { useCreateTodo } from '~/hooks/useTodos'
 import { TodoEditor } from './TodoEditor'
 import { TodoItem } from './TodoItem'
+import { sortTodosByUpdatedAt } from '~/utils/todoSort'
 
 interface TodoSectionProps {
   title: string
@@ -35,12 +36,8 @@ interface TodoListProps {
 export function TodoList({ todos, showNewTodoForm, onCancelNewTodo }: TodoListProps) {
   const createTodo = useCreateTodo()
 
-  const incompleteTodos = todos
-    .filter(todo => !todo.completed)
-    .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
-  const completedTodos = todos
-    .filter(todo => todo.completed)
-    .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+  const incompleteTodos = sortTodosByUpdatedAt(todos.filter(todo => !todo.completed))
+  const completedTodos = sortTodosByUpdatedAt(todos.filter(todo => todo.completed))
 
   const handleSave = (title: string, description?: string) => {
     createTodo.mutate(
