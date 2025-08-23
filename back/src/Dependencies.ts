@@ -1,10 +1,10 @@
-import type { ITodoRepository } from './application/repositories/ITodoRepository'
-import { CreateTodoUseCase } from './application/usecases/CreateTodoUseCase'
-import { DeleteTodoUseCase } from './application/usecases/DeleteTodoUseCase'
-import { GetTodoUseCase } from './application/usecases/GetTodoUseCase'
-import { ListTodosUseCase } from './application/usecases/ListTodosUseCase'
-import { UpdateTodoUseCase } from './application/usecases/UpdateTodoUseCase'
-import { D1TodoRepository } from './infrastructure/repositories/D1TodoRepository'
+import type { ITodoRepository } from "./application/repositories/ITodoRepository"
+import { CreateTodoUseCase } from "./application/usecases/CreateTodoUseCase"
+import { DeleteTodoUseCase } from "./application/usecases/DeleteTodoUseCase"
+import { GetTodoUseCase } from "./application/usecases/GetTodoUseCase"
+import { ListTodosUseCase } from "./application/usecases/ListTodosUseCase"
+import { UpdateTodoUseCase } from "./application/usecases/UpdateTodoUseCase"
+import { D1TodoRepository } from "./infrastructure/repositories/D1TodoRepository"
 
 export class Dependencies {
   private todoRepository: ITodoRepository

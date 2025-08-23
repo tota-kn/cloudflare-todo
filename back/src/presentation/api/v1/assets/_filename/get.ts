@@ -1,7 +1,7 @@
-import { zValidator } from '@hono/zod-validator'
-import { Hono } from 'hono'
-import { z } from 'zod'
-import type { Dependencies } from '../../../../../Dependencies'
+import { zValidator } from "@hono/zod-validator"
+import { Hono } from "hono"
+import { z } from "zod"
+import type { Dependencies } from "../../../../../Dependencies"
 
 const paramsSchema = z.object({
   filename: z.string().min(1),
@@ -9,10 +9,10 @@ const paramsSchema = z.object({
 
 export function v1AssetsFilenameGet(dependencies: Dependencies) {
   return new Hono<{ Bindings: CloudflareEnv }>().get(
-    '/v1/assets/:filename',
-    zValidator('param', paramsSchema),
+    "/v1/assets/:filename",
+    zValidator("param", paramsSchema),
     async (c) => {
-      const { filename } = c.req.valid('param')
+      const { filename } = c.req.valid("param")
 
       try {
         const assetStorage = dependencies.getBucketRepository()
@@ -20,17 +20,16 @@ export function v1AssetsFilenameGet(dependencies: Dependencies) {
         const asset = await assetStorage.get(filename)
 
         if (!asset) {
-          return c.json({ error: 'File not found' }, 404)
+          return c.json({ error: "File not found" }, 404)
         }
         const body = await asset.arrayBuffer()
         return c.body(body, 200, {
-          'Content-Type': asset.httpMetadata?.contentType ?? 'image/jpeg',
+          "Content-Type": asset.httpMetadata?.contentType ?? "image/jpeg",
         })
+      } catch (error) {
+        console.error("Error fetching asset:", error)
+        return c.json({ error: "Internal server error" }, 500)
       }
-      catch (error) {
-        console.error('Error fetching asset:', error)
-        return c.json({ error: 'Internal server error' }, 500)
-      }
-    },
+    }
   )
 }

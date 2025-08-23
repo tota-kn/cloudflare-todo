@@ -1,5 +1,5 @@
-import { TodoId } from '../value-objects/TodoId'
-import { TodoStatus } from '../value-objects/TodoStatus'
+import { TodoId } from "../value-objects/TodoId"
+import { TodoStatus } from "../value-objects/TodoStatus"
 
 export class Todo {
   private constructor(
@@ -8,24 +8,20 @@ export class Todo {
     private description: string,
     private status: TodoStatus,
     private readonly createdAt: Date,
-    private updatedAt: Date,
+    private updatedAt: Date
   ) {
     this.validateTitle()
   }
 
-  static create(
-    id: TodoId,
-    title: string,
-    description?: string,
-  ): Todo {
+  static create(id: TodoId, title: string, description?: string): Todo {
     const now = new Date()
     return new Todo(
       id,
       title,
-      description || '',
+      description || "",
       TodoStatus.pending(),
       now,
-      now,
+      now
     )
   }
 
@@ -40,16 +36,16 @@ export class Todo {
     return new Todo(
       new TodoId(data.id),
       data.title,
-      data.description || '',
+      data.description || "",
       data.completed === 1 ? TodoStatus.completed() : TodoStatus.pending(),
       new Date(data.created_at),
-      new Date(data.updated_at),
+      new Date(data.updated_at)
     )
   }
 
   private validateTitle(): void {
-    if (!this.title || this.title === '') {
-      throw new Error('Todo title cannot be empty')
+    if (!this.title || this.title === "") {
+      throw new Error("Todo title cannot be empty")
     }
   }
 

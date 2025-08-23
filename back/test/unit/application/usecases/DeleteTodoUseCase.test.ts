@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach } from 'vitest'
-import { DeleteTodoUseCase } from '../../../../src/application/usecases/DeleteTodoUseCase'
-import { MockTodoRepository } from '../../mocks/MockTodoRepository'
-import { TestFactory } from '../../mocks/TestFactory'
+import { describe, it, expect, beforeEach } from "vitest"
+import { DeleteTodoUseCase } from "../../../../src/application/usecases/DeleteTodoUseCase"
+import { MockTodoRepository } from "../../mocks/MockTodoRepository"
+import { TestFactory } from "../../mocks/TestFactory"
 
-describe('DeleteTodoUseCase', () => {
+describe("DeleteTodoUseCase", () => {
   let useCase: DeleteTodoUseCase
   let mockRepository: MockTodoRepository
 
@@ -12,13 +12,13 @@ describe('DeleteTodoUseCase', () => {
     useCase = new DeleteTodoUseCase(mockRepository)
   })
 
-  describe('execute()', () => {
-    it('存在するTodoを正常に削除する', async () => {
-      const todoId = TestFactory.createTodoId('delete-test-id')
+  describe("execute()", () => {
+    it("存在するTodoを正常に削除する", async () => {
+      const todoId = TestFactory.createTodoId("delete-test-id")
       const todo = TestFactory.createTodo({
         id: todoId,
-        title: '削除対象タスク',
-        description: '削除されるタスク',
+        title: "削除対象タスク",
+        description: "削除されるタスク",
       })
       await mockRepository.save(todo)
 
@@ -34,11 +34,11 @@ describe('DeleteTodoUseCase', () => {
       expect(mockRepository.size()).toBe(0)
     })
 
-    it('完了状態のTodoを正常に削除する', async () => {
-      const todoId = TestFactory.createTodoId('delete-completed-id')
+    it("完了状態のTodoを正常に削除する", async () => {
+      const todoId = TestFactory.createTodoId("delete-completed-id")
       const todo = TestFactory.createTodo({
         id: todoId,
-        title: '完了済み削除対象',
+        title: "完了済み削除対象",
       })
       todo.complete()
       await mockRepository.save(todo)
@@ -51,8 +51,8 @@ describe('DeleteTodoUseCase', () => {
       expect(mockRepository.has(todoId)).toBe(false)
     })
 
-    it('存在しないTodoに対してfalseを返す', async () => {
-      const nonExistentId = 'non-existent-id'
+    it("存在しないTodoに対してfalseを返す", async () => {
+      const nonExistentId = "non-existent-id"
 
       const result = await useCase.execute(nonExistentId)
 
@@ -60,14 +60,14 @@ describe('DeleteTodoUseCase', () => {
       expect(mockRepository.size()).toBe(0)
     })
 
-    it('複数のTodoがある中から特定のTodoを削除する', async () => {
-      const todoId1 = TestFactory.createTodoId('todo-1')
-      const todoId2 = TestFactory.createTodoId('todo-2')
-      const todoId3 = TestFactory.createTodoId('todo-3')
+    it("複数のTodoがある中から特定のTodoを削除する", async () => {
+      const todoId1 = TestFactory.createTodoId("todo-1")
+      const todoId2 = TestFactory.createTodoId("todo-2")
+      const todoId3 = TestFactory.createTodoId("todo-3")
 
-      const todo1 = TestFactory.createTodo({ id: todoId1, title: 'タスク1' })
-      const todo2 = TestFactory.createTodo({ id: todoId2, title: 'タスク2' })
-      const todo3 = TestFactory.createTodo({ id: todoId3, title: 'タスク3' })
+      const todo1 = TestFactory.createTodo({ id: todoId1, title: "タスク1" })
+      const todo2 = TestFactory.createTodo({ id: todoId2, title: "タスク2" })
+      const todo3 = TestFactory.createTodo({ id: todoId3, title: "タスク3" })
 
       await mockRepository.save(todo1)
       await mockRepository.save(todo2)
@@ -84,15 +84,17 @@ describe('DeleteTodoUseCase', () => {
       expect(mockRepository.has(todoId3)).toBe(true)
     })
 
-    it('無効なTodoId文字列でエラーを投げる', async () => {
-      await expect(useCase.execute('')).rejects.toThrow('TodoId cannot be empty')
+    it("無効なTodoId文字列でエラーを投げる", async () => {
+      await expect(useCase.execute("")).rejects.toThrow(
+        "TodoId cannot be empty"
+      )
     })
 
-    it('同じTodoを二回削除しようとした場合、二回目はfalseを返す', async () => {
-      const todoId = TestFactory.createTodoId('double-delete-id')
+    it("同じTodoを二回削除しようとした場合、二回目はfalseを返す", async () => {
+      const todoId = TestFactory.createTodoId("double-delete-id")
       const todo = TestFactory.createTodo({
         id: todoId,
-        title: '二回削除対象',
+        title: "二回削除対象",
       })
       await mockRepository.save(todo)
 
@@ -107,12 +109,12 @@ describe('DeleteTodoUseCase', () => {
       expect(mockRepository.size()).toBe(0)
     })
 
-    it('削除操作がリポジトリに正しく反映される', async () => {
-      const todoId1 = TestFactory.createTodoId('persist-test-1')
-      const todoId2 = TestFactory.createTodoId('persist-test-2')
+    it("削除操作がリポジトリに正しく反映される", async () => {
+      const todoId1 = TestFactory.createTodoId("persist-test-1")
+      const todoId2 = TestFactory.createTodoId("persist-test-2")
 
-      const todo1 = TestFactory.createTodo({ id: todoId1, title: 'タスク1' })
-      const todo2 = TestFactory.createTodo({ id: todoId2, title: 'タスク2' })
+      const todo1 = TestFactory.createTodo({ id: todoId1, title: "タスク1" })
+      const todo2 = TestFactory.createTodo({ id: todoId2, title: "タスク2" })
 
       await mockRepository.save(todo1)
       await mockRepository.save(todo2)
@@ -126,10 +128,10 @@ describe('DeleteTodoUseCase', () => {
 
       expect(remaining).toBeNull()
       expect(stillExists).not.toBeNull()
-      expect(stillExists!.getTitle()).toBe('タスク2')
+      expect(stillExists!.getTitle()).toBe("タスク2")
     })
 
-    it('大量のTodoから特定のTodoを削除する', async () => {
+    it("大量のTodoから特定のTodoを削除する", async () => {
       const todoCount = 50
       const todos = Array.from({ length: todoCount }, (_, i) => {
         const id = TestFactory.createTodoId(`mass-delete-${i}`)

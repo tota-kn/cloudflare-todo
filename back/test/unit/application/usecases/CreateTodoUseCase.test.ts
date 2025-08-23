@@ -1,15 +1,15 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { CreateTodoUseCase } from '../../../../src/application/usecases/CreateTodoUseCase'
-import { MockTodoRepository } from '../../mocks/MockTodoRepository'
-import { TodoId } from '../../../../src/domain/value-objects/TodoId'
+import { describe, it, expect, beforeEach, vi } from "vitest"
+import { CreateTodoUseCase } from "../../../../src/application/usecases/CreateTodoUseCase"
+import { MockTodoRepository } from "../../mocks/MockTodoRepository"
+import { TodoId } from "../../../../src/domain/value-objects/TodoId"
 
 // crypto.randomUUIDをモック化
-const mockUUID = 'test-uuid-123'
-vi.stubGlobal('crypto', {
+const mockUUID = "test-uuid-123"
+vi.stubGlobal("crypto", {
   randomUUID: () => mockUUID,
 })
 
-describe('CreateTodoUseCase', () => {
+describe("CreateTodoUseCase", () => {
   let useCase: CreateTodoUseCase
   let mockRepository: MockTodoRepository
 
@@ -18,11 +18,11 @@ describe('CreateTodoUseCase', () => {
     useCase = new CreateTodoUseCase(mockRepository)
   })
 
-  describe('execute()', () => {
-    it('正常にTodoを作成する', async () => {
+  describe("execute()", () => {
+    it("正常にTodoを作成する", async () => {
       const request = {
-        title: 'テストタスク',
-        description: 'テスト用の説明',
+        title: "テストタスク",
+        description: "テスト用の説明",
       }
 
       const result = await useCase.execute(request)
@@ -41,9 +41,9 @@ describe('CreateTodoUseCase', () => {
       expect(mockRepository.size()).toBe(1)
     })
 
-    it('説明なしでTodoを作成する', async () => {
+    it("説明なしでTodoを作成する", async () => {
       const request = {
-        title: 'タイトルのみ',
+        title: "タイトルのみ",
       }
 
       const result = await useCase.execute(request)
@@ -51,7 +51,7 @@ describe('CreateTodoUseCase', () => {
       expect(result).toEqual({
         id: mockUUID,
         title: request.title,
-        description: '',
+        description: "",
         completed: false,
         created_at: expect.any(String),
         updated_at: expect.any(String),
@@ -60,9 +60,9 @@ describe('CreateTodoUseCase', () => {
       expect(mockRepository.has(new TodoId(mockUUID))).toBe(true)
     })
 
-    it('作成されたTodoのステータスが未完了である', async () => {
+    it("作成されたTodoのステータスが未完了である", async () => {
       const request = {
-        title: 'ステータステスト',
+        title: "ステータステスト",
       }
 
       const result = await useCase.execute(request)
@@ -73,9 +73,9 @@ describe('CreateTodoUseCase', () => {
       expect(savedTodo!.getStatus().isPending()).toBe(true)
     })
 
-    it('UUIDが正しく設定される', async () => {
+    it("UUIDが正しく設定される", async () => {
       const request = {
-        title: 'UUIDテスト',
+        title: "UUIDテスト",
       }
 
       const result = await useCase.execute(request)
@@ -86,22 +86,22 @@ describe('CreateTodoUseCase', () => {
       expect(savedTodo!.getId().getValue()).toBe(mockUUID)
     })
 
-    it('複数のTodoを作成できる', async () => {
+    it("複数のTodoを作成できる", async () => {
       // 異なるUUIDを生成するよう設定
       let callCount = 0
-      vi.stubGlobal('crypto', {
+      vi.stubGlobal("crypto", {
         randomUUID: () => `uuid-${callCount++}`,
       })
 
-      const request1 = { title: 'タスク1' }
-      const request2 = { title: 'タスク2' }
+      const request1 = { title: "タスク1" }
+      const request2 = { title: "タスク2" }
 
       await useCase.execute(request1)
       await useCase.execute(request2)
 
       expect(mockRepository.size()).toBe(2)
-      expect(mockRepository.has(new TodoId('uuid-0'))).toBe(true)
-      expect(mockRepository.has(new TodoId('uuid-1'))).toBe(true)
+      expect(mockRepository.has(new TodoId("uuid-0"))).toBe(true)
+      expect(mockRepository.has(new TodoId("uuid-1"))).toBe(true)
     })
   })
 })

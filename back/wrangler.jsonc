@@ -4,68 +4,68 @@
   "compatibility_date": "2025-02-14",
   "main": "src/index.ts",
   "observability": {
-    "enabled": true
+    "enabled": true,
   },
   "env": {
     "local": {
       "name": "todo-back-local",
       "vars": {
         "STAGE": "local",
-        "CORS_ORIGIN": "http://localhost:5173"
+        "CORS_ORIGIN": "http://localhost:5173",
       },
       "r2_buckets": [
         {
           "binding": "STORAGE",
-          "bucket_name": "todo-app-storage-local"
-        }
+          "bucket_name": "todo-app-storage-local",
+        },
       ],
       "d1_databases": [
         {
           "binding": "DB",
           "database_name": "todo-app-db-local",
           "database_id": "aa062ca7-72e6-47c1-8df6-bac22d30ec67",
-        }
-      ]
+        },
+      ],
     },
     "dev": {
       "name": "todo-back-dev",
       "vars": {
         "STAGE": "dev",
-        "CORS_ORIGIN": "https://todo-front-dev.omen-bt.workers.dev"
+        "CORS_ORIGIN": "https://todo-front-dev.omen-bt.workers.dev",
       },
       "r2_buckets": [
         {
           "binding": "STORAGE",
-          "bucket_name": "todo-app-storage-dev"
-        }
+          "bucket_name": "todo-app-storage-dev",
+        },
       ],
       "d1_databases": [
         {
           "binding": "DB",
           "database_name": "todo-app-db-dev",
-          "database_id": "cc062ca7-72e6-47c1-8df6-bac22d30ec67"
-        }
-      ]
+          "database_id": "cc062ca7-72e6-47c1-8df6-bac22d30ec67",
+        },
+      ],
     },
     "prd": {
       "name": "todo-back-prd",
       "vars": {
         "STAGE": "prd",
-        "CORS_ORIGIN": "https://todo-front-prd.omen-bt.workers.dev"
+        "CORS_ORIGIN": "https://todo-front-prd.omen-bt.workers.dev",
       },
       "r2_buckets": [
         {
           "binding": "STORAGE",
-          "bucket_name": "todo-app-storage-prd"
-        }
+          "bucket_name": "todo-app-storage-prd",
+        },
       ],
       "d1_databases": [
         {
           "binding": "DB",
           "database_name": "todo-app-db-prd",
-          "database_id": "9aad595b-0429-4b5d-8051-7f28a31b17ca"
-        }
-      ]
-    }
-  }
+          "database_id": "9aad595b-0429-4b5d-8051-7f28a31b17ca",
+        },
+      ],
+    },
+  },
 }

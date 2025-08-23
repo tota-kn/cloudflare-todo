@@ -1,6 +1,6 @@
-import { TodoId } from '../../domain/value-objects/TodoId'
-import { type TodoDto, toTodoDto } from '../dto/TodoDto'
-import type { ITodoRepository } from '../repositories/ITodoRepository'
+import { TodoId } from "../../domain/value-objects/TodoId"
+import { type TodoDto, toTodoDto } from "../dto/TodoDto"
+import type { ITodoRepository } from "../repositories/ITodoRepository"
 
 export interface UpdateTodoRequest {
   todoId: string
@@ -31,8 +31,7 @@ export class UpdateTodoUseCase {
     if (request.completed !== undefined) {
       if (request.completed) {
         todo.complete()
-      }
-      else {
+      } else {
         todo.markAsPending()
       }
     }

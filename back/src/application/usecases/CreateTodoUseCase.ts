@@ -1,7 +1,7 @@
-import { Todo } from '../../domain/entities/Todo'
-import { TodoId } from '../../domain/value-objects/TodoId'
-import { type TodoDto, toTodoDto } from '../dto/TodoDto'
-import type { ITodoRepository } from '../repositories/ITodoRepository'
+import { Todo } from "../../domain/entities/Todo"
+import { TodoId } from "../../domain/value-objects/TodoId"
+import { type TodoDto, toTodoDto } from "../dto/TodoDto"
+import type { ITodoRepository } from "../repositories/ITodoRepository"
 
 export interface CreateTodoRequest {
   title: string

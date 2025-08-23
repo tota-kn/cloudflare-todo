@@ -1,9 +1,9 @@
-import { desc, eq } from 'drizzle-orm'
-import { drizzle } from 'drizzle-orm/d1'
-import type { ITodoRepository } from '../../application/repositories/ITodoRepository'
-import { Todo } from '../../domain/entities/Todo'
-import { TodoId } from '../../domain/value-objects/TodoId'
-import { todosTable } from '../database/todoTable'
+import { desc, eq } from "drizzle-orm"
+import { drizzle } from "drizzle-orm/d1"
+import type { ITodoRepository } from "../../application/repositories/ITodoRepository"
+import { Todo } from "../../domain/entities/Todo"
+import { TodoId } from "../../domain/value-objects/TodoId"
+import { todosTable } from "../database/todoTable"
 
 export class D1TodoRepository implements ITodoRepository {
   private readonly drizzle
@@ -51,14 +51,16 @@ export class D1TodoRepository implements ITodoRepository {
       .orderBy(desc(todosTable.createdAt))
       .all()
 
-    return results.map(result => Todo.fromData({
-      id: result.id,
-      title: result.title,
-      description: result.description,
-      completed: result.completed ? 1 : 0,
-      created_at: result.createdAt,
-      updated_at: result.updatedAt,
-    }))
+    return results.map((result) =>
+      Todo.fromData({
+        id: result.id,
+        title: result.title,
+        description: result.description,
+        completed: result.completed ? 1 : 0,
+        created_at: result.createdAt,
+        updated_at: result.updatedAt,
+      })
+    )
   }
 
   async update(todo: Todo): Promise<void> {

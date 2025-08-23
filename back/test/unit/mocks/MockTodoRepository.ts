@@ -1,6 +1,6 @@
-import { ITodoRepository } from '../../../src/application/repositories/ITodoRepository'
-import { Todo } from '../../../src/domain/entities/Todo'
-import { TodoId } from '../../../src/domain/value-objects/TodoId'
+import { ITodoRepository } from "../../../src/application/repositories/ITodoRepository"
+import { Todo } from "../../../src/domain/entities/Todo"
+import { TodoId } from "../../../src/domain/value-objects/TodoId"
 
 export class MockTodoRepository implements ITodoRepository {
   private todos: Map<string, Todo> = new Map()

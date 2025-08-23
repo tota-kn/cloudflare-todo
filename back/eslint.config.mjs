@@ -2,7 +2,7 @@ import { includeIgnoreFile } from "@eslint/compat"
 import eslint from "@eslint/js"
 import boundariesPlugin from "eslint-plugin-boundaries"
 import importPlugin from "eslint-plugin-import"
-import prettierPlugin from "eslint-plugin-prettier"
+import prettierConfig from "eslint-config-prettier"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import tseslint from "typescript-eslint"
@@ -15,16 +15,7 @@ export default tseslint.config(
   eslint.configs.recommended,
   tseslint.configs.recommended,
   includeIgnoreFile(gitignorePath),
-
-  // prettier設定
-  {
-    plugins: {
-      prettier: prettierPlugin,
-    },
-    rules: {
-      "prettier/prettier": "error",
-    },
-  },
+  prettierConfig,
 
   // tsConfig設定の参照
   {

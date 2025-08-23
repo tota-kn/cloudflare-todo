@@ -1,9 +1,9 @@
-import { beforeEach, describe, expect, it } from 'vitest'
-import { UpdateTodoUseCase } from '../../../../src/application/usecases/UpdateTodoUseCase'
-import { MockTodoRepository } from '../../mocks/MockTodoRepository'
-import { TestFactory } from '../../mocks/TestFactory'
+import { beforeEach, describe, expect, it } from "vitest"
+import { UpdateTodoUseCase } from "../../../../src/application/usecases/UpdateTodoUseCase"
+import { MockTodoRepository } from "../../mocks/MockTodoRepository"
+import { TestFactory } from "../../mocks/TestFactory"
 
-describe('UpdateTodoUseCase', () => {
+describe("UpdateTodoUseCase", () => {
   let useCase: UpdateTodoUseCase
   let mockRepository: MockTodoRepository
 
@@ -12,61 +12,61 @@ describe('UpdateTodoUseCase', () => {
     useCase = new UpdateTodoUseCase(mockRepository)
   })
 
-  describe('execute()', () => {
-    it('存在するTodoのタイトルを更新する', async () => {
-      const todoId = TestFactory.createTodoId('update-test-id')
+  describe("execute()", () => {
+    it("存在するTodoのタイトルを更新する", async () => {
+      const todoId = TestFactory.createTodoId("update-test-id")
       const todo = TestFactory.createTodo({
         id: todoId,
-        title: '元のタイトル',
-        description: '元の説明',
+        title: "元のタイトル",
+        description: "元の説明",
       })
       await mockRepository.save(todo)
 
       const request = {
         todoId: todoId.getValue(),
-        title: '更新されたタイトル',
+        title: "更新されたタイトル",
       }
 
       const result = await useCase.execute(request)
 
       expect(result).not.toBeNull()
-      expect(result!.title).toBe('更新されたタイトル')
-      expect(result!.description).toBe('元の説明') // 変更されていない
+      expect(result!.title).toBe("更新されたタイトル")
+      expect(result!.description).toBe("元の説明") // 変更されていない
       expect(result!.completed).toBe(false) // 変更されていない
 
       // リポジトリの状態も確認
       const updatedTodo = await mockRepository.findById(todoId)
-      expect(updatedTodo!.getTitle()).toBe('更新されたタイトル')
+      expect(updatedTodo!.getTitle()).toBe("更新されたタイトル")
     })
 
-    it('存在するTodoの説明を更新する', async () => {
-      const todoId = TestFactory.createTodoId('update-desc-id')
+    it("存在するTodoの説明を更新する", async () => {
+      const todoId = TestFactory.createTodoId("update-desc-id")
       const todo = TestFactory.createTodo({
         id: todoId,
-        title: 'タイトル',
-        description: '元の説明',
+        title: "タイトル",
+        description: "元の説明",
       })
       await mockRepository.save(todo)
 
       const request = {
         todoId: todoId.getValue(),
-        description: '更新された説明',
+        description: "更新された説明",
       }
 
       const result = await useCase.execute(request)
 
       expect(result).not.toBeNull()
-      expect(result!.title).toBe('タイトル') // 変更されていない
-      expect(result!.description).toBe('更新された説明')
+      expect(result!.title).toBe("タイトル") // 変更されていない
+      expect(result!.description).toBe("更新された説明")
       expect(result!.completed).toBe(false) // 変更されていない
     })
 
-    it('存在するTodoの完了状態をtrueに更新する', async () => {
-      const todoId = TestFactory.createTodoId('complete-test-id')
+    it("存在するTodoの完了状態をtrueに更新する", async () => {
+      const todoId = TestFactory.createTodoId("complete-test-id")
       // IDを手動で設定
       const todoWithId = TestFactory.createTodo({
         id: todoId,
-        title: '未完了タスク',
+        title: "未完了タスク",
       })
       await mockRepository.save(todoWithId)
 
@@ -85,11 +85,11 @@ describe('UpdateTodoUseCase', () => {
       expect(updatedTodo!.getStatus().isCompleted()).toBe(true)
     })
 
-    it('存在するTodoの完了状態をfalseに更新する', async () => {
-      const todoId = TestFactory.createTodoId('incomplete-test-id')
+    it("存在するTodoの完了状態をfalseに更新する", async () => {
+      const todoId = TestFactory.createTodoId("incomplete-test-id")
       const todo = TestFactory.createTodo({
         id: todoId,
-        title: '完了タスク',
+        title: "完了タスク",
       })
       todo.complete()
       await mockRepository.save(todo)
@@ -109,58 +109,58 @@ describe('UpdateTodoUseCase', () => {
       expect(updatedTodo!.getStatus().isPending()).toBe(true)
     })
 
-    it('複数のフィールドを同時に更新する', async () => {
-      const todoId = TestFactory.createTodoId('multi-update-id')
+    it("複数のフィールドを同時に更新する", async () => {
+      const todoId = TestFactory.createTodoId("multi-update-id")
       const todo = TestFactory.createTodo({
         id: todoId,
-        title: '元のタイトル',
-        description: '元の説明',
+        title: "元のタイトル",
+        description: "元の説明",
       })
       await mockRepository.save(todo)
 
       const request = {
         todoId: todoId.getValue(),
-        title: '新しいタイトル',
-        description: '新しい説明',
+        title: "新しいタイトル",
+        description: "新しい説明",
         completed: true,
       }
 
       const result = await useCase.execute(request)
 
       expect(result).not.toBeNull()
-      expect(result!.title).toBe('新しいタイトル')
-      expect(result!.description).toBe('新しい説明')
+      expect(result!.title).toBe("新しいタイトル")
+      expect(result!.description).toBe("新しい説明")
       expect(result!.completed).toBe(true)
     })
 
-    it('説明を空文字に更新する', async () => {
-      const todoId = TestFactory.createTodoId('empty-desc-id')
+    it("説明を空文字に更新する", async () => {
+      const todoId = TestFactory.createTodoId("empty-desc-id")
       const todo = TestFactory.createTodo({
         id: todoId,
-        title: 'タイトル',
-        description: '削除される説明',
+        title: "タイトル",
+        description: "削除される説明",
       })
       await mockRepository.save(todo)
 
       const request = {
         todoId: todoId.getValue(),
-        description: '',
+        description: "",
       }
 
       const result = await useCase.execute(request)
 
       expect(result).not.toBeNull()
-      expect(result!.description).toBe('')
+      expect(result!.description).toBe("")
 
       // リポジトリの状態も確認
       const updatedTodo = await mockRepository.findById(todoId)
-      expect(updatedTodo!.getDescription()).toBe('')
+      expect(updatedTodo!.getDescription()).toBe("")
     })
 
-    it('存在しないTodoに対してnullを返す', async () => {
+    it("存在しないTodoに対してnullを返す", async () => {
       const request = {
-        todoId: 'non-existent-id',
-        title: '更新タイトル',
+        todoId: "non-existent-id",
+        title: "更新タイトル",
       }
 
       const result = await useCase.execute(request)
@@ -168,34 +168,38 @@ describe('UpdateTodoUseCase', () => {
       expect(result).toBeNull()
     })
 
-    it('無効なTodoId文字列でエラーを投げる', async () => {
+    it("無効なTodoId文字列でエラーを投げる", async () => {
       const request = {
-        todoId: '',
-        title: '更新タイトル',
+        todoId: "",
+        title: "更新タイトル",
       }
 
-      await expect(useCase.execute(request)).rejects.toThrow('TodoId cannot be empty')
+      await expect(useCase.execute(request)).rejects.toThrow(
+        "TodoId cannot be empty"
+      )
     })
 
-    it('空のタイトルでエラーを投げる', async () => {
-      const todoId = TestFactory.createTodoId('empty-title-id')
-      const todo = TestFactory.createTodo({ id: todoId, title: '元のタイトル' })
+    it("空のタイトルでエラーを投げる", async () => {
+      const todoId = TestFactory.createTodoId("empty-title-id")
+      const todo = TestFactory.createTodo({ id: todoId, title: "元のタイトル" })
       await mockRepository.save(todo)
 
       const request = {
         todoId: todoId.getValue(),
-        title: '',
+        title: "",
       }
 
-      await expect(useCase.execute(request)).rejects.toThrow('Todo title cannot be empty')
+      await expect(useCase.execute(request)).rejects.toThrow(
+        "Todo title cannot be empty"
+      )
     })
 
-    it('何もフィールドを指定しない場合でも正常に動作する', async () => {
-      const todoId = TestFactory.createTodoId('no-change-id')
+    it("何もフィールドを指定しない場合でも正常に動作する", async () => {
+      const todoId = TestFactory.createTodoId("no-change-id")
       const todo = TestFactory.createTodo({
         id: todoId,
-        title: '変更なしタイトル',
-        description: '変更なし説明',
+        title: "変更なしタイトル",
+        description: "変更なし説明",
       })
       await mockRepository.save(todo)
 
@@ -206,8 +210,8 @@ describe('UpdateTodoUseCase', () => {
       const result = await useCase.execute(request)
 
       expect(result).not.toBeNull()
-      expect(result!.title).toBe('変更なしタイトル')
-      expect(result!.description).toBe('変更なし説明')
+      expect(result!.title).toBe("変更なしタイトル")
+      expect(result!.description).toBe("変更なし説明")
       expect(result!.completed).toBe(false)
     })
   })

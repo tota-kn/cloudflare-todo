@@ -1,9 +1,9 @@
-import { describe, it, expect } from 'vitest'
-import { TodoStatus } from '../../../../src/domain/value-objects/TodoStatus'
+import { describe, it, expect } from "vitest"
+import { TodoStatus } from "../../../../src/domain/value-objects/TodoStatus"
 
-describe('TodoStatus', () => {
-  describe('ファクトリーメソッド', () => {
-    it('completed()で完了状態のTodoStatusを作成する', () => {
+describe("TodoStatus", () => {
+  describe("ファクトリーメソッド", () => {
+    it("completed()で完了状態のTodoStatusを作成する", () => {
       const status = TodoStatus.completed()
 
       expect(status.isCompleted()).toBe(true)
@@ -11,7 +11,7 @@ describe('TodoStatus', () => {
       expect(status.toBoolean()).toBe(true)
     })
 
-    it('pending()で未完了状態のTodoStatusを作成する', () => {
+    it("pending()で未完了状態のTodoStatusを作成する", () => {
       const status = TodoStatus.pending()
 
       expect(status.isCompleted()).toBe(false)
@@ -20,8 +20,8 @@ describe('TodoStatus', () => {
     })
   })
 
-  describe('状態判定メソッド', () => {
-    it('isCompleted()が正しく動作する', () => {
+  describe("状態判定メソッド", () => {
+    it("isCompleted()が正しく動作する", () => {
       const completedStatus = TodoStatus.completed()
       const pendingStatus = TodoStatus.pending()
 
@@ -29,7 +29,7 @@ describe('TodoStatus', () => {
       expect(pendingStatus.isCompleted()).toBe(false)
     })
 
-    it('isPending()が正しく動作する', () => {
+    it("isPending()が正しく動作する", () => {
       const completedStatus = TodoStatus.completed()
       const pendingStatus = TodoStatus.pending()
 
@@ -37,7 +37,7 @@ describe('TodoStatus', () => {
       expect(pendingStatus.isPending()).toBe(true)
     })
 
-    it('toBoolean()が正しく動作する', () => {
+    it("toBoolean()が正しく動作する", () => {
       const completedStatus = TodoStatus.completed()
       const pendingStatus = TodoStatus.pending()
 
@@ -46,8 +46,8 @@ describe('TodoStatus', () => {
     })
   })
 
-  describe('状態変更', () => {
-    it('toggle()で完了状態を未完了に変更する', () => {
+  describe("状態変更", () => {
+    it("toggle()で完了状態を未完了に変更する", () => {
       const completedStatus = TodoStatus.completed()
       const toggledStatus = completedStatus.toggle()
 
@@ -55,7 +55,7 @@ describe('TodoStatus', () => {
       expect(toggledStatus.isCompleted()).toBe(false)
     })
 
-    it('toggle()で未完了状態を完了に変更する', () => {
+    it("toggle()で未完了状態を完了に変更する", () => {
       const pendingStatus = TodoStatus.pending()
       const toggledStatus = pendingStatus.toggle()
 
@@ -63,7 +63,7 @@ describe('TodoStatus', () => {
       expect(toggledStatus.isPending()).toBe(false)
     })
 
-    it('toggle()は元のオブジェクトを変更しない（イミュータブル）', () => {
+    it("toggle()は元のオブジェクトを変更しない（イミュータブル）", () => {
       const originalStatus = TodoStatus.pending()
       const toggledStatus = originalStatus.toggle()
 

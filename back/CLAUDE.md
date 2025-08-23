@@ -5,9 +5,10 @@
 ## アーキテクチャ
 
 ### バックエンドアーキテクチャ
+
 - **フレームワーク**: Hono with TypeScript
 - **パターン**: オニオンアーキテクチャ（関心の分離が明確）
-- **構造**: 
+- **構造**:
   - `src/domain/` - エンティティ、リポジトリ、値オブジェクト
   - `src/application/` - ユースケースとDTO
   - `src/infrastructure/` - D1/R2実装、依存性注入
@@ -31,28 +32,33 @@
 ## 開発コマンド
 
 ### 開発サーバー
+
 ```bash
 pnpm dev              # local envでlocalhost:8787で実行
 ```
 
 ### 型生成とチェック
+
 ```bash
 pnpm typegen          # Cloudflare環境の型を生成
 pnpm typecheck        # 型チェックと宣言ファイル生成
 ```
 
 ### リント & 修正
+
 ```bash
 pnpm lint             # ESLintでコード品質チェック
 ```
 
 ### デプロイ
+
 ```bash
 pnpm deploy:dev       # dev環境にデプロイ
 pnpm deploy:prd       # productionにデプロイ
 ```
 
 ### テスト
+
 ```bash
 pnpm test:unit        # 単体テスト実行（カバレッジ付き）
 pnpm test:unit:watch  # 単体テストウォッチモード
@@ -60,6 +66,7 @@ pnpm test:api         # Bruno APIテストを実行
 ```
 
 ### データベース操作
+
 ```bash
 pnpm db:migrate       # D1データベースマイグレーションを適用
 pnpm db:reset         # テストデータでデータベースリセット
