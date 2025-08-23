@@ -17,6 +17,15 @@ export default tseslint.config(
   stylistic.configs.recommended,
   includeIgnoreFile(gitignorePath),
 
+  // tsConfig設定の参照
+  {
+    languageOptions: {
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+      },
+    },
+  },
+
   // eslint-plugin-import
   {
     plugins: {

@@ -19,6 +19,17 @@ export default tseslint.config(
   reactHooksPlugin.configs["recommended-latest"],
   prettierConfig,
   includeIgnoreFile(gitignorePath),
+
+  // tsConfig設定の参照
+  {
+    languageOptions: {
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+      },
+    },
+  },
+  
+  // Reactバージョンの自動検出
   {
     settings: {
       react: {
