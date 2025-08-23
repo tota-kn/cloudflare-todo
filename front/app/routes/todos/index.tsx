@@ -8,7 +8,7 @@ import { useTheme } from '~/contexts/ThemeContext'
 import { useTodos } from '~/hooks/useTodos'
 import type { Route } from './+types/index'
 
-export function meta(_: Route.MetaArgs) {
+export function meta() {
   return [
     { title: 'Todo List' },
     { name: 'description', content: 'Todo list page' },

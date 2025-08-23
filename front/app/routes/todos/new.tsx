@@ -5,7 +5,7 @@ import { TodoEditor } from '~/components/TodoEditor'
 import { useCreateTodo } from '~/hooks/useTodos'
 import type { Route } from './+types/new'
 
-export function meta(_: Route.MetaArgs) {
+export function meta() {
   return [
     { title: 'Create New Todo' },
     { name: 'description', content: 'Create a new todo item' },
@@ -38,7 +38,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   return { todo: res }
 }
 
-export default function TodoNew(_: Route.ComponentProps) {
+export default function TodoNew() {
   const navigate = useNavigate()
   const createTodo = useCreateTodo()
   const [title, setTitle] = useState('')

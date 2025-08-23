@@ -24,8 +24,6 @@ export function TodoInput({
   titlePlaceholder = 'Todo title...',
   descriptionPlaceholder = 'Add description...',
   autoFocusTitle = false,
-  showHelpText: _showHelpText = false,
-  mode: _mode = 'create',
 }: TodoInputProps) {
   const titleInputRef = React.useRef<HTMLInputElement>(null)
   const descriptionTextareaRef = React.useRef<HTMLTextAreaElement>(null)

@@ -16,6 +16,7 @@
       "Bash(sudo:*)",
       "Bash(wrangler:*)",
       "Bash(pnpx:*)",
+      "Bash(pnpm exec:*)",
       "Read(.env.*)"
     ]
   },

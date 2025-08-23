@@ -71,7 +71,7 @@ export const useCreateTodo = () => {
 
       return { previousTodos }
     },
-    onError: (_err, _newTodo, context) => {
+    onError: (_err, _variables, context) => {
       queryClient.setQueryData(['todos'], context?.previousTodos)
     },
   })
@@ -148,7 +148,7 @@ export const useDeleteTodo = () => {
 
       return { previousTodos }
     },
-    onError: (_err, _todoId, context) => {
+    onError: (_err, _variables, context) => {
       queryClient.setQueryData(['todos'], context?.previousTodos)
     },
   })

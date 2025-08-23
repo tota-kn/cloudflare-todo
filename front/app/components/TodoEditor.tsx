@@ -21,7 +21,6 @@ export function TodoEditor({
   todo,
   onSave,
   onCancel,
-  isSaving: _isSaving = false,
   showTimestamps = false,
 }: TodoEditorProps) {
   const [title, setTitle] = useState(initialTitle)
