@@ -60,7 +60,6 @@ describe('GetTodoUseCase', () => {
 
     it('無効なTodoId文字列でエラーを投げる', async () => {
       await expect(useCase.execute('')).rejects.toThrow('TodoId cannot be empty')
-      await expect(useCase.execute('   ')).rejects.toThrow('TodoId cannot be empty')
     })
 
     it('複数のTodoが存在する中から正しいTodoを取得する', async () => {

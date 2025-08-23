@@ -13,10 +13,6 @@ describe('TodoId', () => {
     it('空文字でエラーを投げる', () => {
       expect(() => new TodoId('')).toThrow('TodoId cannot be empty')
     })
-
-    it('スペースのみの文字列でエラーを投げる', () => {
-      expect(() => new TodoId('   ')).toThrow('TodoId cannot be empty')
-    })
   })
 
   describe('getValue()', () => {

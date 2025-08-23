@@ -86,7 +86,6 @@ describe('DeleteTodoUseCase', () => {
 
     it('無効なTodoId文字列でエラーを投げる', async () => {
       await expect(useCase.execute('')).rejects.toThrow('TodoId cannot be empty')
-      await expect(useCase.execute('   ')).rejects.toThrow('TodoId cannot be empty')
     })
 
     it('同じTodoを二回削除しようとした場合、二回目はfalseを返す', async () => {

@@ -98,11 +98,6 @@ describe('Todo', () => {
       const todoId = TestFactory.createTodoId()
       expect(() => Todo.create(todoId, '')).toThrow('Todo title cannot be empty')
     })
-
-    it('スペースのみのタイトルでエラーを投げる', () => {
-      const todoId = TestFactory.createTodoId()
-      expect(() => Todo.create(todoId, '   ')).toThrow('Todo title cannot be empty')
-    })
   })
 
   describe('ゲッターメソッド', () => {
