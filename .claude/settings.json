@@ -1,17 +1,29 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git rm:*)"
+      "Bash(find:*)",
+      "Bash(mkdir:*)",
+      "Bash(rm:*)",
+      "Bash(cp:*)",
+      "Bash(curl:*)",
+      "Bash(mv:*)",
+      "Bash(pnpm:*)",
+      "mcp__serena",
+      "mcp__cloudflare-docs",
     ],
     "deny": [
-      "Bash(git commit:*)",
-      "Bash(git push:*)",
-      "Bash(git rebase:*)",
-      "Bash(rm:*)",
+      "Bash(git:*)",
       "Bash(sudo:*)",
+      "Bash(wrangler:*)",
+      "Bash(pnpx:*)",
       "Read(.env.*)"
     ]
   },
+  "enabledMcpjsonServers": [
+    "playwright",
+    "cloudflare-observability",
+    "cloudflare-docs"
+  ],
   "hooks": {
     "PostToolUse": [],
     "Stop": [
