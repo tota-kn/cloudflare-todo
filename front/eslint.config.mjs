@@ -28,7 +28,7 @@ export default tseslint.config(
       },
     },
   },
-  
+
   // Reactバージョンの自動検出
   {
     settings: {
