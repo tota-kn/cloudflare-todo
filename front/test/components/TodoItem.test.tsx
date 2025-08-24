@@ -30,12 +30,13 @@ vi.mock("~/hooks/useTodos", () => ({
 /**
  * テスト用のQueryClientを作成するヘルパー関数
  */
-const createTestQueryClient = () => new QueryClient({
-  defaultOptions: {
-    queries: { retry: false },
-    mutations: { retry: false },
-  },
-})
+const createTestQueryClient = () =>
+  new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false },
+    },
+  })
 
 /**
  * テスト用のTodoItemデータ
@@ -55,7 +56,7 @@ const mockTodoItem: TodoItemData = {
 describe("TodoItem", () => {
   it("正常にレンダリングされること", () => {
     const queryClient = createTestQueryClient()
-    
+
     const { container } = render(
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
