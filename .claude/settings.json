@@ -44,10 +44,6 @@
           {
             "type": "command",
             "command": "powershell.exe -command \"Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; New-BurntToastNotification -Text '🛑Stoped'\""
-          },
-          {
-            "type": "command",
-            "command": "pnpm -r lint"
           }
         ]
       }
