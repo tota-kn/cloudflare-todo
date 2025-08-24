@@ -17,6 +17,11 @@ export default tseslint.config(
   includeIgnoreFile(gitignorePath),
   prettierConfig,
 
+  // 自動生成ファイルを除外
+  {
+    ignores: ["src/types/env.d.ts"],
+  },
+
   // tsConfig設定の参照
   {
     languageOptions: {

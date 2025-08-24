@@ -1,0 +1,2 @@
+# 自動生成ファイルを除外
+src/types/env.d.ts

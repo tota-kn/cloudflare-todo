@@ -20,6 +20,11 @@ export default tseslint.config(
   prettierConfig,
   includeIgnoreFile(gitignorePath),
 
+  // 自動生成ファイルを除外
+  {
+    ignores: ["worker-configuration.d.ts"],
+  },
+
   // tsConfig設定の参照
   {
     languageOptions: {
