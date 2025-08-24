@@ -2,8 +2,7 @@
 
 - [x] CLAUDE.md
 - [ ] DevContainer
-- [ ] ログイン機能
-  - [ ] OAuth 認証
+- [ ] ログイン機能 OAuth 認証
 
 ## back
 
@@ -21,9 +20,9 @@
 - [x] tailwind
 - [x] ライトモード、ダークモード
 - [x] ユニットテスト + Testing Library
-- [ ] PWA 化
-- [ ] EU Cookie
 - [ ] 多言語
+  <!-- - [ ] PWA 化 -->
+  <!-- - [ ] EU Cookie -->
 
 ## E2E
 
