@@ -10,8 +10,13 @@
       "Bash(pnpm:*)",
       "mcp__serena",
       "mcp__cloudflare-docs",
+      "mcp__context7",
       "WebSearch",
       "WebFetch"
+    ],
+    "ask": [
+      "mcp__playwright",
+      "macp__cloudflare-observability"
     ],
     "deny": [
       "Bash(rm:*)",
@@ -27,7 +32,9 @@
   "enabledMcpjsonServers": [
     "playwright",
     "cloudflare-observability",
-    "cloudflare-docs"
+    "cloudflare-docs",
+    "serena",
+    "context7"
   ],
   "hooks": {
     "PostToolUse": [],

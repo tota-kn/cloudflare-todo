@@ -8,13 +8,13 @@ TODO
 ---
 
 ## 共通
-- [ ] E2Eテスト
+- [x] E2Eテスト
 - [ ] OAuth認証
 - [ ] CLAUDE.md
   - [ ] TSDoc記載
   - [ ] hooks
   - [ ] task
-  - [ ] context7
+  - [x] context7
 - [ ] 型チェック、リント、フォーマット、テストの実行まで完了してからビルド、デプロイ
 
 ## back
