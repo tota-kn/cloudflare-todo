@@ -1,8 +1,8 @@
-import type { TodoItem as TodoItemData } from "../../../shared/client"
 import { useCreateTodo } from "~/hooks/useTodos"
+import { sortTodosByUpdatedAt } from "~/utils/todoSort"
+import type { TodoItem as TodoItemData } from "../../../shared/client"
 import { TodoEditor } from "./TodoEditor"
 import { TodoItem } from "./TodoItem"
-import { sortTodosByUpdatedAt } from "~/utils/todoSort"
 
 /**
  * TodoSectionコンポーネントのProps
