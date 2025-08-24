@@ -31,7 +31,7 @@
     "@eslint/js": "^9.21.0",
     "@types/node": "^20",
     "@types/uuid": "^10.0.0",
-    "@usebruno/cli": "^2.7.0",
+    "@usebruno/cli": "^2.9.1",
     "@vitest/coverage-v8": "^2.1.8",
     "drizzle-kit": "^0.31.4",
     "eslint": "^9",

@@ -76,8 +76,9 @@
       "dependsOrder": "parallel",
       "dependsOn": [
         "back dev",
-        "front dev",
-      ]
+        "front dev"
+      ],
+      "problemMatcher": []
     },
     {
       "label": "check",
