@@ -1,5 +1,4 @@
 TODO
-- [ ] E2Eテスト
 - [ ] DevContainer
 - [ ] front多言語化
 - [ ] E2Eフォルダ　eslint, tsc
@@ -11,6 +10,7 @@ TODO
 - [x] E2Eテスト
 - [ ] OAuth認証
 - [x] CLAUDE.md
+- [ ] DevContainer
 
 ## back
 - [x] リンター

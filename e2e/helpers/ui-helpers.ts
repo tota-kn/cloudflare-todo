@@ -68,7 +68,7 @@ export class TodoUIヘルパー {
 
   async Todoフォームクリア入力(
     title: string,
-    description: string
+    description: string,
   ): Promise<void> {
     await this.Todoタイトル入力().clear();
     await this.Todoタイトル入力().fill(title);
