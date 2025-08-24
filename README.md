@@ -1,15 +1,6 @@
-TODO
-- [ ] DevContainer
-- [ ] front多言語化
-- [ ] E2Eフォルダ　eslint, tsc
-- [ ] ログイン機能
-
----
-
 ## 共通
-- [x] E2Eテスト
-- [ ] OAuth認証
 - [x] CLAUDE.md
+- [ ] OAuth認証
 - [ ] DevContainer
 
 ## back
@@ -23,13 +14,17 @@ TODO
 ## front
 - [x] リンター
 - [x] フォーマッター
-- [ ] ユニットテスト?
 - [x] tailwind
 - [x] ライトモード、ダークモード
+- [ ] ユニットテスト?
 - [ ] PWA化
 - [ ] Cookie
 - [ ] 多言語
 
+## E2E
+- [ ] テスト作成
+- [ ] リンター
+- [ ] フォーマッター
 
 --- 
 # 環境構築
