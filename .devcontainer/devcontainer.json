@@ -1,5 +1,5 @@
 {
-    "name": "Node.js & TypeScript",
+    "name": "Claudeflare Todo",
     "build": {
         "dockerfile": "Dockerfile",
         "args": {
@@ -29,14 +29,11 @@
                 "bradlc.vscode-tailwindcss",
                 "usernamehw.errorlens",
                 "christian-kohler.path-intellisense",
-                "ms-vscode.vscode-json"
+                "ms-vscode.vscode-json",
+                "antfu.browse-lite",
+                "vitest.explorer"
             ],
             "settings": {
-                "editor.formatOnSave": true,
-                "editor.defaultFormatter": "esbenp.prettier-vscode",
-                "editor.codeActionsOnSave": {
-                    "source.fixAll.eslint": "explicit"
-                },
                 "terminal.integrated.defaultProfile.linux": "zsh",
                 "terminal.integrated.profiles.linux": {
                     "bash": {
@@ -46,12 +43,7 @@
                     "zsh": {
                         "path": "zsh"
                     }
-                },
-                "typescript.preferences.preferTypeOnlyAutoImports": true,
-                "typescript.suggest.autoImports": true,
-                "typescript.updateImportsOnFileMove.enabled": "always",
-                "playwright.showTrace": true,
-                "playwright.reuseBrowser": true
+                }
             }
         }
     },

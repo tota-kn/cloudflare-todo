@@ -17,5 +17,9 @@
     "eslint.useFlatConfig": true,
     "files.autoSave": "afterDelay",
     "javascript.updateImportsOnFileMove.enabled": "always",
-    "prettier.enable": true
+    "prettier.enable": true,
+    "typescript.preferences.preferTypeOnlyAutoImports": true,
+    "typescript.suggest.autoImports": true,
+    "playwright.showTrace": false,
+    "playwright.reuseBrowser": false
 }
