@@ -1,5 +1,6 @@
 import { TodoId } from "../value-objects/TodoId"
 import { TodoStatus } from "../value-objects/TodoStatus"
+import { getCurrentUtcTime } from "../../utils/dateTime"
 
 /**
  * Todoエンティティ
@@ -25,7 +26,7 @@ export class Todo {
    * @returns 作成されたTodoインスタンス
    */
   static create(id: TodoId, title: string, description?: string): Todo {
-    const now = new Date()
+    const now = getCurrentUtcTime()
     return new Todo(
       id,
       title,
@@ -124,7 +125,7 @@ export class Todo {
   updateTitle(title: string): void {
     this.title = title
     this.validateTitle()
-    this.updatedAt = new Date()
+    this.updatedAt = getCurrentUtcTime()
   }
 
   /**
@@ -133,7 +134,7 @@ export class Todo {
    */
   updateDescription(description: string): void {
     this.description = description
-    this.updatedAt = new Date()
+    this.updatedAt = getCurrentUtcTime()
   }
 
   /**
@@ -141,7 +142,7 @@ export class Todo {
    */
   complete(): void {
     this.status = TodoStatus.completed()
-    this.updatedAt = new Date()
+    this.updatedAt = getCurrentUtcTime()
   }
 
   /**
@@ -149,7 +150,7 @@ export class Todo {
    */
   markAsPending(): void {
     this.status = TodoStatus.pending()
-    this.updatedAt = new Date()
+    this.updatedAt = getCurrentUtcTime()
   }
 
   /**
@@ -157,6 +158,6 @@ export class Todo {
    */
   toggleStatus(): void {
     this.status = this.status.toggle()
-    this.updatedAt = new Date()
+    this.updatedAt = getCurrentUtcTime()
   }
 }

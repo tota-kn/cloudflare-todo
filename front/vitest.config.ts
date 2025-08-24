@@ -4,6 +4,9 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     include: ["test/**/*.test.{ts,tsx}"],
+    env: {
+      TZ: "UTC", // テスト実行時にUTCタイムゾーンを設定
+    },
     coverage: {
       provider: "v8",
       reporter: ["text", "html", "json-summary"],

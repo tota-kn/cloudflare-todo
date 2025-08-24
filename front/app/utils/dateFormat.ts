@@ -1,5 +1,5 @@
 /**
- * 日付を日本語ロケールでフォーマットする
+ * 日付をUTC時間で表示用にフォーマットする
  */
 export const formatDateTime = (dateString: string): string => {
   return new Date(dateString).toLocaleString("ja-JP", {

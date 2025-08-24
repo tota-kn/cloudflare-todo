@@ -4,6 +4,9 @@ export default defineConfig({
   test: {
     include: ["test/unit/**/*.test.ts"],
     environment: "node",
+    env: {
+      TZ: "UTC", // テスト実行時にUTCタイムゾーンを設定
+    },
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],

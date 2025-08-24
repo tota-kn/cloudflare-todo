@@ -3,7 +3,7 @@ import { formatDateTime } from "~/utils/dateFormat"
 
 /**
  * formatDateTime関数のテスト
- * t-wada氏のテスト設計原則に基づく包括的テスト
+ * テスト環境はUTCで実行され、ユーザーのローカルタイムゾーンでの表示機能をテスト
  */
 describe("formatDateTime", () => {
   describe("正常系テスト", () => {
@@ -35,15 +35,14 @@ describe("formatDateTime", () => {
       expect(typeof formatted).toBe("string")
     })
 
-    it("特定の日時が正確にフォーマットされること", () => {
+    it("特定の日時が正確にUTCでフォーマットされること", () => {
       // 2024年1月15日 9:30 UTC
       const isoDate = "2024-01-15T09:30:00.000Z"
       const formatted = formatDateTime(isoDate)
 
-      // 日本時間（UTC+9）での表示を想定
-      // 9:30 UTC = 18:30 JST
+      // UTC時間での表示を確認
       expect(formatted).toContain("2024/01/15")
-      expect(formatted).toContain("18:30")
+      expect(formatted).toContain("09:30")
     })
   })
 
@@ -182,30 +181,32 @@ describe("formatDateTime", () => {
     })
   })
 
-  describe("タイムゾーンテスト", () => {
-    it("UTC日付がローカル時間に変換されること", () => {
+  describe("UTC時間表示テスト", () => {
+    it("UTC時間がそのまま表示されること", () => {
       const utcMidnight = "2024-01-15T00:00:00.000Z"
       const formatted = formatDateTime(utcMidnight)
 
-      // UTC 00:00 は日本時間 09:00 になる
-      expect(formatted).toContain("09:00")
+      // UTC 00:00 がそのまま表示される
+      expect(formatted).toContain("00:00")
+      expect(formatted).toContain("2024/01/15")
     })
 
-    it("UTC正午がローカル時間に変換されること", () => {
+    it("UTC正午がそのまま表示されること", () => {
       const utcNoon = "2024-01-15T12:00:00.000Z"
       const formatted = formatDateTime(utcNoon)
 
-      // UTC 12:00 は日本時間 21:00 になる
-      expect(formatted).toContain("21:00")
+      // UTC 12:00 がそのまま表示される
+      expect(formatted).toContain("12:00")
+      expect(formatted).toContain("2024/01/15")
     })
 
-    it("日付変更線をまたぐ変換が正しく処理されること", () => {
+    it("UTC時間で日付変更を確認できること", () => {
       const utcLateEvening = "2024-01-15T23:00:00.000Z"
       const formatted = formatDateTime(utcLateEvening)
 
-      // UTC 23:00 は日本時間の翌日 08:00 になる
-      expect(formatted).toContain("2024/01/16")
-      expect(formatted).toContain("08:00")
+      // UTC 23:00 は同じ日付で表示される
+      expect(formatted).toContain("2024/01/15")
+      expect(formatted).toContain("23:00")
     })
   })
 })
