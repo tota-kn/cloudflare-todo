@@ -10,12 +10,7 @@ TODO
 ## 共通
 - [x] E2Eテスト
 - [ ] OAuth認証
-- [ ] CLAUDE.md
-  - [ ] TSDoc記載
-  - [ ] hooks
-  - [ ] task
-  - [x] context7
-- [ ] 型チェック、リント、フォーマット、テストの実行まで完了してからビルド、デプロイ
+- [x] CLAUDE.md
 
 ## back
 - [x] リンター
@@ -28,17 +23,17 @@ TODO
 ## front
 - [x] リンター
 - [x] フォーマッター
-- [ ] ユニットテスト
+- [ ] ユニットテスト?
 - [x] tailwind
 - [x] ライトモード、ダークモード
 - [ ] PWA化
 - [ ] Cookie
 - [ ] 多言語
 
+
 --- 
 # 環境構築
 1. pnpm install
 2. pnpx playwright install
-3. Run Task: all
-4. pnpm b test:api
-5. pnpm test:e2e
+3. Run Task: dev
+4. pnpm all-check
