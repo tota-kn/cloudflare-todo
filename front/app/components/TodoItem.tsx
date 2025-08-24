@@ -1,14 +1,14 @@
 import { useNavigate } from "react-router"
 import { useDeleteTodo, useToggleTodo } from "~/hooks/useTodos"
+import type { TodoDto } from "~/types/shared"
 import { formatDateTime } from "~/utils/dateFormat"
-import type { TodoItem as TodoItemData } from "../../../shared/client"
 import { ActionButton } from "./CircleButton"
 
 /**
  * TodoItemコンポーネントのProps
  */
 interface TodoItemProps {
-  todo: TodoItemData
+  todo: TodoDto
 }
 
 /**

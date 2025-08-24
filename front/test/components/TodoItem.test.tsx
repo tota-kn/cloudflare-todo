@@ -1,10 +1,10 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import "@testing-library/jest-dom"
 import { render } from "@testing-library/react"
 import { BrowserRouter } from "react-router"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { describe, expect, it, vi } from "vitest"
 import { TodoItem } from "~/components/TodoItem"
-import type { TodoItem as TodoItemData } from "../../../shared/client"
+import type { TodoDto } from "~/types/shared"
 
 // React Routerのモック
 vi.mock("react-router", async () => {
@@ -41,7 +41,7 @@ const createTestQueryClient = () =>
 /**
  * テスト用のTodoItemデータ
  */
-const mockTodoItem: TodoItemData = {
+const mockTodoItem: TodoDto = {
   id: "1",
   title: "Test Todo",
   description: "Test Description",

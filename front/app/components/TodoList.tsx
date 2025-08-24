@@ -1,6 +1,6 @@
 import { useCreateTodo } from "~/hooks/useTodos"
+import type { TodoDto } from "~/types/shared"
 import { sortTodosByUpdatedAt } from "~/utils/todoSort"
-import type { TodoItem as TodoItemData } from "../../../shared/client"
 import { TodoEditor } from "./TodoEditor"
 import { TodoItem } from "./TodoItem"
 
@@ -9,7 +9,7 @@ import { TodoItem } from "./TodoItem"
  */
 interface TodoSectionProps {
   title: string
-  todos: TodoItemData[]
+  todos: TodoDto[]
 }
 
 /**
@@ -37,7 +37,7 @@ function TodoSection({ title, todos }: TodoSectionProps) {
  * TodoListコンポーネントのProps
  */
 interface TodoListProps {
-  todos: TodoItemData[]
+  todos: TodoDto[]
   showNewTodoForm?: boolean
   onCancelNewTodo?: () => void
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { formatDateTime } from "~/utils/dateFormat"
-import type { TodoItem as TodoItemData } from "../../../shared/client"
+import type { TodoDto } from "../types/shared"
 import { ActionButton } from "./CircleButton"
 import { TodoInput } from "./TodoInput"
 
@@ -8,7 +8,7 @@ interface TodoEditorProps {
   mode: "create" | "edit"
   initialTitle?: string
   initialDescription?: string
-  todo?: TodoItemData
+  todo?: TodoDto
   onSave: (title: string, description?: string) => void
   onCancel: () => void
   isSaving?: boolean

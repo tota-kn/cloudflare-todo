@@ -1,5 +1,5 @@
 import { hc } from "hono/client"
-import type { ClientType } from "../../shared/client"
+import type { ClientType } from "./types/shared"
 
 export const createServerFetcher = (env: Env) => {
   if (env.IS_LOCAL) {

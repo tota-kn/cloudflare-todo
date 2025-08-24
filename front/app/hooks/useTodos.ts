@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { InferRequestType } from "hono"
 import { createBrowserClient } from "~/client"
-import type { TodoItem } from "../../../shared/client"
+import type { TodoDto } from "../types/shared"
 
 type CreateTodoRequest = InferRequestType<typeof client.v1.todos.$post>["json"]
 
@@ -16,7 +16,7 @@ const client = createBrowserClient()
  * @param initialData 初期データ（オプション）
  * @returns Todo一覧のクエリ結果
  */
-export const useTodos = (initialData?: TodoItem[]) => {
+export const useTodos = (initialData?: TodoDto[]) => {
   return useQuery({
     queryKey: ["todos"],
     queryFn: async () => {
@@ -61,9 +61,9 @@ export const useCreateTodo = () => {
     onMutate: async (newTodo) => {
       await queryClient.cancelQueries({ queryKey: ["todos"] })
 
-      const previousTodos = queryClient.getQueryData<TodoItem[]>(["todos"])
+      const previousTodos = queryClient.getQueryData<TodoDto[]>(["todos"])
 
-      const optimisticTodo: TodoItem = {
+      const optimisticTodo: TodoDto = {
         id: `temp-${Date.now()}`,
         title: newTodo.title,
         description: newTodo.description ?? "",
@@ -72,7 +72,7 @@ export const useCreateTodo = () => {
         updated_at: new Date().toISOString(),
       }
 
-      queryClient.setQueryData<TodoItem[]>(["todos"], (old) =>
+      queryClient.setQueryData<TodoDto[]>(["todos"], (old) =>
         old ? [...old, optimisticTodo] : [optimisticTodo]
       )
 
@@ -114,9 +114,9 @@ export const useUpdateTodo = () => {
     onMutate: async ({ todoId, ...updates }) => {
       await queryClient.cancelQueries({ queryKey: ["todos"] })
 
-      const previousTodos = queryClient.getQueryData<TodoItem[]>(["todos"])
+      const previousTodos = queryClient.getQueryData<TodoDto[]>(["todos"])
 
-      queryClient.setQueryData<TodoItem[]>(
+      queryClient.setQueryData<TodoDto[]>(
         ["todos"],
         (old) =>
           old?.map((todo) =>
@@ -160,9 +160,9 @@ export const useDeleteTodo = () => {
     onMutate: async (todoId) => {
       await queryClient.cancelQueries({ queryKey: ["todos"] })
 
-      const previousTodos = queryClient.getQueryData<TodoItem[]>(["todos"])
+      const previousTodos = queryClient.getQueryData<TodoDto[]>(["todos"])
 
-      queryClient.setQueryData<TodoItem[]>(
+      queryClient.setQueryData<TodoDto[]>(
         ["todos"],
         (old) => old?.filter((todo) => todo.id !== todoId) || []
       )
@@ -208,9 +208,9 @@ export const useToggleTodo = () => {
     onMutate: async ({ todoId, completed }) => {
       await queryClient.cancelQueries({ queryKey: ["todos"] })
 
-      const previousTodos = queryClient.getQueryData<TodoItem[]>(["todos"])
+      const previousTodos = queryClient.getQueryData<TodoDto[]>(["todos"])
 
-      queryClient.setQueryData<TodoItem[]>(
+      queryClient.setQueryData<TodoDto[]>(
         ["todos"],
         (old) =>
           old?.map((todo) =>
