@@ -13,6 +13,6 @@
 		"test:unit": "pnpm b test:unit",
 		"test:api": "pnpm b test:api",
 		"test:e2e": "pnpm b db:reset && pnpm e2e test",
-		"all-check": "pnpm -r lint && pnpm -r typecheck && pnpm test:unit && pnpm test:api && pnpm test:e2e"
+		"all-check": "pnpm -r lint && pnpm b typecheck && pnpm f typecheck && pnpm test:unit && pnpm test:api && pnpm test:e2e"
 	}
 }
