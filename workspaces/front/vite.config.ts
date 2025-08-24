@@ -13,4 +13,8 @@ export default defineConfig({
     reactRouter(),
     tsconfigPaths(),
   ],
+  server: {
+    host: true,
+    port: 5173,
+  },
 })
