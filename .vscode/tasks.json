@@ -9,7 +9,7 @@
         "dev"
       ],
       "presentation": {
-        "group": "back"
+        "group": "dev"
       },
       "options": {
         "cwd": "${workspaceFolder}/back"
@@ -23,7 +23,7 @@
         "test:unit:watch"
       ],
       "presentation": {
-        "group": "back"
+        "group": "check"
       },
       "options": {
         "cwd": "${workspaceFolder}/back"
@@ -37,20 +37,11 @@
         "typecheck:watch"
       ],
       "presentation": {
-        "group": "back"
+        "group": "check"
       },
       "options": {
         "cwd": "${workspaceFolder}/back"
       }
-    },
-    {
-      "label": "back all",
-      "dependsOrder": "parallel",
-      "dependsOn": [
-        "back dev",
-        "back unit test",
-        "back typecheck"
-      ]
     },
     {
       "label": "front dev",
@@ -60,7 +51,7 @@
         "dev"
       ],
       "presentation": {
-        "group": "front"
+        "group": "dev"
       },
       "options": {
         "cwd": "${workspaceFolder}/front"
@@ -74,17 +65,26 @@
         "typecheck:watch"
       ],
       "presentation": {
-        "group": "front"
+        "group": "check"
       },
       "options": {
         "cwd": "${workspaceFolder}/front"
       }
     },
     {
-      "label": "front all",
+      "label": "dev",
       "dependsOrder": "parallel",
       "dependsOn": [
+        "back dev",
         "front dev",
+      ]
+    },
+    {
+      "label": "check",
+      "dependsOrder": "parallel",
+      "dependsOn": [
+        "back typecheck",
+        "back unit test",
         "front typecheck"
       ]
     },
@@ -92,8 +92,8 @@
       "label": "all",
       "dependsOrder": "parallel",
       "dependsOn": [
-        "back all",
-        "front all"
+        "dev",
+        "check"
       ],
       "group": {
         "kind": "build",
