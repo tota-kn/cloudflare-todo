@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import { createServerFetcher } from "~/client"
+import { PageHeader } from "~/components/PageHeader"
 import { TodoEditor } from "~/components/TodoEditor"
 import { useUpdateTodo } from "~/hooks/useTodos"
 import type { Route } from "./+types/$id"
@@ -88,9 +89,11 @@ export default function TodoEdit({ loaderData }: Route.ComponentProps) {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-foreground">Edit Todo</h1>
-      </div>
+      <PageHeader
+        title="Edit Todo"
+        logoUrl={`${loaderData.apiBaseUrl}/v1/assets/logo.png`}
+        showBackButton={true}
+      />
 
       <TodoEditor
         mode="edit"

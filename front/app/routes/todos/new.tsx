@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import { createServerFetcher } from "~/client"
+import { PageHeader } from "~/components/PageHeader"
 import { TodoEditor } from "~/components/TodoEditor"
 import { useCreateTodo } from "~/hooks/useTodos"
 import type { Route } from "./+types/new"
@@ -38,7 +39,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   return { todo: res }
 }
 
-export default function TodoNew() {
+export default function TodoNew({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate()
   const createTodo = useCreateTodo()
   const [title, setTitle] = useState("")
@@ -65,15 +66,11 @@ export default function TodoNew() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-foreground">Create New Todo</h1>
-        <button
-          onClick={() => navigate("/todos")}
-          className="px-4 py-2 text-sm bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors"
-        >
-          ← Back to List
-        </button>
-      </div>
+      <PageHeader
+        title="Create New Todo"
+        logoUrl={`${loaderData.apiBaseUrl}/v1/assets/logo.png`}
+        showBackButton={true}
+      />
 
       <TodoEditor
         mode="create"

@@ -1,10 +1,8 @@
-import { useNavigate } from "react-router"
 import { createServerFetcher } from "~/client"
-import { ActionButton } from "~/components/CircleButton"
 import { ErrorMessage } from "~/components/ErrorMessage"
 import { LoadingSpinner } from "~/components/LoadingSpinner"
+import { PageHeader } from "~/components/PageHeader"
 import { TodoList } from "~/components/TodoList"
-import { useTheme } from "~/contexts/ThemeContext"
 import { useTodos } from "~/hooks/useTodos"
 import type { Route } from "./+types/index"
 
@@ -31,37 +29,17 @@ export async function loader({ context }: Route.LoaderArgs) {
 }
 
 export default function Todos({ loaderData }: Route.ComponentProps) {
-  const { theme, toggleTheme } = useTheme()
-  const navigate = useNavigate()
-
   const { data: todos, isLoading, error } = useTodos(loaderData.todos)
 
   const currentTodos = todos || []
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <img
-            src={`${loaderData.apiBaseUrl}/v1/assets/logo.png`}
-            alt="Test"
-            className="h-12 object-contain"
-          />
-        </div>
-        <div className="flex items-center space-x-2">
-          <ActionButton
-            onClick={toggleTheme}
-            variant={theme === "light" ? "theme-light" : "theme-dark"}
-          />
-          <div className="p-1">
-            <ActionButton
-              onClick={() => navigate("/todos/new")}
-              variant="add-cancel"
-              showCancel={false}
-            />
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        title="Todo List"
+        logoUrl={`${loaderData.apiBaseUrl}/v1/assets/logo.png`}
+        showNewTodoButton={true}
+      />
 
       {isLoading && <LoadingSpinner />}
 
