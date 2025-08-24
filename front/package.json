@@ -13,8 +13,8 @@
     "typegen": "wrangler types -e local",
     "postinstall": "npm run typegen",
     "preview": "pnpm run build && vite preview",
-    "test:unit": "vitest run",
-    "test:unit:watch": "vitest"
+    "test:unit": "vitest run --coverage",
+    "test:unit:watch": "vitest --coverage"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.81.5",
@@ -29,25 +29,26 @@
     "@eslint/compat": "^1.3.1",
     "@eslint/js": "^9.21.0",
     "@react-router/dev": "^7.5.3",
-    "eslint-config-prettier": "^9.1.0",
-    "prettier": "^3.4.2",
     "@tailwindcss/vite": "^4.1.4",
     "@tanstack/react-query-devtools": "^5.81.5",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
     "@types/node": "^20",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
+    "@vitest/coverage-v8": "^2.1.8",
     "eslint": "^9",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
+    "jsdom": "^26.0.0",
+    "prettier": "^3.4.2",
     "tailwindcss": "^4.1.4",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.25.0",
     "vite": "^6.3.3",
     "vite-tsconfig-paths": "^5.1.4",
-    "wrangler": "^4.23.0",
     "vitest": "^2.1.8",
-    "@testing-library/react": "^16.1.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "jsdom": "^26.0.0"
+    "wrangler": "^4.23.0"
   }
 }
