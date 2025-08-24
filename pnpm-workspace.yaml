@@ -1,4 +1,4 @@
 packages:
-  - "back"
-  - "front"
-  - "e2e"
+  - "workspaces/back"
+  - "workspaces/front"
+  - "workspaces/e2e"

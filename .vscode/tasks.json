@@ -12,7 +12,7 @@
         "group": "dev"
       },
       "options": {
-        "cwd": "${workspaceFolder}/back"
+        "cwd": "${workspaceFolder}/workspaces/back"
       }
     },
     {
@@ -26,7 +26,7 @@
         "group": "check"
       },
       "options": {
-        "cwd": "${workspaceFolder}/back"
+        "cwd": "${workspaceFolder}/workspaces/back"
       }
     },
     {
@@ -40,7 +40,7 @@
         "group": "check"
       },
       "options": {
-        "cwd": "${workspaceFolder}/back"
+        "cwd": "${workspaceFolder}/workspaces/back"
       }
     },
     {
@@ -54,7 +54,7 @@
         "group": "dev"
       },
       "options": {
-        "cwd": "${workspaceFolder}/front"
+        "cwd": "${workspaceFolder}/workspaces/front"
       }
     },
     {
@@ -68,7 +68,21 @@
         "group": "check"
       },
       "options": {
-        "cwd": "${workspaceFolder}/front"
+        "cwd": "${workspaceFolder}/workspaces/front"
+      }
+    },
+    {
+      "label": "front unit test",
+      "type": "shell",
+      "command": "pnpm",
+      "args": [
+        "test:unit"
+      ],
+      "presentation": {
+        "group": "check"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/workspaces/front"
       }
     },
     {
@@ -86,7 +100,8 @@
       "dependsOn": [
         "back typecheck",
         "back unit test",
-        "front typecheck"
+        "front typecheck",
+        "front unit test"
       ]
     },
     {
