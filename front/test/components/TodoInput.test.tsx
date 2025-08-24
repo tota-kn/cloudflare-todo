@@ -20,7 +20,7 @@ describe("TodoInput", () => {
   })
 
   describe("正常系テスト", () => {
-    it("正常にレンダリングされること", () => {
+    it("正常にレンダリングされること", () => {  
       render(<TodoInput {...defaultProps} />)
 
       expect(screen.getByPlaceholderText("Todo title...")).toBeInTheDocument()
