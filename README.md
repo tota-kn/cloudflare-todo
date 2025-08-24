@@ -1,6 +1,7 @@
 ## 共通
 - [x] CLAUDE.md
-- [ ] OAuth認証
+- [ ] ログイン機能
+  - [ ] OAuth認証
 - [ ] DevContainer
 
 ## back
@@ -18,7 +19,7 @@
 - [x] ライトモード、ダークモード
 - [x] ユニットテスト + Testing Library 
 - [ ] PWA化
-- [ ] Cookie
+- [ ] EU Cookie
 - [ ] 多言語
 
 ## E2E
