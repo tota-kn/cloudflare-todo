@@ -9,6 +9,9 @@ import {
   XIcon,
 } from "./CustomIcon"
 
+/**
+ * ActionButtonコンポーネントのProps
+ */
 interface ActionButtonProps {
   onClick: () => void
   disabled?: boolean
@@ -27,6 +30,12 @@ interface ActionButtonProps {
   showCancel?: boolean
 }
 
+/**
+ * 円形のアクションボタンコンポーネント
+ * 様々なバリアントとローディング状態をサポート
+ * @param props コンポーネントのProps
+ * @returns ActionButtonコンポーネント
+ */
 export function ActionButton({
   onClick,
   disabled = false,

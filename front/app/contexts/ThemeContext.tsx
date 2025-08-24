@@ -1,7 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react"
 
+/**
+ * テーマの種類（ライト・ダーク）
+ */
 type Theme = "light" | "dark"
 
+/**
+ * テーマコンテキストの型定義
+ */
 interface ThemeContextType {
   theme: Theme
   setTheme: (theme: Theme) => void
@@ -10,6 +16,11 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
+/**
+ * 初期テーマを取得する
+ * ローカルストレージ、システム設定の順で優先度を決定
+ * @returns 初期テーマ
+ */
 function getInitialTheme(): Theme {
   if (typeof window === "undefined") {
     return "light"
@@ -25,6 +36,12 @@ function getInitialTheme(): Theme {
     : "light"
 }
 
+/**
+ * テーマプロバイダーコンポーネント
+ * アプリケーション全体でテーマ状態を管理する
+ * @param props コンポーネントのProps
+ * @returns ThemeProviderコンポーネント
+ */
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>(getInitialTheme)
   const [mounted, setMounted] = useState(false)
@@ -54,6 +71,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   )
 }
 
+/**
+ * テーマコンテキストを使用するカスタムフック
+ * @returns テーマコンテキストの値
+ * @throws {Error} ThemeProvider外で使用された場合
+ */
 export function useTheme() {
   const context = useContext(ThemeContext)
   if (context === undefined) {

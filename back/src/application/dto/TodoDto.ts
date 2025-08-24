@@ -1,5 +1,9 @@
 import { Todo } from "../../domain/entities/Todo"
 
+/**
+ * Todoのデータ転送オブジェクト
+ * アプリケーション境界を跨ぐデータのやり取りに使用
+ */
 export interface TodoDto {
   id: string
   title: string
@@ -9,6 +13,11 @@ export interface TodoDto {
   updated_at: string
 }
 
+/**
+ * TodoエンティティからTodoDTOに変換する
+ * @param todo 変換元のTodoエンティティ
+ * @returns 変換されたTodoDTO
+ */
 export const toTodoDto = (todo: Todo): TodoDto => {
   return {
     id: todo.getId().toString(),

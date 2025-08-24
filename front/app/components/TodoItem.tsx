@@ -4,10 +4,19 @@ import { formatDateTime } from "~/utils/dateFormat"
 import type { TodoItem as TodoItemData } from "../../../shared/client"
 import { ActionButton } from "./CircleButton"
 
+/**
+ * TodoItemコンポーネントのProps
+ */
 interface TodoItemProps {
   todo: TodoItemData
 }
 
+/**
+ * Todoアイテムを表示するコンポーネント
+ * 完了/未完了の切り替え、編集、削除機能を提供する
+ * @param props コンポーネントのProps
+ * @returns TodoItemコンポーネント
+ */
 export function TodoItem({ todo }: TodoItemProps) {
   const navigate = useNavigate()
   const deleteTodo = useDeleteTodo()

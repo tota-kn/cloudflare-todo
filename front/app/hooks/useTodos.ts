@@ -11,6 +11,11 @@ type UpdateTodoRequest = InferRequestType<
 
 const client = createBrowserClient()
 
+/**
+ * Todo一覧を取得するカスタムフック
+ * @param initialData 初期データ（オプション）
+ * @returns Todo一覧のクエリ結果
+ */
 export const useTodos = (initialData?: TodoItem[]) => {
   return useQuery({
     queryKey: ["todos"],
@@ -30,6 +35,10 @@ export const useTodos = (initialData?: TodoItem[]) => {
   })
 }
 
+/**
+ * Todo作成のカスタムフック
+ * @returns Todo作成のミューテーション
+ */
 export const useCreateTodo = () => {
   const queryClient = useQueryClient()
 
@@ -75,6 +84,10 @@ export const useCreateTodo = () => {
   })
 }
 
+/**
+ * Todo更新のカスタムフック
+ * @returns Todo更新のミューテーション
+ */
 export const useUpdateTodo = () => {
   const queryClient = useQueryClient()
 
@@ -121,6 +134,10 @@ export const useUpdateTodo = () => {
   })
 }
 
+/**
+ * Todo削除のカスタムフック
+ * @returns Todo削除のミューテーション
+ */
 export const useDeleteTodo = () => {
   const queryClient = useQueryClient()
 
@@ -158,6 +175,10 @@ export const useDeleteTodo = () => {
   })
 }
 
+/**
+ * Todoのステータス切り替えのカスタムフック
+ * @returns Todoステータス切り替えのミューテーション
+ */
 export const useToggleTodo = () => {
   const queryClient = useQueryClient()
 

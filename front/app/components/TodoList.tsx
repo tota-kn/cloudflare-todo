@@ -4,11 +4,20 @@ import { TodoEditor } from "./TodoEditor"
 import { TodoItem } from "./TodoItem"
 import { sortTodosByUpdatedAt } from "~/utils/todoSort"
 
+/**
+ * TodoSectionコンポーネントのProps
+ */
 interface TodoSectionProps {
   title: string
   todos: TodoItemData[]
 }
 
+/**
+ * Todoセクションを表示するコンポーネント
+ * 完了済み・未完了のTodoをグループ化して表示する
+ * @param props コンポーネントのProps
+ * @returns TodoSectionコンポーネント
+ */
 function TodoSection({ title, todos }: TodoSectionProps) {
   if (todos.length === 0) return null
 
@@ -24,12 +33,21 @@ function TodoSection({ title, todos }: TodoSectionProps) {
   )
 }
 
+/**
+ * TodoListコンポーネントのProps
+ */
 interface TodoListProps {
   todos: TodoItemData[]
   showNewTodoForm?: boolean
   onCancelNewTodo?: () => void
 }
 
+/**
+ * Todo一覧を表示するメインコンポーネント
+ * 未完了・完了済みでセクション分けし、新規作成フォームも含む
+ * @param props コンポーネントのProps
+ * @returns TodoListコンポーネント
+ */
 export function TodoList({
   todos,
   showNewTodoForm,
