@@ -8,7 +8,9 @@
     "workers/**/*",
     "worker-configuration.d.ts",
     "../shared/**/*",
-    "../back/dist/types/**/*.d.ts"
+    "../back/dist/types/**/*.d.ts",
+    "app/utils",
+    "test"
   ],
   "compilerOptions": {
     "composite": true,
