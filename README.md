@@ -16,7 +16,7 @@
 - [x] フォーマッター
 - [x] tailwind
 - [x] ライトモード、ダークモード
-- [ ] ユニットテスト?
+- [ ] Testing Library? 
 - [ ] PWA化
 - [ ] Cookie
 - [ ] 多言語
