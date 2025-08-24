@@ -42,11 +42,10 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
     <div className="max-w-4xl mx-auto p-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <h1 className="text-3xl font-bold text-foreground">Todo List</h1>
           <img
-            src={`${loaderData.apiBaseUrl}/v1/assets/test.png`}
+            src={`${loaderData.apiBaseUrl}/v1/assets/logo.png`}
             alt="Test"
-            className="w-8 h-8 object-contain"
+            className="h-12 object-contain"
           />
         </div>
         <div className="flex items-center space-x-2">
