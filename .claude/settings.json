@@ -5,15 +5,17 @@
       "Bash(mkdir:*)",
       "Bash(cp:*)",
       "Bash(curl:*)",
-      "Bash(mv:*)",
+      "Bash(git mv:*)",
+      "Bash(git rm:*)",
       "Bash(pnpm:*)",
       "mcp__serena",
-      "mcp__cloudflare-docs"
-    ],
-    "ask": [
-      "Bash(rm:*)"
+      "mcp__cloudflare-docs",
+      "WebSearch",
+      "WebFetch"
     ],
     "deny": [
+      "Bash(rm:*)",
+      "Bash(mv:*)",
       "Bash(git:*)",
       "Bash(sudo:*)",
       "Bash(wrangler:*)",
