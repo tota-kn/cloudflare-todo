@@ -10,7 +10,8 @@
 				"esbenp.prettier-vscode",
 				"bradlc.vscode-tailwindcss",
 				"vitest.explorer",
-				"christian-kohler.path-intellisense"
+				"christian-kohler.path-intellisense",
+				"Anthropic.claude-code"
 			]
 		}
 	},
