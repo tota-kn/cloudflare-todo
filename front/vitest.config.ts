@@ -3,6 +3,7 @@ import { defineConfig } from "vitest/config"
 export default defineConfig({
   test: {
     environment: "jsdom",
+    setupFiles: ["./test/setup.ts"],
     include: ["test/**/*.test.{ts,tsx}"],
     coverage: {
       provider: "v8",
@@ -13,6 +14,11 @@ export default defineConfig({
         "app/**/*.test.{ts,tsx}",
         "app/**/*.spec.{ts,tsx}",
       ],
+    },
+  },
+  resolve: {
+    alias: {
+      "~": "/app",
     },
   },
 })
