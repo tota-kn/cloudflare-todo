@@ -63,17 +63,17 @@ RUN ARCH=$(dpkg --print-architecture) && \
   sudo dpkg -i "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && \
   rm "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb"
 
-# Set up non-root user
-USER node
-
-# Install pnpm globally
+# Install pnpm globally as root
 RUN npm install -g pnpm@latest
 
-# Install global packages
+# Set up npm and pnpm environment variables
 ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
 ENV PATH=$PATH:/usr/local/share/npm-global/bin
 ENV PNPM_HOME=/usr/local/share/pnpm
 ENV PATH=$PATH:$PNPM_HOME
+
+# Set up non-root user
+USER node
 
 # Set the default shell to zsh rather than sh
 ENV SHELL=/bin/zsh

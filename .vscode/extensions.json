@@ -1,5 +1,14 @@
 {
     "recommendations": [
-        "esbenp.prettier-vscode"
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "eamodio.gitlens",
+        "Anthropic.claude-code",
+        "ms-vscode.vscode-typescript-next",
+        "ms-playwright.playwright",
+        "bradlc.vscode-tailwindcss",
+        "usernamehw.errorlens",
+        "christian-kohler.path-intellisense",
+        "ms-vscode.vscode-json"
     ]
 }
