@@ -4,7 +4,7 @@ import { createServerFetcher } from "~/client"
 import { PageHeader } from "~/components/PageHeader"
 import { TodoEditor } from "~/components/TodoEditor"
 import { useCreateTodo } from "~/hooks/useTodos"
-import { isSupportedLanguage } from "~/i18n/config"
+import { isSupportedLanguage, defaultLanguage } from "~/i18n/config"
 import { initI18nClient, useTranslation } from "~/i18n/client"
 import { redirect } from "react-router"
 import type { Route } from "./+types/new"
@@ -62,7 +62,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 
   // 言語パラメータの検証
   if (!isSupportedLanguage(lang)) {
-    return redirect("/en/todos/new")
+    return redirect(`/${defaultLanguage}/todos/new`)
   }
 
   return {
@@ -76,7 +76,7 @@ export async function action({ params, request, context }: Route.ActionArgs) {
 
   // 言語パラメータの検証
   if (!isSupportedLanguage(lang)) {
-    return redirect("/en/todos/new")
+    return redirect(`/${defaultLanguage}/todos/new`)
   }
 
   const client = createServerFetcher(context.cloudflare.env)

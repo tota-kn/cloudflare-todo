@@ -4,6 +4,11 @@ import type { TodoDto } from "~/types/shared"
 import { formatDateTime } from "~/utils/dateFormat"
 import { ActionButton } from "./CircleButton"
 import { useTranslation } from "~/i18n/client"
+import {
+  type SupportedLanguage,
+  isSupportedLanguage,
+  defaultLanguage,
+} from "~/i18n/config"
 
 /**
  * TodoItemコンポーネントのProps
@@ -26,10 +31,10 @@ export function TodoItem({ todo }: TodoItemProps) {
   const toggleTodo = useToggleTodo()
 
   // 現在のパスから言語を検出
-  const getCurrentLanguage = () => {
+  const getCurrentLanguage = (): SupportedLanguage => {
     const pathSegments = location.pathname.split("/").filter(Boolean)
     const langFromPath = pathSegments[0]
-    return ["en", "ja"].includes(langFromPath) ? langFromPath : "en"
+    return isSupportedLanguage(langFromPath) ? langFromPath : defaultLanguage
   }
 
   const handleToggleComplete = () => {

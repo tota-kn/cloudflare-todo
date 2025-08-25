@@ -2,6 +2,7 @@ import {
   createI18nInstance,
   type SupportedLanguage,
   isSupportedLanguage,
+  defaultLanguage,
 } from "./config"
 
 export async function initI18nServer(language: SupportedLanguage) {
@@ -24,5 +25,5 @@ export function getLanguageFromRequest(request: Request): SupportedLanguage {
     return langFromPath
   }
 
-  return "en" // デフォルト言語
+  return defaultLanguage // デフォルト言語
 }
