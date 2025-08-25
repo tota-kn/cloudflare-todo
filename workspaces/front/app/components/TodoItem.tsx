@@ -24,7 +24,7 @@ export function TodoItem({ todo }: TodoItemProps) {
   const { t } = useTranslation()
   const deleteTodo = useDeleteTodo()
   const toggleTodo = useToggleTodo()
-  
+
   // 現在のパスから言語を検出
   const getCurrentLanguage = () => {
     const pathSegments = location.pathname.split("/").filter(Boolean)

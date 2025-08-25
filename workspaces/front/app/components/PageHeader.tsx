@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from "react-router"
 import { ActionButton } from "~/components/CircleButton"
 import { useTheme } from "~/contexts/ThemeContext"
 import { useTranslation } from "~/i18n/client"
+import { type SupportedLanguage } from "~/i18n/config"
 
 interface PageHeaderProps {
   titleKey: string
@@ -19,20 +20,25 @@ export function PageHeader({
   const navigate = useNavigate()
   const location = useLocation()
   const { theme, toggleTheme } = useTheme()
-  const { t, changeLanguage, currentLanguage } = useTranslation()
+  const { t, changeLanguage } = useTranslation()
 
   // 現在のパスから言語を検出
-  const getCurrentLanguage = () => {
+  const getCurrentLanguage = (): SupportedLanguage => {
     const pathSegments = location.pathname.split("/").filter(Boolean)
     const langFromPath = pathSegments[0]
-    return ["en", "ja"].includes(langFromPath) ? langFromPath : "en"
+    return ["en", "ja"].includes(langFromPath)
+      ? (langFromPath as SupportedLanguage)
+      : "en"
   }
 
   // 言語切り替え時のURL変更処理
   const handleLanguageSwitch = (newLanguage: string) => {
     const currentLang = getCurrentLanguage()
-    const newPath = location.pathname.replace(`/${currentLang}`, `/${newLanguage}`)
-    changeLanguage(newLanguage as any)
+    const newPath = location.pathname.replace(
+      `/${currentLang}`,
+      `/${newLanguage}`
+    )
+    changeLanguage(newLanguage as SupportedLanguage)
     navigate(newPath)
   }
 
@@ -51,7 +57,9 @@ export function PageHeader({
       <div className="flex items-center space-x-2">
         {/* 言語切り替えボタン */}
         <button
-          onClick={() => handleLanguageSwitch(getCurrentLanguage() === "en" ? "ja" : "en")}
+          onClick={() =>
+            handleLanguageSwitch(getCurrentLanguage() === "en" ? "ja" : "en")
+          }
           className="px-3 py-1 text-sm bg-accent text-accent-foreground rounded-md hover:bg-accent/80 transition-colors"
         >
           {getCurrentLanguage() === "en" ? "日本語" : "English"}

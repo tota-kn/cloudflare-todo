@@ -11,7 +11,7 @@ import type { Route } from "./+types/new"
 
 export const links: Route.LinksFunction = () => {
   const currentPath = "/todos/new"
-  
+
   return [
     // Alternate language links for SEO
     {
@@ -20,7 +20,7 @@ export const links: Route.LinksFunction = () => {
       href: `/en${currentPath}`,
     },
     {
-      rel: "alternate", 
+      rel: "alternate",
       hrefLang: "ja",
       href: `/ja${currentPath}`,
     },
@@ -35,20 +35,33 @@ export const links: Route.LinksFunction = () => {
 export function meta({ params }: Route.MetaArgs) {
   const { lang } = params
   const isJapanese = lang === "ja"
-  
+
   return [
     { title: isJapanese ? "新しいTodoを作成" : "Create New Todo" },
-    { name: "description", content: isJapanese ? "新しいTodoアイテムを作成" : "Create a new todo item" },
-    { name: "og:title", content: isJapanese ? "新しいTodoを作成" : "Create New Todo" },
-    { name: "og:description", content: isJapanese ? "新しいTodoアイテムを作成" : "Create a new todo item" },
+    {
+      name: "description",
+      content: isJapanese
+        ? "新しいTodoアイテムを作成"
+        : "Create a new todo item",
+    },
+    {
+      name: "og:title",
+      content: isJapanese ? "新しいTodoを作成" : "Create New Todo",
+    },
+    {
+      name: "og:description",
+      content: isJapanese
+        ? "新しいTodoアイテムを作成"
+        : "Create a new todo item",
+    },
   ]
 }
 
 export async function loader({ params, context }: Route.LoaderArgs) {
   const { lang } = params
-  
+
   // 言語パラメータの検証
-  if (!lang || !supportedLanguages.includes(lang as any)) {
+  if (!lang || !supportedLanguages.includes(lang as SupportedLanguage)) {
     return redirect("/en/todos/new")
   }
 
@@ -60,9 +73,9 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 
 export async function action({ params, request, context }: Route.ActionArgs) {
   const { lang } = params
-  
+
   // 言語パラメータの検証
-  if (!lang || !supportedLanguages.includes(lang as any)) {
+  if (!lang || !supportedLanguages.includes(lang as SupportedLanguage)) {
     return redirect("/en/todos/new")
   }
 

@@ -101,6 +101,7 @@ app/
 ## 完了した作業
 
 ### Phase 0 & 1
+
 - 作業進捗ファイル作成
 - 依存関係追加 (react-i18next, i18next, i18next-resources-to-backend)
 - Context7でSSR実装方法調査
@@ -111,6 +112,7 @@ app/
 - i18n初期化エラー修正
 
 ### Phase 2
+
 - URLパラメータベースの言語ルーティング実装
 - 新しいルートファイル作成:
   - `routes/$lang/index.tsx` - ルート言語リダイレクト
@@ -122,6 +124,7 @@ app/
 - 型チェック完了・動作確認OK
 
 ### Phase 3
+
 - 全コンポーネントの多言語化完了:
   - `TodoInput` - プレースホルダーテキストの翻訳
   - `TodoEditor` - タイムスタンプ表示の翻訳
@@ -131,6 +134,7 @@ app/
 - 翻訳リソースファイルの拡充
 
 ### Phase 4 - SEO最適化
+
 - `root.tsx`に動的`html lang`属性設定実装
 - 各ルートでのmeta情報多言語化（title, description, og:tags）
 - alternate link tags実装（静的ルートはlinks関数、動的ルートはmeta関数）

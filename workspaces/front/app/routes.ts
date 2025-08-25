@@ -3,7 +3,7 @@ import { type RouteConfig, index, route } from "@react-router/dev/routes"
 export default [
   // ルート path: `/` → `/en/` にリダイレクト
   index("routes/index.tsx"),
-  
+
   // 言語パラメータ付きルート
   route("/:lang", "routes/$lang/index.tsx"),
   route("/:lang/todos", "routes/$lang/todos/index.tsx"),

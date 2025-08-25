@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import {
   initReactI18next,
   useTranslation as useI18nextTranslation,
@@ -42,7 +42,7 @@ export function useTranslation() {
     i18n: clientI18nInstance!,
   })
 
-  const [isInitialized, setIsInitialized] = useState(true) // 初期化済みと仮定
+  const [isInitialized] = useState(true) // 初期化済みと仮定
 
   const changeLanguage = (language: SupportedLanguage) => {
     if (clientI18nInstance) {

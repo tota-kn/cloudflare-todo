@@ -18,24 +18,48 @@ export const links: Route.LinksFunction = () => {
 export function meta({ params }: Route.MetaArgs) {
   const { lang, id } = params
   const isJapanese = lang === "ja"
-  
+
   return [
     { title: isJapanese ? `Todo ${id}を編集` : `Edit Todo ${id}` },
-    { name: "description", content: isJapanese ? "Todoアイテムを編集" : "Edit todo item" },
-    { name: "og:title", content: isJapanese ? `Todo ${id}を編集` : `Edit Todo ${id}` },
-    { name: "og:description", content: isJapanese ? "Todoアイテムを編集" : "Edit todo item" },
+    {
+      name: "description",
+      content: isJapanese ? "Todoアイテムを編集" : "Edit todo item",
+    },
+    {
+      name: "og:title",
+      content: isJapanese ? `Todo ${id}を編集` : `Edit Todo ${id}`,
+    },
+    {
+      name: "og:description",
+      content: isJapanese ? "Todoアイテムを編集" : "Edit todo item",
+    },
     // Alternate language links for dynamic routes
-    { tagName: "link", rel: "alternate", hrefLang: "en", href: `/en/todos/${id}` },
-    { tagName: "link", rel: "alternate", hrefLang: "ja", href: `/ja/todos/${id}` },
-    { tagName: "link", rel: "alternate", hrefLang: "x-default", href: `/en/todos/${id}` },
+    {
+      tagName: "link",
+      rel: "alternate",
+      hrefLang: "en",
+      href: `/en/todos/${id}`,
+    },
+    {
+      tagName: "link",
+      rel: "alternate",
+      hrefLang: "ja",
+      href: `/ja/todos/${id}`,
+    },
+    {
+      tagName: "link",
+      rel: "alternate",
+      hrefLang: "x-default",
+      href: `/en/todos/${id}`,
+    },
   ]
 }
 
 export async function loader({ params, context }: Route.LoaderArgs) {
   const { lang, id: todoId } = params
-  
+
   // 言語パラメータの検証
-  if (!lang || !supportedLanguages.includes(lang as any)) {
+  if (!lang || !supportedLanguages.includes(lang as SupportedLanguage)) {
     return redirect(`/en/todos/${todoId}`)
   }
 
@@ -60,9 +84,9 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 
 export async function action({ params, request, context }: Route.ActionArgs) {
   const { lang, id: todoId } = params
-  
+
   // 言語パラメータの検証
-  if (!lang || !supportedLanguages.includes(lang as any)) {
+  if (!lang || !supportedLanguages.includes(lang as SupportedLanguage)) {
     return redirect(`/en/todos/${todoId}`)
   }
 

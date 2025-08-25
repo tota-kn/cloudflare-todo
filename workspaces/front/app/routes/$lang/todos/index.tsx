@@ -12,7 +12,7 @@ import type { Route } from "./+types/index"
 
 export const links: Route.LinksFunction = () => {
   const currentPath = "/todos"
-  
+
   return [
     // Alternate language links for SEO
     {
@@ -21,7 +21,7 @@ export const links: Route.LinksFunction = () => {
       href: `/en${currentPath}`,
     },
     {
-      rel: "alternate", 
+      rel: "alternate",
       hrefLang: "ja",
       href: `/ja${currentPath}`,
     },
@@ -36,20 +36,26 @@ export const links: Route.LinksFunction = () => {
 export function meta({ params }: Route.MetaArgs) {
   const { lang } = params
   const isJapanese = lang === "ja"
-  
+
   return [
     { title: isJapanese ? "Todoリスト" : "Todo List" },
-    { name: "description", content: isJapanese ? "Todoリストページ" : "Todo list page" },
+    {
+      name: "description",
+      content: isJapanese ? "Todoリストページ" : "Todo list page",
+    },
     { name: "og:title", content: isJapanese ? "Todoリスト" : "Todo List" },
-    { name: "og:description", content: isJapanese ? "Todoリストページ" : "Todo list page" },
+    {
+      name: "og:description",
+      content: isJapanese ? "Todoリストページ" : "Todo list page",
+    },
   ]
 }
 
 export async function loader({ params, context }: Route.LoaderArgs) {
   const { lang } = params
-  
+
   // 言語パラメータの検証
-  if (!lang || !supportedLanguages.includes(lang as any)) {
+  if (!lang || !supportedLanguages.includes(lang as SupportedLanguage)) {
     return redirect("/en/todos")
   }
 
@@ -70,7 +76,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 
 export default function Todos({ loaderData }: Route.ComponentProps) {
   const { data: todos, isLoading, error } = useTodos(loaderData.todos)
-  
+
   // クライアントサイドでの言語初期化
   useEffect(() => {
     initI18nClient(loaderData.language)
