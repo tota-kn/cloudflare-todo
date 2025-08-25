@@ -3,11 +3,7 @@ import { ActionButton } from "~/components/CircleButton"
 import { LanguageSwitcher } from "~/components/LanguageSwitcher"
 import { useTheme } from "~/contexts/ThemeContext"
 import { useTranslation } from "~/i18n/client"
-import {
-  type SupportedLanguage,
-  isSupportedLanguage,
-  defaultLanguage,
-} from "~/i18n/config"
+import { getCurrentLanguage, getLanguageAwarePath } from "~/utils/language"
 
 interface PageHeaderProps {
   titleKey: string
@@ -27,18 +23,7 @@ export function PageHeader({
   const { theme, toggleTheme } = useTheme()
   const { t } = useTranslation()
 
-  // 現在のパスから言語を検出
-  const getCurrentLanguage = (): SupportedLanguage => {
-    const pathSegments = location.pathname.split("/").filter(Boolean)
-    const langFromPath = pathSegments[0]
-    return isSupportedLanguage(langFromPath) ? langFromPath : defaultLanguage
-  }
-
-  // 現在の言語に基づいたナビゲーション
-  const getLanguageAwarePath = (path: string) => {
-    const currentLang = getCurrentLanguage()
-    return `/${currentLang}${path}`
-  }
+  const currentLang = getCurrentLanguage(location.pathname)
 
   return (
     <div className="flex items-center justify-between mb-6">
@@ -56,7 +41,9 @@ export function PageHeader({
         {showNewTodoButton && (
           <div className="p-1">
             <ActionButton
-              onClick={() => navigate(getLanguageAwarePath("/todos/new"))}
+              onClick={() =>
+                navigate(getLanguageAwarePath(currentLang, "/todos/new"))
+              }
               variant="add-cancel"
               showCancel={false}
             />
@@ -64,7 +51,9 @@ export function PageHeader({
         )}
         {showBackButton && (
           <button
-            onClick={() => navigate(getLanguageAwarePath("/todos"))}
+            onClick={() =>
+              navigate(getLanguageAwarePath(currentLang, "/todos"))
+            }
             className="px-4 py-2 text-sm bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors"
           >
             ← {t("Back to List")}

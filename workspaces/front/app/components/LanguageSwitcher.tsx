@@ -1,12 +1,8 @@
 import { useState, useRef, useEffect } from "react"
 import { useLocation, useNavigate } from "react-router"
 import { useTranslation } from "~/i18n/client"
-import {
-  supportedLanguages,
-  defaultLanguage,
-  type SupportedLanguage,
-  isSupportedLanguage,
-} from "~/i18n/config"
+import { supportedLanguages, type SupportedLanguage } from "~/i18n/config"
+import { getCurrentLanguage } from "~/utils/language"
 
 /**
  * 言語名を表示用に変換する
@@ -29,14 +25,7 @@ export function LanguageSwitcher() {
   const location = useLocation()
   const { changeLanguage } = useTranslation()
 
-  // 現在のパスから言語を検出
-  const getCurrentLanguage = (): SupportedLanguage => {
-    const pathSegments = location.pathname.split("/").filter(Boolean)
-    const langFromPath = pathSegments[0]
-    return isSupportedLanguage(langFromPath) ? langFromPath : defaultLanguage
-  }
-
-  const currentLanguage = getCurrentLanguage()
+  const currentLanguage = getCurrentLanguage(location.pathname)
 
   // 外部クリックでドロップダウンを閉じる
   useEffect(() => {
@@ -57,9 +46,8 @@ export function LanguageSwitcher() {
 
   // 言語切り替え処理
   const handleLanguageSwitch = (newLanguage: SupportedLanguage) => {
-    const currentLang = getCurrentLanguage()
     const newPath = location.pathname.replace(
-      `/${currentLang}`,
+      `/${currentLanguage}`,
       `/${newLanguage}`
     )
 

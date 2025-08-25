@@ -4,11 +4,7 @@ import type { TodoDto } from "~/types/shared"
 import { formatDateTime } from "~/utils/dateFormat"
 import { ActionButton } from "./CircleButton"
 import { useTranslation } from "~/i18n/client"
-import {
-  type SupportedLanguage,
-  isSupportedLanguage,
-  defaultLanguage,
-} from "~/i18n/config"
+import { getCurrentLanguage, getLanguageAwarePath } from "~/utils/language"
 
 /**
  * TodoItemコンポーネントのProps
@@ -30,12 +26,7 @@ export function TodoItem({ todo }: TodoItemProps) {
   const deleteTodo = useDeleteTodo()
   const toggleTodo = useToggleTodo()
 
-  // 現在のパスから言語を検出
-  const getCurrentLanguage = (): SupportedLanguage => {
-    const pathSegments = location.pathname.split("/").filter(Boolean)
-    const langFromPath = pathSegments[0]
-    return isSupportedLanguage(langFromPath) ? langFromPath : defaultLanguage
-  }
+  const currentLang = getCurrentLanguage(location.pathname)
 
   const handleToggleComplete = () => {
     toggleTodo.mutate({ todoId: todo.id, completed: todo.completed })
@@ -48,8 +39,7 @@ export function TodoItem({ todo }: TodoItemProps) {
   }
 
   const handleEdit = () => {
-    const currentLang = getCurrentLanguage()
-    navigate(`/${currentLang}/todos/${todo.id}`)
+    navigate(getLanguageAwarePath(currentLang, `/todos/${todo.id}`))
   }
 
   return (
