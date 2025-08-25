@@ -47,21 +47,21 @@ export class TodoUIヘルパー {
   }
 
   async Todoページへ移動(): Promise<void> {
-    await this.page.goto("/todos");
+    await this.page.goto("/en/todos");
     await this.page.waitForLoadState("networkidle");
   }
 
   async 新規Todoページへ移動(): Promise<void> {
     await expect(this.Todo追加ボタン()).toBeVisible();
     await this.Todo追加ボタン().click();
-    await expect(this.page).toHaveURL(/\/todos\/new/);
+    await expect(this.page).toHaveURL(/\/en\/todos\/new/);
     await this.page.waitForLoadState("networkidle");
   }
 
   async Todo編集ページへ移動(title: string): Promise<void> {
     await expect(this.タイトルでTodo取得(title)).toBeVisible();
     await this.タイトルでTodo取得(title).click();
-    await expect(this.page).toHaveURL(/\/todos\/[a-f0-9-]+/);
+    await expect(this.page).toHaveURL(/\/en\/todos\/[a-f0-9-]+/);
     await this.page.waitForLoadState("networkidle");
   }
 
@@ -87,7 +87,7 @@ export class TodoUIヘルパー {
   async Todo保存(): Promise<void> {
     await expect(this.保存ボタン()).toBeVisible();
     await this.保存ボタン().click();
-    await expect(this.page).toHaveURL("/todos");
+    await expect(this.page).toHaveURL("/en/todos");
     await this.page.waitForLoadState("networkidle");
   }
 
