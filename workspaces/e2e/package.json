@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --fix && prettier --write .",
-    "test": "playwright test --reporter=line"
+    "test": "playwright test --reporter=line",
+    "test-ui": "playwright test --ui"
   },
   "keywordsz": [],
   "author": "",

@@ -36,6 +36,14 @@ iptables -A INPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
 # Allow localhost
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
+# Allow development server port 5173 for Playwright
+iptables -A INPUT -p tcp --sport 5173 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 5173 -j ACCEPT
+# Allow Docker internal networks for container communication
+iptables -A INPUT -s 172.17.0.0/16 -j ACCEPT
+iptables -A OUTPUT -d 172.17.0.0/16 -j ACCEPT
+iptables -A INPUT -s 172.18.0.0/16 -j ACCEPT
+iptables -A OUTPUT -d 172.18.0.0/16 -j ACCEPT
 
 # Create ipset with CIDR support
 ipset create allowed-domains hash:net
@@ -60,7 +68,7 @@ while read -r cidr; do
         exit 1
     fi
     echo "Adding GitHub range $cidr"
-    ipset add allowed-domains "$cidr"
+    ipset add allowed-domains "$cidr" 2>/dev/null || true
 done < <(echo "$gh_ranges" | jq -r '(.web + .api + .git)[]' | aggregate -q)
 
 # Resolve and add other allowed domains
@@ -69,7 +77,10 @@ for domain in \
     "api.anthropic.com" \
     "sentry.io" \
     "statsig.anthropic.com" \
-    "statsig.com"; do
+    "statsig.com" \
+    "observability.mcp.cloudflare.com" \
+    "docs.mcp.cloudflare.com" \
+    "github.com"; do
     echo "Resolving $domain..."
     ips=$(dig +noall +answer A "$domain" | awk '$4 == "A" {print $5}')
     if [ -z "$ips" ]; then
@@ -83,7 +94,7 @@ for domain in \
             exit 1
         fi
         echo "Adding $ip for $domain"
-        ipset add allowed-domains "$ip"
+        ipset add allowed-domains "$ip" 2>/dev/null || true
     done < <(echo "$ips")
 done
 
