@@ -8,10 +8,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 これは、pnpm ワークスペースモノレポを使用したフルスタックCloudflare Todoアプリケーションです：
 
-- **back/**: Cloudflare Workersにデプロイされる Hono ベースのAPIサーバー（詳細は @back/CLAUDE.md を参照）
-- **front/**: Cloudflare Pagesにデプロイされる React Router v7 SSRアプリケーション（詳細は @front/CLAUDE.md を参照）
-- **shared/**: フロントエンドとバックエンド間で共有される型定義
-- **e2e/**: Playwrightを使用したE2Eテスト（詳細は @e2e/CLAUDE.md を参照）
+- **workspaces/back/**: Cloudflare Workersにデプロイされる Hono ベースのAPIサーバー（詳細は @workspaces/back/CLAUDE.md を参照）
+- **workspaces/front/**: Cloudflare Pagesにデプロイされる React Router v7 SSRアプリケーション（詳細は @workspaces/front/CLAUDE.md を参照）
+- **workspaces/e2e/**: Playwrightを使用したE2Eテスト（詳細は @workspaces/e2e/CLAUDE.md を参照）
 
 ## 開発コマンド
 
@@ -38,26 +37,29 @@ pnpm f dev                # フロントエンド開発サーバー起動
 pnpm b test:unit          # バックエンド単体テスト実行
 pnpm b test:api           # API統合テスト実行
 pnpm test:e2e             # E2Eテスト実行（DB/バケットリセット含む）
+
+# 全品質チェック（重要）
+pnpm check-all            # lint + typecheck + 全テスト実行
 ```
 
 ### ワークスペース固有コマンド
 各ワークスペースの詳細なコマンドについては、以下の個別ドキュメントを参照してください：
-- **バックエンド**: @back/CLAUDE.md
-- **フロントエンド**: @front/CLAUDE.md 
-- **E2Eテスト**: @e2e/CLAUDE.md
+- **バックエンド**: @workspaces/back/CLAUDE.md
+- **フロントエンド**: @workspaces/front/CLAUDE.md 
+- **E2Eテスト**: @workspaces/e2e/CLAUDE.md
 
 ## アーキテクチャ概要
 
 ### 全体アーキテクチャ
 このプロジェクトは、Cloudflareプラットフォーム上で動作するフルスタックアプリケーションです。各ワークスペースの詳細なアーキテクチャについては、以下を参照してください：
 
-- **バックエンド**: オニオンアーキテクチャによるHono API（詳細は @back/CLAUDE.md）
-- **フロントエンド**: React Router v7 SSRアプリケーション（詳細は @front/CLAUDE.md）
-- **E2Eテスト**: Playwrightによる統合テスト（詳細は @e2e/CLAUDE.md）
+- **バックエンド**: オニオンアーキテクチャによるHono API（詳細は @workspaces/back/CLAUDE.md）
+- **フロントエンド**: React Router v7 SSRアプリケーション（詳細は @workspaces/front/CLAUDE.md）
+- **E2Eテスト**: Playwrightによる統合テスト（詳細は @workspaces/e2e/CLAUDE.md）
 
 ### 型共有戦略
-- バックエンドルートが`src/presentation/app.ts`から`AppType`をエクスポート
-- `shared/client.ts`がこれを`ClientType`として再エクスポート
+- バックエンドルートが`workspaces/back/src/presentation/app.ts`から`AppType`をエクスポート
+- フロントエンドが`workspaces/front/app/types/shared.ts`で`ClientType = AppType`として型を取得
 - フロントエンドが完全に型付けされたAPIクライアント用に`hc<ClientType>()`を使用
 - これによりバックエンドからフロントエンドへのエンドツーエンドの型安全性を実現
 
@@ -70,15 +72,15 @@ pnpm test:e2e             # E2Eテスト実行（DB/バケットリセット含�
 ## 重要なファイル
 
 ### プロジェクト全体
-- `shared/client.ts` - バックエンドとフロントエンド間の型ブリッジ
-- `**/wrangler.jsonc` - Cloudflare Workers設定
+- `workspaces/front/app/types/shared.ts` - バックエンドとフロントエンド間の型ブリッジ
+- `workspaces/*/wrangler.jsonc` - Cloudflare Workers設定
 - `pnpm-workspace.yaml` - pnpmワークスペース設定
 
 ### ワークスペース固有のファイル
 各ワークスペースの重要なファイルについては、以下の個別ドキュメントを参照してください：
-- **バックエンド**: @back/CLAUDE.md
-- **フロントエンド**: @front/CLAUDE.md 
-- **E2Eテスト**: @e2e/CLAUDE.md
+- **バックエンド**: @workspaces/back/CLAUDE.md
+- **フロントエンド**: @workspaces/front/CLAUDE.md 
+- **E2Eテスト**: @workspaces/e2e/CLAUDE.md
 
 ## 開発ワークフロー
 
@@ -98,9 +100,9 @@ pnpm test:e2e             # E2Eテスト実行（DB/バケットリセット含�
 
 ### ワークスペース固有のワークフロー
 各ワークスペースの詳細なワークフローについては、以下を参照してください：
-- **バックエンド**: @back/CLAUDE.md
-- **フロントエンド**: @front/CLAUDE.md 
-- **E2Eテスト**: @e2e/CLAUDE.md
+- **バックエンド**: @workspaces/back/CLAUDE.md
+- **フロントエンド**: @workspaces/front/CLAUDE.md 
+- **E2Eテスト**: @workspaces/e2e/CLAUDE.md
 
 ## メモリ
 

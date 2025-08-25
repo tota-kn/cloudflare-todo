@@ -1,4 +1,4 @@
-# バックエンド (back/) - CLAUDE.md
+# バックエンド (workspaces/back/) - CLAUDE.md
 
 このファイルはバックエンドワークスペース固有のClaude Codeガイダンスを提供します。
 

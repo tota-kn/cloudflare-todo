@@ -1,4 +1,4 @@
-# E2Eテスト (e2e/) - CLAUDE.md
+# E2Eテスト (workspaces/e2e/) - CLAUDE.md
 
 このファイルはE2Eテストワークスペース固有のClaude Codeガイダンスを提供します。
 

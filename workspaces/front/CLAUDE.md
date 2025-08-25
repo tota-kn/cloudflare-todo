@@ -1,4 +1,4 @@
-# フロントエンド (front/) - CLAUDE.md
+# フロントエンド (workspaces/front/) - CLAUDE.md
 
 このファイルはフロントエンドワークスペース固有のClaude Codeガイダンスを提供します。
 
@@ -83,7 +83,7 @@ pnpm deploy:prd       # ビルドしてproductionにデプロイ
 
 ### 型安全なAPIクライアント
 
-- バックエンドの`AppType`を`shared/client.ts`経由で受け取る
+- バックエンドの`AppType`を`app/types/shared.ts`で`ClientType`として受け取る
 - `hc<ClientType>()`で完全に型付けされたAPIクライアント
 - エンドツーエンドの型安全性を実現
 
