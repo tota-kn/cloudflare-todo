@@ -2,3 +2,4 @@ node_modules
 .serena/cache
 .pnpm-store/
 coverage/
+.claude/settings.local.json
