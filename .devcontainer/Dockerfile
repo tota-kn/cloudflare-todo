@@ -66,6 +66,10 @@ RUN ARCH=$(dpkg --print-architecture) && \
 # Install pnpm globally as root
 RUN npm install -g pnpm@latest
 
+# Install uv (Python package manager) as root
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/root/.local/bin:$PATH"
+
 # Set up npm and pnpm environment variables
 ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
 ENV PATH=$PATH:/usr/local/share/npm-global/bin
@@ -79,8 +83,8 @@ USER node
 ENV SHELL=/bin/zsh
 
 # Set the default editor and visual
-ENV EDITOR nano
-ENV VISUAL nano
+ENV EDITOR=nano
+ENV VISUAL=nano
 
 # Default powerline10k theme
 ARG ZSH_IN_DOCKER_VERSION=1.2.0
@@ -94,10 +98,6 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 
 # Install Claude and Playwright
 RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
-RUN pnpm add -g playwright@latest
-RUN npx playwright install chromium firefox webkit
-RUN npx playwright install-deps
-
 
 # Copy and set up firewall script
 COPY init-firewall.sh /usr/local/bin/

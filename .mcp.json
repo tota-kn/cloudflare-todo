@@ -1,20 +1,20 @@
 {
   "mcpServers": {
-    "playwright": {
+    "cloudflare-observabiliy": {
       "type": "stdio",
       "command": "npx",
       "args": [
-        "@playwright/mcp@latest"
-      ],
-      "env": {}
-    },
-    "cloudflare-observability": {
-      "type": "sse",
-      "url": "https://observability.mcp.cloudflare.com/sse"
+        "mcp-remote",
+        "https://observability.mcp.cloudflare.com/sse"
+      ]
     },
     "cloudflare-docs": {
-      "type": "sse",
-      "url": "https://docs.mcp.cloudflare.com/sse"
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://docs.mcp.cloudflare.com/sse"
+      ]
     },
     "serena": {
       "command": "uvx",

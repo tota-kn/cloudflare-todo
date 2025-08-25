@@ -15,7 +15,6 @@
       "WebFetch"
     ],
     "ask": [
-      "mcp__playwright",
       "macp__cloudflare-observability"
     ],
     "deny": [
