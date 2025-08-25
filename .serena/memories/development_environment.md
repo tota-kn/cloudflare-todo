@@ -1,66 +1,161 @@
-# 開発環境構成
+# 開発環境設定
 
-## 必要な環境
-- **Node.js**: 推奨版（package.jsonのenginesで指定）
-- **pnpm**: パッケージマネージャ（pnpm-lock.yamlを使用）
-- **Playwright**: E2Eテスト用（`pnpx playwright install`で初期化）
+## ランタイム環境
 
-## ローカル開発環境
+### Node.js
+- **バージョン**: v22.14.0（mise.tomlで指定）
+- **パッケージマネージャー**: pnpm
+- **ワークスペース**: pnpm ワークスペース機能を使用
 
-### Cloudflare Workers開発
-- **Wrangler**: Cloudflare公式CLI
-- **ローカル実行**: `wrangler dev -e local`
-- **環境固有設定**: `wrangler.jsonc`で管理
-  - `local`: http://localhost:5173 CORS
-  - `dev`: https://todo-front-dev.omen-bt.workers.dev CORS  
-  - `prd`: https://todo-front-prd.omen-bt.workers.dev CORS
+### パッケージ管理設定
 
-### データベース（D1）
-- **ローカル実行**: `--local`フラグでローカルSQLite使用
-- **マイグレーション**: `migrations/`ディレクトリで管理
-- **テストデータ**: `0002_reset_and_seed_test_data.sql`で初期化
-
-### ストレージ（R2）
-- **バケット初期化**: `back/buckets/init.sh`スクリプト
-- **ローカル開発**: `wrangler dev`でローカルエミュレーション
-
-## IDEサポート
-
-### VS Code設定（.vscode/）
-- **Tailwind CSS IntelliSense**: 有効
-- **TypeScript**: 厳密モード
-- **ESLint**: 自動修正有効
-- **React Router**: ルート補完対応
-
-### 型生成とウォッチ
-```bash
-pnpm b typecheck:watch       # バックエンド型監視
-pnpm f typecheck:watch       # フロントエンド型監視
+#### ルートレベル (package.json)
+```json
+{
+  "name": "cloudflare-todo",
+  "version": "1.0.0",
+  "workspaces": ["front", "back", "e2e"],
+  "scripts": {
+    "b": "pnpm --filter \"back\" run",
+    "f": "pnpm --filter \"front\" run", 
+    "e2e": "pnpm --filter \"e2e\" run",
+    "typecheck": "pnpm b typecheck && pnpm f typecheck",
+    "test:unit": "pnpm -r test:unit",
+    "test:api": "pnpm b test:api",
+    "test:e2e": "pnpm b db:reset && pnpm e2e test",
+    "check-all": "pnpm -r lint && pnpm run typecheck && pnpm test:unit && pnpm test:api && pnpm test:e2e"
+  }
+}
 ```
 
-## テスト環境
+#### ワークスペース設定 (pnpm-workspace.yaml)
+```yaml
+packages:
+  - "workspaces/back"
+  - "workspaces/front"
+  - "workspaces/e2e"
+```
 
-### 単体テスト（Vitest）
-- **設定**: `back/vitest.config.ts`
-- **カバレッジ**: v8プロバイダー使用
-- **対象**: Domain/Application層のみ
+## 開発ツール設定
 
-### API統合テスト（Bruno）
-- **設定**: `back/test/api/`
-- **環境**: local環境で実行
-- **データ**: 実行前にDB/バケットをリセット
+### TypeScript設定
 
-### E2Eテスト（Playwright）
-- **設定**: `e2e/playwright.config.ts`
-- **ブラウザ**: Chromium, Firefox, Webkit対応
-- **UI モード**: `pnpm e2e test:ui`で視覚的テスト
+#### バックエンド (workspaces/back/tsconfig.json)
+```json
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext", 
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "lib": ["ESNext"],
+    "types": ["@cloudflare/workers-types/2023-07-01"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx"
+  }
+}
+```
 
-## 環境変数・設定
-- **Cloudflare環境**: `wrangler.jsonc`で管理
-- **型生成**: 各環境の設定から自動型生成
-- **CORS設定**: 環境別にオリジン制御
+#### フロントエンド (workspaces/front/tsconfig.json)
+- プロジェクトリファレンス使用
+- `tsconfig.node.json`, `tsconfig.cloudflare.json` で環境分離
+- 厳密な型チェック有効
 
-## ホットリロード対応
-- **バックエンド**: Wranglerによるファイル監視・自動再起動
-- **フロントエンド**: Vite によるホットモジュールリプレースメント
-- **並行開発**: 両方のサーバーを同時起動して開発可能
+### コードフォーマット・品質
+
+#### Prettier設定 (.prettierrc)
+```json
+{
+  "semi": false,
+  "singleQuote": false, 
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "useTabs": false
+}
+```
+
+#### ESLint設定
+- バックエンド・フロントエンドで共通のESLint設定
+- TypeScript推奨ルール適用
+- インポートルール、コード品質ルール
+
+### テスト環境
+
+#### 単体テスト
+- **フレームワーク**: Vitest
+- **対象**: バックエンド・フロントエンド両方
+- **カバレッジ**: 自動生成
+
+#### 統合テスト
+- **API テスト**: Bruno
+- **E2E テスト**: Playwright
+
+## Cloudflare 開発環境
+
+### Workers 設定 (wrangler.jsonc)
+```jsonc
+{
+  "name": "todo-back-local",
+  "main": "src/index.ts",
+  "compatibility_date": "2024-01-15",
+  "node_compat": true
+}
+```
+
+### 環境別設定
+- **local**: localhost開発環境
+- **dev**: 開発デプロイ環境
+- **prd**: 本番環境
+
+### データベース・ストレージ
+- **D1**: SQLデータベース、マイグレーション管理
+- **R2**: オブジェクトストレージ、ファイルアップロード
+
+## 開発ワークフロー
+
+### 推奨開発手順
+1. `pnpm install` - 依存関係インストール
+2. `pnpm b dev` & `pnpm f dev` - 両サーバー起動
+3. 開発・変更作業
+4. `pnpm typecheck` - 型チェック
+5. `pnpm -r lint` - リント実行
+6. `pnpm test:unit` - 単体テスト
+7. `pnpm test:api` - APIテスト
+8. `pnpm test:e2e` - E2Eテスト
+
+### 便利コマンド
+```bash
+# ワークスペース横断作業
+pnpm -r [command]        # 全ワークスペースで実行
+pnpm check-all           # 全品質チェック実行
+
+# 個別ワークスペース作業  
+pnpm b [command]         # バックエンドコマンド
+pnpm f [command]         # フロントエンドコマンド
+pnpm e2e [command]       # E2Eテストコマンド
+```
+
+## IDE・エディタ設定
+
+### VS Code設定 (.vscode/)
+- TypeScript設定
+- ESLint・Prettier統合
+- デバッグ設定
+
+### 開発コンテナ (.devcontainer/)
+- 統一開発環境提供
+- 必要ツールプリインストール
+
+## 品質保証体制
+
+### 自動化されたチェック
+1. **型安全性**: TypeScript strict mode
+2. **コード品質**: ESLint + Prettier
+3. **テスト**: 単体・統合・E2E の3層テスト
+4. **CI/CD**: GitHub Actions での自動チェック
+
+### 手動チェックポイント
+- コードレビュー時の設計確認
+- パフォーマンス確認
+- セキュリティ確認
