@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from "react-router"
 import { ActionButton } from "~/components/CircleButton"
+import { LanguageSwitcher } from "~/components/LanguageSwitcher"
 import { useTheme } from "~/contexts/ThemeContext"
 import { useTranslation } from "~/i18n/client"
 import {
@@ -24,26 +25,13 @@ export function PageHeader({
   const navigate = useNavigate()
   const location = useLocation()
   const { theme, toggleTheme } = useTheme()
-  const { t, changeLanguage } = useTranslation()
+  const { t } = useTranslation()
 
   // 現在のパスから言語を検出
   const getCurrentLanguage = (): SupportedLanguage => {
     const pathSegments = location.pathname.split("/").filter(Boolean)
     const langFromPath = pathSegments[0]
     return isSupportedLanguage(langFromPath) ? langFromPath : defaultLanguage
-  }
-
-  // 言語切り替え時のURL変更処理
-  const handleLanguageSwitch = (newLanguage: string) => {
-    const currentLang = getCurrentLanguage()
-    const newPath = location.pathname.replace(
-      `/${currentLang}`,
-      `/${newLanguage}`
-    )
-    if (isSupportedLanguage(newLanguage)) {
-      changeLanguage(newLanguage)
-    }
-    navigate(newPath)
   }
 
   // 現在の言語に基づいたナビゲーション
@@ -60,16 +48,7 @@ export function PageHeader({
       </div>
       <div className="flex items-center space-x-2">
         {/* 言語切り替えボタン */}
-        <button
-          onClick={() =>
-            handleLanguageSwitch(
-              getCurrentLanguage() === defaultLanguage ? "ja" : defaultLanguage
-            )
-          }
-          className="px-3 py-1 text-sm bg-accent text-accent-foreground rounded-md hover:bg-accent/80 transition-colors"
-        >
-          {getCurrentLanguage() === defaultLanguage ? "日本語" : "English"}
-        </button>
+        <LanguageSwitcher />
         <ActionButton
           onClick={toggleTheme}
           variant={theme === "light" ? "theme-light" : "theme-dark"}
