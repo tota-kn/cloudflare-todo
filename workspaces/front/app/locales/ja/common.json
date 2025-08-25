@@ -1,0 +1,16 @@
+{
+  "Todo List": "Todoリスト",
+  "Create New Todo": "新しいTodoを作成",
+  "Edit Todo": "Todoを編集",
+  "Back to List": "リストに戻る",
+  "Cancel": "キャンセル",
+  "Save": "保存",
+  "Saving...": "保存中...",
+  "Are you sure you want to delete this todo?": "このTodoを削除してもよろしいですか？",
+  "Click to edit": "クリックして編集",
+  "Updated": "更新日時",
+  "Created": "作成日時",
+  "Todo title...": "Todoタイトル...",
+  "Add description...": "説明を追加...",
+  "Test": "テスト"
+}

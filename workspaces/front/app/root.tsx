@@ -5,10 +5,12 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
 } from "react-router"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { ThemeProvider } from "./contexts/ThemeContext"
+import { supportedLanguages, defaultLanguage, type SupportedLanguage } from "./i18n/config"
 
 import type { Route } from "./+types/root"
 import "./app.css"
@@ -36,8 +38,19 @@ export const links: Route.LinksFunction = () => [
 ]
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const location = useLocation()
+  
+  // URLパスから言語を検出
+  const getCurrentLanguage = (): SupportedLanguage => {
+    const pathSegments = location.pathname.split("/").filter(Boolean)
+    const langFromPath = pathSegments[0]
+    return supportedLanguages.includes(langFromPath as SupportedLanguage) ? langFromPath as SupportedLanguage : defaultLanguage
+  }
+  
+  const currentLanguage = getCurrentLanguage()
+  
   return (
-    <html lang="en">
+    <html lang={currentLanguage}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

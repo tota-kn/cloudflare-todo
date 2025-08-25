@@ -36,7 +36,7 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <PageHeader
-        title="Todo List"
+        titleKey="Todo List"
         logoUrl={`${loaderData.apiBaseUrl}/v1/assets/logo.png`}
         showNewTodoButton={true}
       />

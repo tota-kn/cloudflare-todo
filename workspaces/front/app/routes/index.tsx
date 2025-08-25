@@ -1,5 +1,6 @@
 import { redirect } from "react-router"
 
 export async function loader() {
-  return redirect("/todos")
+  // デフォルト言語（英語）にリダイレクト
+  return redirect("/en/todos")
 }

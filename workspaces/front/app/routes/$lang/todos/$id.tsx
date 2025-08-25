@@ -1,26 +1,49 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router"
 import { createServerFetcher } from "~/client"
 import { PageHeader } from "~/components/PageHeader"
 import { TodoEditor } from "~/components/TodoEditor"
 import { useUpdateTodo } from "~/hooks/useTodos"
+import { supportedLanguages, type SupportedLanguage } from "~/i18n/config"
+import { initI18nClient, useTranslation } from "~/i18n/client"
+import { redirect } from "react-router"
 import type { Route } from "./+types/$id"
 
+export const links: Route.LinksFunction = () => {
+  // Note: Dynamic params not available in links function,
+  // alternate links will be handled via meta tags instead
+  return []
+}
+
 export function meta({ params }: Route.MetaArgs) {
+  const { lang, id } = params
+  const isJapanese = lang === "ja"
+  
   return [
-    { title: `Edit Todo ${params.id}` },
-    { name: "description", content: "Edit todo item" },
+    { title: isJapanese ? `Todo ${id}を編集` : `Edit Todo ${id}` },
+    { name: "description", content: isJapanese ? "Todoアイテムを編集" : "Edit todo item" },
+    { name: "og:title", content: isJapanese ? `Todo ${id}を編集` : `Edit Todo ${id}` },
+    { name: "og:description", content: isJapanese ? "Todoアイテムを編集" : "Edit todo item" },
+    // Alternate language links for dynamic routes
+    { tagName: "link", rel: "alternate", hrefLang: "en", href: `/en/todos/${id}` },
+    { tagName: "link", rel: "alternate", hrefLang: "ja", href: `/ja/todos/${id}` },
+    { tagName: "link", rel: "alternate", hrefLang: "x-default", href: `/en/todos/${id}` },
   ]
 }
 
 export async function loader({ params, context }: Route.LoaderArgs) {
-  const client = createServerFetcher(context.cloudflare.env)
-  const todoId = params.id
+  const { lang, id: todoId } = params
+  
+  // 言語パラメータの検証
+  if (!lang || !supportedLanguages.includes(lang as any)) {
+    return redirect(`/en/todos/${todoId}`)
+  }
 
   if (!todoId) {
     throw new Error("Todo ID is required")
   }
 
+  const client = createServerFetcher(context.cloudflare.env)
   const req = await client.v1.todos[":todoId"].$get({ param: { todoId } })
   const res = await req.json()
 
@@ -31,17 +54,23 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   return {
     todo: res,
     apiBaseUrl: context.cloudflare.env.API_BASE_URL,
+    language: lang as SupportedLanguage,
   }
 }
 
 export async function action({ params, request, context }: Route.ActionArgs) {
-  const client = createServerFetcher(context.cloudflare.env)
-  const todoId = params.id
+  const { lang, id: todoId } = params
+  
+  // 言語パラメータの検証
+  if (!lang || !supportedLanguages.includes(lang as any)) {
+    return redirect(`/en/todos/${todoId}`)
+  }
 
   if (!todoId) {
     throw new Error("Todo ID is required")
   }
 
+  const client = createServerFetcher(context.cloudflare.env)
   const formData = await request.formData()
   const title = formData.get("title") as string
   const description = formData.get("description") as string
@@ -62,11 +91,17 @@ export async function action({ params, request, context }: Route.ActionArgs) {
 
 export default function TodoEdit({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const updateTodo = useUpdateTodo()
   const [title, setTitle] = useState(loaderData.todo.title)
   const [description, setDescription] = useState(
     loaderData.todo.description || ""
   )
+
+  // クライアントサイドでの言語初期化
+  useEffect(() => {
+    initI18nClient(loaderData.language)
+  }, [loaderData.language])
 
   const handleSave = () => {
     if (title.length > 0) {
@@ -74,7 +109,7 @@ export default function TodoEdit({ loaderData }: Route.ComponentProps) {
         { todoId: loaderData.todo.id, title, description },
         {
           onSuccess: () => {
-            navigate("/todos")
+            navigate(`/${loaderData.language}/todos`)
           },
         }
       )
@@ -84,7 +119,7 @@ export default function TodoEdit({ loaderData }: Route.ComponentProps) {
   const handleCancel = () => {
     setTitle(loaderData.todo.title)
     setDescription(loaderData.todo.description || "")
-    navigate("/todos")
+    navigate(`/${loaderData.language}/todos`)
   }
 
   return (
@@ -113,14 +148,14 @@ export default function TodoEdit({ loaderData }: Route.ComponentProps) {
           onClick={handleCancel}
           className="px-4 py-2 text-sm bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors"
         >
-          Cancel
+          {t("Cancel")}
         </button>
         <button
           onClick={handleSave}
           disabled={title.length === 0 || updateTodo.isPending}
           className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {updateTodo.isPending ? "Saving..." : "Save"}
+          {updateTodo.isPending ? t("Saving...") : t("Save")}
         </button>
       </div>
     </div>

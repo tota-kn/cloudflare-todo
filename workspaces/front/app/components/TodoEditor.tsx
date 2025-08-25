@@ -3,6 +3,7 @@ import { formatDateTime } from "~/utils/dateFormat"
 import type { TodoDto } from "../types/shared"
 import { ActionButton } from "./CircleButton"
 import { TodoInput } from "./TodoInput"
+import { useTranslation } from "~/i18n/client"
 
 interface TodoEditorProps {
   mode: "create" | "edit"
@@ -24,6 +25,7 @@ export function TodoEditor({
   onCancel,
   showTimestamps = false,
 }: TodoEditorProps) {
+  const { t } = useTranslation()
   const [title, setTitle] = useState(initialTitle)
   const [description, setDescription] = useState(initialDescription)
 
@@ -110,12 +112,12 @@ export function TodoEditor({
           {showTimestamps && todo && (
             <div className="text-xs text-muted-foreground text-right">
               {todo.updated_at !== todo.created_at && (
-                <div>{`Updated: ${formatDateTime(todo.updated_at)}`}</div>
+                <div>{`${t("Updated")}: ${formatDateTime(todo.updated_at)}`}</div>
               )}
               <div
                 className={todo.updated_at !== todo.created_at ? "mt-0.5" : ""}
               >
-                {`Created: ${formatDateTime(todo.created_at)}`}
+                {`${t("Created")}: ${formatDateTime(todo.created_at)}`}
               </div>
             </div>
           )}
