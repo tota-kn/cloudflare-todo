@@ -65,6 +65,8 @@ RUN ARCH=$(dpkg --print-architecture) && \
 
 # Install pnpm globally as root
 RUN npm install -g pnpm@latest
+RUN npm install -g playwright@latest
+RUN npx playwright install-deps
 
 # Install uv (Python package manager) as root
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -98,6 +100,7 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 
 # Install Claude and Playwright
 RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
+RUN npx playwright install
 
 # Copy and set up firewall script
 COPY init-firewall.sh /usr/local/bin/
