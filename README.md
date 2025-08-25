@@ -1,7 +1,7 @@
 ## 共通
 
 - [x] CLAUDE.md
-- [ ] DevContainer
+- [x] DevContainer
 - [ ] ログイン機能 OAuth 認証
 
 ## back
