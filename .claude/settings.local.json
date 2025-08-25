@@ -1,0 +1,10 @@
+{
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "playwright",
+    "cloudflare-observability",
+    "cloudflare-docs",
+    "serena",
+    "context7"
+  ]
+}
