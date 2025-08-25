@@ -36,23 +36,12 @@
     "context7"
   ],
   "hooks": {
-    "PostToolUse": [],
     "Stop": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "powershell.exe -command \"Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; New-BurntToastNotification -Text '🛑Stoped'\""
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "powershell.exe -command \"Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; New-BurntToastNotification -Text '❓Asked'\""
+            "command": "echo '✅ 作業完了 - 確認をお願いします'"
           }
         ]
       }
