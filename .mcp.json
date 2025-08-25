@@ -1,13 +1,5 @@
 {
   "mcpServers": {
-    "cloudflare-observabiliy": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://observability.mcp.cloudflare.com/sse"
-      ]
-    },
     "cloudflare-docs": {
       "type": "stdio",
       "command": "npx",
@@ -17,12 +9,15 @@
       ]
     },
     "serena": {
+      "type": "stdio",
       "command": "uvx",
       "args": [
         "--from",
         "git+https://github.com/oraios/serena",
         "serena",
-        "start-mcp-server"
+        "start-mcp-server",
+        "--context",
+        "ide-assistant"
       ]
     },
     "context7": {

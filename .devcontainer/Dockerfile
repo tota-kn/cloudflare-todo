@@ -70,8 +70,7 @@ RUN npm install -g pnpm@latest
 RUN npm install -g playwright@latest
 RUN npx playwright install-deps
 
-# Install uv (Python package manager) and set up package manager environment variables
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+# Set up package manager environment variables
 ENV PATH="/root/.local/bin:$PATH"
 ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
 ENV PNPM_HOME=/usr/local/share/pnpm
@@ -89,6 +88,9 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
   -a "source /usr/share/doc/fzf/examples/completion.zsh" \
   -a "export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
   -x
+
+# Install uv (Python package manager)
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Install Claude and complete Playwright setup
 RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
