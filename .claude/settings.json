@@ -5,8 +5,8 @@
       "Bash(mkdir:*)",
       "Bash(cp:*)",
       "Bash(curl:*)",
-      "Bash(git mv:*)",
-      "Bash(git rm:*)",
+      "Bash(rm:*)",
+      "Bash(mv:*)",
       "Bash(pnpm:*)",
       "mcp__serena",
       "mcp__cloudflare-docs",
@@ -14,13 +14,15 @@
       "WebSearch",
       "WebFetch"
     ],
-    "ask": [
-      "macp__cloudflare-observability"
-    ],
+    "ask": [],
     "deny": [
-      "Bash(rm:*)",
-      "Bash(mv:*)",
-      "Bash(git:*)",
+      "Bash(git reset:*)",
+      "Bash(git rebase:*)",
+      "Bash(git push:*)",
+      "Bash(git branch -D:*)",
+      "Bash(git clean:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
       "Bash(sudo:*)",
       "Bash(wrangler:*)",
       "Bash(pnpx:*)",
