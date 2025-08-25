@@ -11,9 +11,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { ThemeProvider } from "./contexts/ThemeContext"
 import {
-  supportedLanguages,
   defaultLanguage,
   type SupportedLanguage,
+  isSupportedLanguage,
 } from "./i18n/config"
 
 import type { Route } from "./+types/root"
@@ -48,9 +48,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const getCurrentLanguage = (): SupportedLanguage => {
     const pathSegments = location.pathname.split("/").filter(Boolean)
     const langFromPath = pathSegments[0]
-    return supportedLanguages.includes(langFromPath as SupportedLanguage)
-      ? (langFromPath as SupportedLanguage)
-      : defaultLanguage
+    return isSupportedLanguage(langFromPath) ? langFromPath : defaultLanguage
   }
 
   const currentLanguage = getCurrentLanguage()

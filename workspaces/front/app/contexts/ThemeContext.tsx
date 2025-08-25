@@ -4,6 +4,12 @@ import { createContext, useContext, useEffect, useState } from "react"
  * テーマの種類（ライト・ダーク）
  */
 type Theme = "light" | "dark"
+/**
+ * 指定された値がTheme型かどうかをチェックする型ガード関数
+ */
+function isTheme(value: unknown): value is Theme {
+  return value === "light" || value === "dark"
+}
 
 /**
  * テーマコンテキストの型定義
@@ -26,8 +32,8 @@ function getInitialTheme(): Theme {
     return "light"
   }
 
-  const savedTheme = localStorage.getItem("theme") as Theme
-  if (savedTheme && (savedTheme === "light" || savedTheme === "dark")) {
+  const savedTheme = localStorage.getItem("theme")
+  if (isTheme(savedTheme)) {
     return savedTheme
   }
 

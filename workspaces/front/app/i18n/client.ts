@@ -8,6 +8,7 @@ import {
   createI18nInstance,
   type SupportedLanguage,
   defaultLanguage,
+  isSupportedLanguage,
 } from "./config"
 
 let clientI18nInstance: i18n | null = null
@@ -56,6 +57,8 @@ export function useTranslation() {
     i18n,
     isInitialized,
     changeLanguage,
-    currentLanguage: (i18n?.language || defaultLanguage) as SupportedLanguage,
+    currentLanguage: isSupportedLanguage(i18n?.language)
+      ? i18n.language
+      : defaultLanguage,
   }
 }

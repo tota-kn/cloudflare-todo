@@ -5,6 +5,17 @@ export const supportedLanguages = ["en", "ja"] as const
 export const defaultLanguage = "en"
 
 export type SupportedLanguage = (typeof supportedLanguages)[number]
+/**
+ * 指定された値がサポートされている言語かどうかをチェックする型ガード関数
+ */
+export function isSupportedLanguage(
+  value: unknown
+): value is SupportedLanguage {
+  return (
+    typeof value === "string" &&
+    (supportedLanguages as readonly string[]).includes(value)
+  )
+}
 
 export function createI18nInstance(language: string = defaultLanguage) {
   const instance = i18next.createInstance()

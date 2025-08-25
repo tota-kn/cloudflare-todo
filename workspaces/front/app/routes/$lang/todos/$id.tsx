@@ -4,7 +4,7 @@ import { createServerFetcher } from "~/client"
 import { PageHeader } from "~/components/PageHeader"
 import { TodoEditor } from "~/components/TodoEditor"
 import { useUpdateTodo } from "~/hooks/useTodos"
-import { supportedLanguages, type SupportedLanguage } from "~/i18n/config"
+import { isSupportedLanguage } from "~/i18n/config"
 import { initI18nClient, useTranslation } from "~/i18n/client"
 import { redirect } from "react-router"
 import type { Route } from "./+types/$id"
@@ -59,7 +59,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   const { lang, id: todoId } = params
 
   // 言語パラメータの検証
-  if (!lang || !supportedLanguages.includes(lang as SupportedLanguage)) {
+  if (!isSupportedLanguage(lang)) {
     return redirect(`/en/todos/${todoId}`)
   }
 
@@ -78,7 +78,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   return {
     todo: res,
     apiBaseUrl: context.cloudflare.env.API_BASE_URL,
-    language: lang as SupportedLanguage,
+    language: lang,
   }
 }
 
@@ -86,7 +86,7 @@ export async function action({ params, request, context }: Route.ActionArgs) {
   const { lang, id: todoId } = params
 
   // 言語パラメータの検証
-  if (!lang || !supportedLanguages.includes(lang as SupportedLanguage)) {
+  if (!isSupportedLanguage(lang)) {
     return redirect(`/en/todos/${todoId}`)
   }
 
@@ -96,8 +96,8 @@ export async function action({ params, request, context }: Route.ActionArgs) {
 
   const client = createServerFetcher(context.cloudflare.env)
   const formData = await request.formData()
-  const title = formData.get("title") as string
-  const description = formData.get("description") as string
+  const title = String(formData.get("title") ?? "")
+  const description = String(formData.get("description") ?? "")
 
   const req = await client.v1.todos[":todoId"].$put({
     param: { todoId },

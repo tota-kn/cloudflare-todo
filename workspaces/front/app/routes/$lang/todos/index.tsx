@@ -4,7 +4,7 @@ import { LoadingSpinner } from "~/components/LoadingSpinner"
 import { PageHeader } from "~/components/PageHeader"
 import { TodoList } from "~/components/TodoList"
 import { useTodos } from "~/hooks/useTodos"
-import { supportedLanguages, type SupportedLanguage } from "~/i18n/config"
+import { isSupportedLanguage } from "~/i18n/config"
 import { initI18nClient } from "~/i18n/client"
 import { redirect } from "react-router"
 import { useEffect } from "react"
@@ -55,7 +55,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   const { lang } = params
 
   // 言語パラメータの検証
-  if (!lang || !supportedLanguages.includes(lang as SupportedLanguage)) {
+  if (!isSupportedLanguage(lang)) {
     return redirect("/en/todos")
   }
 
@@ -70,7 +70,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   return {
     todos: res.items,
     apiBaseUrl: context.cloudflare.env.API_BASE_URL,
-    language: lang as SupportedLanguage,
+    language: lang,
   }
 }
 

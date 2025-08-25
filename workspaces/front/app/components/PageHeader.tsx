@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from "react-router"
 import { ActionButton } from "~/components/CircleButton"
 import { useTheme } from "~/contexts/ThemeContext"
 import { useTranslation } from "~/i18n/client"
-import { type SupportedLanguage } from "~/i18n/config"
+import { type SupportedLanguage, isSupportedLanguage } from "~/i18n/config"
 
 interface PageHeaderProps {
   titleKey: string
@@ -26,9 +26,7 @@ export function PageHeader({
   const getCurrentLanguage = (): SupportedLanguage => {
     const pathSegments = location.pathname.split("/").filter(Boolean)
     const langFromPath = pathSegments[0]
-    return ["en", "ja"].includes(langFromPath)
-      ? (langFromPath as SupportedLanguage)
-      : "en"
+    return isSupportedLanguage(langFromPath) ? langFromPath : "en"
   }
 
   // 言語切り替え時のURL変更処理
@@ -38,7 +36,9 @@ export function PageHeader({
       `/${currentLang}`,
       `/${newLanguage}`
     )
-    changeLanguage(newLanguage as SupportedLanguage)
+    if (isSupportedLanguage(newLanguage)) {
+      changeLanguage(newLanguage)
+    }
     navigate(newPath)
   }
 
