@@ -1,9 +1,14 @@
 FROM node:22
 
 ARG TZ
-ENV TZ="$TZ"
-
 ARG CLAUDE_CODE_VERSION=latest
+
+# Environment variables
+ENV TZ="$TZ"
+ENV DEVCONTAINER=true
+ENV SHELL=/bin/zsh
+ENV EDITOR=vim
+ENV VISUAL=vim
 
 # Install basic development tools, iptables/ipset, and Playwright dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -48,9 +53,6 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
   && touch /commandhistory/.bash_history \
   && chown -R $USERNAME /commandhistory
 
-# Set `DEVCONTAINER` environment variable to help with orientation
-ENV DEVCONTAINER=true
-
 # Create workspace and config directories and set permissions
 RUN mkdir -p /workspace /home/node/.claude && \
   chown -R node:node /workspace /home/node/.claude
@@ -63,30 +65,20 @@ RUN ARCH=$(dpkg --print-architecture) && \
   sudo dpkg -i "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && \
   rm "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb"
 
-# Install pnpm globally as root
+# Install global packages and Playwright dependencies
 RUN npm install -g pnpm@latest
 RUN npm install -g playwright@latest
 RUN npx playwright install-deps
 
-# Install uv (Python package manager) as root
+# Install uv (Python package manager) and set up package manager environment variables
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/root/.local/bin:$PATH"
-
-# Set up npm and pnpm environment variables
 ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
-ENV PATH=$PATH:/usr/local/share/npm-global/bin
 ENV PNPM_HOME=/usr/local/share/pnpm
-ENV PATH=$PATH:$PNPM_HOME
+ENV PATH=$PATH:/usr/local/share/npm-global/bin:$PNPM_HOME
 
 # Set up non-root user
 USER node
-
-# Set the default shell to zsh rather than sh
-ENV SHELL=/bin/zsh
-
-# Set the default editor and visual
-ENV EDITOR=nano
-ENV VISUAL=nano
 
 # Default powerline10k theme
 ARG ZSH_IN_DOCKER_VERSION=1.2.0
@@ -98,14 +90,6 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
   -a "export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
   -x
 
-# Install Claude and Playwright
+# Install Claude and complete Playwright setup
 RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 RUN npx playwright install
-
-# Copy and set up firewall script
-# COPY init-firewall.sh /usr/local/bin/
-# USER root
-# RUN chmod +x /usr/local/bin/init-firewall.sh && \
-#   echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
-#   chmod 0440 /etc/sudoers.d/node-firewall
-# USER node
