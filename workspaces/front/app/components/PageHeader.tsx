@@ -1,30 +1,39 @@
-import { useNavigate } from "react-router"
+import { useNavigate, useLocation } from "react-router"
 import { ActionButton } from "~/components/CircleButton"
+import { LanguageSwitcher } from "~/components/LanguageSwitcher"
 import { useTheme } from "~/contexts/ThemeContext"
+import { useTranslation } from "~/i18n/client"
+import { getCurrentLanguage, getLanguageAwarePath } from "~/utils/language"
 
 interface PageHeaderProps {
-  title: string
+  titleKey: string
   logoUrl: string
   showNewTodoButton?: boolean
   showBackButton?: boolean
 }
 
 export function PageHeader({
-  title,
+  titleKey,
   logoUrl,
   showNewTodoButton = false,
   showBackButton = false,
 }: PageHeaderProps) {
   const navigate = useNavigate()
+  const location = useLocation()
   const { theme, toggleTheme } = useTheme()
+  const { t } = useTranslation()
+
+  const currentLang = getCurrentLanguage(location.pathname)
 
   return (
     <div className="flex items-center justify-between mb-6">
       <div className="flex items-center gap-3">
-        <img src={logoUrl} alt="Test" className="h-12 object-contain" />
-        <h1 className="text-3xl font-bold text-foreground">{title}</h1>
+        <img src={logoUrl} alt={t("Test")} className="h-12 object-contain" />
+        <h1 className="text-3xl font-bold text-foreground">{t(titleKey)}</h1>
       </div>
       <div className="flex items-center space-x-2">
+        {/* 言語切り替えボタン */}
+        <LanguageSwitcher />
         <ActionButton
           onClick={toggleTheme}
           variant={theme === "light" ? "theme-light" : "theme-dark"}
@@ -32,7 +41,9 @@ export function PageHeader({
         {showNewTodoButton && (
           <div className="p-1">
             <ActionButton
-              onClick={() => navigate("/todos/new")}
+              onClick={() =>
+                navigate(getLanguageAwarePath(currentLang, "/todos/new"))
+              }
               variant="add-cancel"
               showCancel={false}
             />
@@ -40,10 +51,12 @@ export function PageHeader({
         )}
         {showBackButton && (
           <button
-            onClick={() => navigate("/todos")}
+            onClick={() =>
+              navigate(getLanguageAwarePath(currentLang, "/todos"))
+            }
             className="px-4 py-2 text-sm bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors"
           >
-            ← Back to List
+            ← {t("Back to List")}
           </button>
         )}
       </div>

@@ -1,8 +1,10 @@
-import { useNavigate } from "react-router"
+import { useNavigate, useLocation } from "react-router"
 import { useDeleteTodo, useToggleTodo } from "~/hooks/useTodos"
 import type { TodoDto } from "~/types/shared"
 import { formatDateTime } from "~/utils/dateFormat"
 import { ActionButton } from "./CircleButton"
+import { useTranslation } from "~/i18n/client"
+import { getCurrentLanguage, getLanguageAwarePath } from "~/utils/language"
 
 /**
  * TodoItemコンポーネントのProps
@@ -19,21 +21,25 @@ interface TodoItemProps {
  */
 export function TodoItem({ todo }: TodoItemProps) {
   const navigate = useNavigate()
+  const location = useLocation()
+  const { t } = useTranslation()
   const deleteTodo = useDeleteTodo()
   const toggleTodo = useToggleTodo()
+
+  const currentLang = getCurrentLanguage(location.pathname)
 
   const handleToggleComplete = () => {
     toggleTodo.mutate({ todoId: todo.id, completed: todo.completed })
   }
 
   const handleDelete = () => {
-    if (confirm("Are you sure you want to delete this todo?")) {
+    if (confirm(t("Are you sure you want to delete this todo?"))) {
       deleteTodo.mutate(todo.id)
     }
   }
 
   const handleEdit = () => {
-    navigate(`/todos/${todo.id}`)
+    navigate(getLanguageAwarePath(currentLang, `/todos/${todo.id}`))
   }
 
   return (
@@ -42,7 +48,7 @@ export function TodoItem({ todo }: TodoItemProps) {
         todo.completed ? "bg-muted border-border" : "bg-card border-border"
       }`}
       onClick={handleEdit}
-      title="Click to edit"
+      title={t("Click to edit")}
     >
       <div className="flex items-center justify-between">
         <div className="mr-3" onClick={(e) => e.stopPropagation()}>
@@ -78,12 +84,12 @@ export function TodoItem({ todo }: TodoItemProps) {
         <div className="flex items-center space-x-2 ml-3">
           <div className="text-xs text-muted-foreground text-right">
             {todo.updated_at !== todo.created_at && (
-              <div>{`Updated: ${formatDateTime(todo.updated_at)}`}</div>
+              <div>{`${t("Updated")}: ${formatDateTime(todo.updated_at)}`}</div>
             )}
             <div
               className={todo.updated_at !== todo.created_at ? "mt-0.5" : ""}
             >
-              {`Created: ${formatDateTime(todo.created_at)}`}
+              {`${t("Created")}: ${formatDateTime(todo.created_at)}`}
             </div>
           </div>
           <div onClick={(e) => e.stopPropagation()}>

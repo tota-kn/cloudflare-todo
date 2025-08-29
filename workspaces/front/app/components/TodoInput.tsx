@@ -1,4 +1,5 @@
 import React from "react"
+import { useTranslation } from "~/i18n/client"
 
 interface TodoInputProps {
   title: string
@@ -21,10 +22,11 @@ export function TodoInput({
   onDescriptionChange,
   onTitleKeyDown,
   onDescriptionKeyDown,
-  titlePlaceholder = "Todo title...",
-  descriptionPlaceholder = "Add description...",
+  titlePlaceholder,
+  descriptionPlaceholder,
   autoFocusTitle = false,
 }: TodoInputProps) {
+  const { t } = useTranslation()
   const titleInputRef = React.useRef<HTMLInputElement>(null)
   const descriptionTextareaRef = React.useRef<HTMLTextAreaElement>(null)
 
@@ -65,7 +67,7 @@ export function TodoInput({
         onChange={(e) => onTitleChange(e.target.value)}
         onKeyDown={handleTitleKeyDown}
         className="font-semibold bg-transparent border-b border-primary focus:outline-none focus:border-primary w-full text-base"
-        placeholder={titlePlaceholder}
+        placeholder={titlePlaceholder || t("Todo title...")}
         autoFocus={autoFocusTitle}
         data-todo-title
       />
@@ -76,7 +78,7 @@ export function TodoInput({
         onKeyDown={handleDescriptionKeyDown}
         className="mt-1 text-sm bg-transparent focus:outline-none w-full resize-none border-b border-primary focus:border-primary pb-0 leading-tight"
         rows={1}
-        placeholder={descriptionPlaceholder}
+        placeholder={descriptionPlaceholder || t("Add description...")}
         data-todo-description
       />
     </div>
