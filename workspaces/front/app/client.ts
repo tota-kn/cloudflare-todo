@@ -19,7 +19,5 @@ export const createBrowserClient = () => {
     return hc<ClientType>("http://localhost:8787")
   }
 
-  if (window.location.host.includes("dev")) {
-    return hc<ClientType>(`https://api.${window.location.hostname}`)
-  }
+  return hc<ClientType>(`https://api.${window.location.hostname}`)
 }
