@@ -66,8 +66,8 @@ pnpm check-all            # lint + typecheck + 全テスト実行
 ### 環境設定
 両アプリはWranglerを環境固有の設定で使用：
 - **local**: `http://localhost:5173` CORS origin
-- **dev**: `https://todo-front-dev.omen-bt.workers.dev` CORS origin  
-- **prd**: `https://todo-front-prd.omen-bt.workers.dev` CORS origin
+- **dev**: `https://todo.dev.totakn.com` CORS origin  
+- **prd**: `https://todo.totakn.com` CORS origin
 
 ## 重要なファイル
 

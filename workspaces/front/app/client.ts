@@ -12,14 +12,14 @@ export const createServerFetcher = (env: Env) => {
 }
 
 export const createBrowserClient = () => {
-  const baseUrl =
-    typeof window !== "undefined"
-      ? window.location.origin.includes("localhost")
-        ? "http://localhost:8787"
-        : window.location.origin.includes("dev")
-          ? "https://todo-back-dev.omen-bt.workers.dev"
-          : "https://todo-back-prd.omen-bt.workers.dev"
-      : "http://localhost:8787"
+  if (
+    typeof window === "undefined" ||
+    window.location.host.includes("localhost")
+  ) {
+    return hc<ClientType>("http://localhost:8787")
+  }
 
-  return hc<ClientType>(baseUrl)
+  if (window.location.host.includes("dev")) {
+    return hc<ClientType>(`https://api.${window.location.hostname}`)
+  }
 }
