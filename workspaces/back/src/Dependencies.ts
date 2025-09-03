@@ -5,6 +5,7 @@ import { GetTodoUseCase } from "./application/usecases/GetTodoUseCase"
 import { ListTodosUseCase } from "./application/usecases/ListTodosUseCase"
 import { UpdateTodoUseCase } from "./application/usecases/UpdateTodoUseCase"
 import { D1TodoRepository } from "./infrastructure/repositories/D1TodoRepository"
+import { createAuth } from "./utils/auth"
 
 /**
  * アプリケーションの依存関係を管理するDIコンテナ
@@ -18,6 +19,7 @@ export class Dependencies {
   private listTodosUseCase: ListTodosUseCase
   private updateTodoUseCase: UpdateTodoUseCase
   private deleteTodoUseCase: DeleteTodoUseCase
+  private auth: ReturnType<typeof createAuth>
 
   /**
    * Cloudflare環境から必要な依存関係を初期化する
@@ -26,6 +28,7 @@ export class Dependencies {
   constructor(env: CloudflareEnv) {
     this.todoRepository = new D1TodoRepository(env.DB)
     this.BucketRepository = env.STORAGE
+    this.auth = createAuth(env.DB)
     this.createTodoUseCase = new CreateTodoUseCase(this.todoRepository)
     this.getTodoUseCase = new GetTodoUseCase(this.todoRepository)
     this.listTodosUseCase = new ListTodosUseCase(this.todoRepository)
@@ -87,5 +90,13 @@ export class Dependencies {
    */
   getBucketRepository(): R2Bucket {
     return this.BucketRepository
+  }
+
+  /**
+   * 認証インスタンスを取得する
+   * @returns better-authのインスタンス
+   */
+  getAuth(): ReturnType<typeof createAuth> {
+    return this.auth
   }
 }
