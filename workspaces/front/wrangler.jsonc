@@ -25,7 +25,7 @@
       "name": "todo-front-dev",
       "vars": {
         "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare Dev",
-        "API_BASE_URL": "https://todo-back-dev.omen-bt.workers.dev",
+        "API_BASE_URL": "https://api.todo.dev.totakn.com",
         "IS_LOCAL": false,
       },
       "services": [
@@ -34,18 +34,30 @@
           "service": "todo-back-dev",
         },
       ],
+      "routes": [
+        {
+          "pattern": "todo.dev.totakn.com",
+          "custom_domain": true,
+        },
+      ],
     },
     "prd": {
       "name": "todo-front-prd",
       "vars": {
         "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare Production",
-        "API_BASE_URL": "https://todo-back-prd.omen-bt.workers.dev",
+        "API_BASE_URL": "https://api.todo.totakn.com",
         "IS_LOCAL": false,
       },
       "services": [
         {
           "binding": "BACKEND_API",
           "service": "todo-back-prd",
+        },
+      ],
+      "routes": [
+        {
+          "pattern": "todo.totakn.com",
+          "custom_domain": true,
         },
       ],
     },

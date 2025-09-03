@@ -31,7 +31,7 @@
       "name": "todo-back-dev",
       "vars": {
         "STAGE": "dev",
-        "CORS_ORIGIN": "https://todo-front-dev.omen-bt.workers.dev",
+        "CORS_ORIGIN": "https://todo.dev.totakn.com",
       },
       "r2_buckets": [
         {
@@ -46,12 +46,18 @@
           "database_id": "cc062ca7-72e6-47c1-8df6-bac22d30ec67",
         },
       ],
+      "routes": [
+        {
+          "pattern": "api.todo.dev.totakn.com",
+          "custom_domain": true,
+        },
+      ],
     },
     "prd": {
       "name": "todo-back-prd",
       "vars": {
         "STAGE": "prd",
-        "CORS_ORIGIN": "https://todo-front-prd.omen-bt.workers.dev",
+        "CORS_ORIGIN": "https://todo.totakn.com",
       },
       "r2_buckets": [
         {
@@ -64,6 +70,12 @@
           "binding": "DB",
           "database_name": "todo-app-db-prd",
           "database_id": "9aad595b-0429-4b5d-8051-7f28a31b17ca",
+        },
+      ],
+      "routes": [
+        {
+          "pattern": "api.todo.totakn.com",
+          "custom_domain": true,
         },
       ],
     },
