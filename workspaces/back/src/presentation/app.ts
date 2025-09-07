@@ -1,6 +1,7 @@
 import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { Dependencies } from "../Dependencies"
+import { testGet } from "./api/test/get"
 import { v1AssetsFilenameGet } from "./api/v1/assets/_filename/get"
 import { v1TodosTodoIdDelete } from "./api/v1/todos/_todoId/delete"
 import { v1TodosTodoIdGet } from "./api/v1/todos/_todoId/get"
@@ -20,9 +21,7 @@ export function createApp(env: CloudflareEnv) {
         allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       })
     )
-    .get("/v1", (c) =>
-      c.json({ message: `${c.env.STAGE}: Hello from Cloudflare Workers!` })
-    )
+    .route("", testGet())
     .route("", v1AssetsFilenameGet(dependencies))
     .route("", v1TodosGet(dependencies))
     .route("", v1TodosPost(dependencies))
