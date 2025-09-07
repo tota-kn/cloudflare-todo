@@ -29,7 +29,7 @@ export const useTodos = (initialData?: TodoDto[]) => {
 
       return data.items
     },
-    initialData,
+    placeholderData: initialData,
     staleTime: 5 * 60 * 1000, // 5分間はキャッシュを新鮮とみなす
     gcTime: 10 * 60 * 1000, // 10分間はキャッシュを保持
   })
