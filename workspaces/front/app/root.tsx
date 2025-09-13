@@ -1,3 +1,5 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import {
   isRouteErrorResponse,
   Links,
@@ -7,13 +9,11 @@ import {
   ScrollRestoration,
   useLocation,
 } from "react-router"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { ThemeProvider } from "./contexts/ThemeContext"
 import {
   defaultLanguage,
-  type SupportedLanguage,
   isSupportedLanguage,
+  type SupportedLanguage,
 } from "./i18n/config"
 
 import type { Route } from "./+types/root"
@@ -58,6 +58,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="google-adsense-account" content="ca-pub-3508964772491118" />
         <Meta />
         <Links />
         <script
