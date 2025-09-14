@@ -34,19 +34,34 @@ export function PageHeader({
         <h1 className="text-3xl font-bold text-foreground">{t(titleKey)}</h1>
       </div>
       <div className="flex items-center space-x-2">
-        {/* ユーザー名表示（ログイン時のみ） */}
-        {session?.user && (
+        {/* ユーザー情報表示 */}
+        {session?.user ? (
           <div className="flex items-center space-x-2 px-3 py-1 bg-secondary/50 rounded-md">
             <span className="text-sm text-foreground font-medium">
               {session.user.name || session.user.email}
             </span>
             <button
-              onClick={() => signOut()}
+              onClick={async () => {
+                await signOut({
+                  fetchOptions: {
+                    onSuccess: () => {
+                      navigate(getLanguageAwarePath(currentLang, "/signin"))
+                    },
+                  },
+                })
+              }}
               className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded hover:bg-secondary"
             >
               {t("Sign Out")}
             </button>
           </div>
+        ) : (
+          <button
+            onClick={() => navigate(getLanguageAwarePath(currentLang, "/signin"))}
+            className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+          >
+            {t("Sign In")}
+          </button>
         )}
         {/* 言語切り替えボタン */}
         <LanguageSwitcher />

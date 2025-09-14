@@ -9,7 +9,7 @@ export const auth = (env: CloudflareEnv) => {
     database: drizzleAdapter(db, {
       provider: "sqlite",
     }),
-    trustedOrigins: ["http://localhost:8787"],
+    trustedOrigins: ["http://localhost:8787", "http://localhost:5173"],
     emailAndPassword: {
       enabled: true,
       // async sendResetPassword(data, request) {
