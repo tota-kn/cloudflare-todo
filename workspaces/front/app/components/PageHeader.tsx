@@ -4,6 +4,7 @@ import { LanguageSwitcher } from "~/components/LanguageSwitcher"
 import { useTheme } from "~/contexts/ThemeContext"
 import { useTranslation } from "~/i18n/client"
 import { getCurrentLanguage, getLanguageAwarePath } from "~/utils/language"
+import { useSession, signOut } from "~/utils/auth-client"
 
 interface PageHeaderProps {
   titleKey: string
@@ -22,6 +23,7 @@ export function PageHeader({
   const location = useLocation()
   const { theme, toggleTheme } = useTheme()
   const { t } = useTranslation()
+  const { data: session } = useSession()
 
   const currentLang = getCurrentLanguage(location.pathname)
 
@@ -32,6 +34,20 @@ export function PageHeader({
         <h1 className="text-3xl font-bold text-foreground">{t(titleKey)}</h1>
       </div>
       <div className="flex items-center space-x-2">
+        {/* ユーザー名表示（ログイン時のみ） */}
+        {session?.user && (
+          <div className="flex items-center space-x-2 px-3 py-1 bg-secondary/50 rounded-md">
+            <span className="text-sm text-foreground font-medium">
+              {session.user.name || session.user.email}
+            </span>
+            <button
+              onClick={() => signOut()}
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded hover:bg-secondary"
+            >
+              {t("Sign Out")}
+            </button>
+          </div>
+        )}
         {/* 言語切り替えボタン */}
         <LanguageSwitcher />
         <ActionButton

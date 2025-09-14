@@ -21,5 +21,14 @@ export const auth = (env: CloudflareEnv) => {
         clientSecret: env.GOOGLE_CLIENT_SECRET,
       },
     },
+    session: {
+      expiresIn: 60 * 60 * 24 * 7, // 7日間
+      updateAge: 60 * 60 * 24, // 24時間後に更新
+      cookieCache: {
+        expiresIn: 60 * 60 * 24 * 7, // 7日間
+        updateAge: 60 * 60 * 24, // 24時間後に更新
+        maxAge: 60 * 60 * 24, // 24時間
+      },
+    },
   })
 }
