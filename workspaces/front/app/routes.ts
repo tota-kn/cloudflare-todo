@@ -9,6 +9,8 @@ export default [
   route("/:lang/todos", "routes/$lang/todos/index.tsx"),
   route("/:lang/todos/new", "routes/$lang/todos/new.tsx"),
   route("/:lang/todos/:id", "routes/$lang/todos/$id.tsx"),
+  route("/:lang/sign-in", "routes/sign-in.tsx"),
+  route("/:lang/sign-up", "routes/sign-up.tsx"),
 
   // Chrome DevToolsが自動的にリクエストしてエラーログが出てくるため抑制
   route(

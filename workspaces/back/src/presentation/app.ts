@@ -20,6 +20,9 @@ export function createApp(env: CloudflareEnv) {
         origin: (_, c) => c.env.CORS_ORIGIN,
         allowHeaders: ["Content-Type", "Authorization"],
         allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        exposeHeaders: ["Content-Length"],
+        maxAge: 600,
+        credentials: true,
       })
     )
     .route("", testGet())
@@ -29,9 +32,7 @@ export function createApp(env: CloudflareEnv) {
     .route("", v1TodosTodoIdGet(dependencies))
     .route("", v1TodosTodoIdPut(dependencies))
     .route("", v1TodosTodoIdDelete(dependencies))
-    .on(["POST", "GET"], "/api/auth/*", (c) =>
-      auth(c.env.DB).handler(c.req.raw)
-    )
+    .on(["POST", "GET"], "/api/auth/*", (c) => auth(c.env).handler(c.req.raw))
 }
 
 export type AppType = ReturnType<typeof createApp>
