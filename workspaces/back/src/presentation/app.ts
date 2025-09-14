@@ -1,6 +1,7 @@
 import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { Dependencies } from "../Dependencies"
+import { auth } from "../utils/auth"
 import { testGet } from "./api/test/get"
 import { v1AssetsFilenameGet } from "./api/v1/assets/_filename/get"
 import { v1TodosTodoIdDelete } from "./api/v1/todos/_todoId/delete"
@@ -28,6 +29,9 @@ export function createApp(env: CloudflareEnv) {
     .route("", v1TodosTodoIdGet(dependencies))
     .route("", v1TodosTodoIdPut(dependencies))
     .route("", v1TodosTodoIdDelete(dependencies))
+    .on(["POST", "GET"], "/api/auth/*", (c) =>
+      auth(c.env.DB).handler(c.req.raw)
+    )
 }
 
 export type AppType = ReturnType<typeof createApp>
