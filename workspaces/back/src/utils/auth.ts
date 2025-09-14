@@ -6,10 +6,16 @@ export const auth = (db: D1Database) =>
     database: drizzleAdapter(db, {
       provider: "sqlite" as const,
     }),
+    emailAndPassword: {
+      enabled: true,
+      // async sendResetPassword(data, request) {
+      //   // Send an email to the user with a link to reset their password
+      // },
+    },
     socialProviders: {
-      github: {
-        clientId: process.env.GITHUB_CLIENT_ID as string,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID!,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       },
     },
   })
