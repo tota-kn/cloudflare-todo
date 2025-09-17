@@ -9,13 +9,11 @@ export const auth = (env: CloudflareEnv) => {
     database: drizzleAdapter(db, {
       provider: "sqlite",
     }),
-    trustedOrigins: ["http://localhost:8787", "http://localhost:5173"],
-    emailAndPassword: {
-      enabled: true,
-      // async sendResetPassword(data, request) {
-      //   // Send an email to the user with a link to reset their password
-      // },
-    },
+    trustedOrigins: [
+      "http://localhost:5173",
+      "https://todo.dev.totakn.com",
+      "https://todo.totakn.com",
+    ],
     socialProviders: {
       google: {
         clientId: env.GOOGLE_CLIENT_ID,
