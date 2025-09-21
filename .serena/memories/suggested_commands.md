@@ -3,9 +3,10 @@
 ## 日常的な開発コマンド
 
 ### 開発サーバー起動
+
 ```bash
 # バックエンド開発サーバー（推奨：別ターミナル）
-pnpm b dev              # localhost:8787 で起動
+pnpm b dev              # 127.0.0.1:8787 で起動
 
 # フロントエンド開発サーバー（推奨：別ターミナル）
 pnpm f dev              # localhost:5173 で起動
@@ -15,6 +16,7 @@ pnpm b dev & pnpm f dev
 ```
 
 ### 型チェック・リント
+
 ```bash
 # 全体の型チェック（最重要）
 pnpm typecheck          # back + front の型チェック
@@ -32,6 +34,7 @@ pnpm f lint             # フロントエンドのみ
 ## テスト実行コマンド
 
 ### 単体テスト
+
 ```bash
 # 全単体テスト実行
 pnpm test:unit          # back + front の単体テスト
@@ -45,7 +48,8 @@ pnpm b test:unit:watch  # バックエンドテストをウォッチ
 pnpm f test:unit:watch  # フロントエンドテストをウォッチ
 ```
 
-### 統合・E2Eテスト
+### 統合・E2E テスト
+
 ```bash
 # API統合テスト（Bruno）
 pnpm test:api           # pnpm b test:api と同じ
@@ -61,6 +65,7 @@ pnpm e2e test:ui        # Playwright UI モード
 ## データベース・ストレージ操作
 
 ### データベース管理
+
 ```bash
 # マイグレーション適用
 pnpm b db:migrate       # D1マイグレーション実行
@@ -73,6 +78,7 @@ pnpm b db:create-migration "add_new_table"
 ```
 
 ### ストレージ管理
+
 ```bash
 # R2バケットリセット
 pnpm b bucket:reset     # ローカルバケットをリセット
@@ -81,6 +87,7 @@ pnpm b bucket:reset     # ローカルバケットをリセット
 ## 品質チェック・デプロイ
 
 ### 全体品質チェック（重要）
+
 ```bash
 # 全品質チェック実行（CI相当）
 pnpm check-all          # lint + typecheck + unit + api + e2e
@@ -92,6 +99,7 @@ pnpm test:e2e                         # E2Eテスト
 ```
 
 ### デプロイ
+
 ```bash
 # 開発環境デプロイ
 pnpm b deploy:dev       # バックエンドdev環境
@@ -106,9 +114,10 @@ pnpm f build            # フロントエンドビルド
 pnpm f preview          # ビルド成果物プレビュー
 ```
 
-## Cloudflare固有コマンド
+## Cloudflare 固有コマンド
 
 ### 型生成
+
 ```bash
 # Cloudflare環境の型生成
 pnpm b typegen          # Workers型生成
@@ -116,6 +125,7 @@ pnpm f typegen          # Pages型生成
 ```
 
 ### ローカル環境管理
+
 ```bash
 # Wrangler情報確認
 pnpm b wrangler --help  # Wranglerコマンド一覧
@@ -128,6 +138,7 @@ pnpm b wrangler secret list     # Workers環境変数
 ## 開発ワークフロー推奨コマンド
 
 ### 作業開始時
+
 ```bash
 # 1. 依存関係更新確認
 pnpm install
@@ -141,6 +152,7 @@ pnpm typecheck
 ```
 
 ### 機能開発中
+
 ```bash
 # 継続的な型チェック
 pnpm typecheck          # 変更後に実行
@@ -151,6 +163,7 @@ pnpm f test:unit:watch  # フロントエンドテストウォッチ
 ```
 
 ### コミット前チェック
+
 ```bash
 # 必須チェックリスト
 pnpm typecheck          # 1. 型エラーがないか
@@ -163,6 +176,7 @@ pnpm test:e2e           # 5. E2Eテストが通るか
 ```
 
 ### 完全チェック（リリース前）
+
 ```bash
 # 全品質チェック実行
 pnpm check-all          # 全チェック実行
@@ -178,6 +192,7 @@ pnpm test:e2e           # E2Eテスト確認
 ## トラブルシューティングコマンド
 
 ### キャッシュクリア
+
 ```bash
 # node_modules 再インストール
 rm -rf node_modules && pnpm install
@@ -190,6 +205,7 @@ pnpm f build --clean
 ```
 
 ### ログ・デバッグ
+
 ```bash
 # 詳細ログ出力
 pnpm b dev --verbose    # バックエンド詳細ログ
@@ -201,10 +217,11 @@ pnpm e2e test --debug                 # E2Eテストデバッグ
 ```
 
 ### 依存関係確認
+
 ```bash
 # 依存関係ツリー
 pnpm list               # ルートレベル依存関係
-pnpm b list             # バックエンド依存関係  
+pnpm b list             # バックエンド依存関係
 pnpm f list             # フロントエンド依存関係
 
 # 古い依存関係チェック
@@ -214,6 +231,7 @@ pnpm outdated           # 更新可能パッケージ確認
 ## パフォーマンス分析コマンド
 
 ### ビルド分析
+
 ```bash
 # バンドルサイズ分析
 pnpm f build --analyze  # webpack-bundle-analyzer相当
@@ -223,6 +241,7 @@ time pnpm f build       # ビルド時間測定
 ```
 
 ### テスト分析
+
 ```bash
 # テストカバレッジ
 pnpm b test:unit --coverage    # バックエンドカバレッジ

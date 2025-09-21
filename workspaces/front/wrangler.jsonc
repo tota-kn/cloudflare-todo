@@ -12,7 +12,7 @@
       "vars": {
         "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare Local",
         "API_BASE_URL": "http://127.0.0.1:8787",
-        "IS_LOCAL": true,
+        "STAGE": "local",
       },
       "services": [
         {
@@ -26,7 +26,7 @@
       "vars": {
         "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare Dev",
         "API_BASE_URL": "https://api.todo.dev.totakn.com",
-        "IS_LOCAL": false,
+        "STAGE": "dev",
       },
       "services": [
         {
@@ -46,7 +46,7 @@
       "vars": {
         "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare Production",
         "API_BASE_URL": "https://api.todo.totakn.com",
-        "IS_LOCAL": false,
+        "STAGE": "prd",
       },
       "services": [
         {
