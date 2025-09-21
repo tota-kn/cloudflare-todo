@@ -38,3 +38,14 @@
 2. pnpx playwright install
 3. Run Task: dev
 4. pnpm all-check
+
+## 環境変数の設定
+
+`touch workspaces/back/.dev.vars`
+
+```
+BETTER_AUTH_SECRET=""
+BETTER_AUTH_URL=""
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+```
