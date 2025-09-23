@@ -9,6 +9,8 @@ export const createServerFetcher = (env: Env) => {
     return hc<ClientType>("http://example/", {
       fetch: env.BACKEND_API.fetch.bind(env.BACKEND_API),
     })
+  } else {
+    throw new Error("Unknown environment")
   }
 }
 
