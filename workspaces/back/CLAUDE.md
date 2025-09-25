@@ -34,7 +34,7 @@
 ### 開発サーバー
 
 ```bash
-pnpm dev              # local envで127.0.0.1:8787で実行
+pnpm dev              # local envでlocalhost:8787で実行
 ```
 
 ### 型生成とチェック

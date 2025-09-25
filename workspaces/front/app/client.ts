@@ -16,7 +16,7 @@ export const createServerFetcher = (env: Env) => {
 
 export const createBrowserClient = () => {
   if (isLocal()) {
-    return hc<ClientType>("http://127.0.0.1:8787")
+    return hc<ClientType>("http://localhost:8787")
   } else if (isDev()) {
     return hc<ClientType>("https://api.dev.totakn.com")
   } else if (isPrd()) {

@@ -6,7 +6,7 @@
 
 ```bash
 # バックエンド開発サーバー（推奨：別ターミナル）
-pnpm b dev              # 127.0.0.1:8787 で起動
+pnpm b dev              # localhost:8787 で起動
 
 # フロントエンド開発サーバー（推奨：別ターミナル）
 pnpm f dev              # localhost:5173 で起動
