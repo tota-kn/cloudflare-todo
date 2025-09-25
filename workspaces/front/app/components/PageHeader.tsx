@@ -1,11 +1,12 @@
-import { useNavigate, useLocation } from "react-router"
 import { useState } from "react"
+import { useLocation, useNavigate } from "react-router"
 import { ActionButton } from "~/components/CircleButton"
 import { LanguageSwitcher } from "~/components/LanguageSwitcher"
 import { useTheme } from "~/contexts/ThemeContext"
 import { useTranslation } from "~/i18n/client"
+import { signIn, signOut, useSession } from "~/utils/auth-client"
+import { getFrontUrl } from "~/utils/env"
 import { getCurrentLanguage, getLanguageAwarePath } from "~/utils/language"
-import { useSession, signOut, signIn } from "~/utils/auth-client"
 
 interface PageHeaderProps {
   titleKey: string
@@ -64,7 +65,7 @@ export function PageHeader({
               await signIn.social(
                 {
                   provider: "google",
-                  callbackURL: "http://localhost:5173/",
+                  callbackURL: getFrontUrl(),
                 },
                 {
                   onRequest: () => {

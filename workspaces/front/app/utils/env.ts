@@ -84,3 +84,21 @@ export function getApiUrl(env?: Env): string {
       return "https://api.todo.totakn.com"
   }
 }
+
+/**
+ * 環境に応じたAPI URLを取得
+ * @param env サーバーサイドの環境オブジェクト（オプション）
+ * @returns API URL
+ */
+export function getFrontUrl(env?: Env): string {
+  const stage = getStage(env)
+
+  switch (stage) {
+    case "local":
+      return "http://localhost:5173"
+    case "dev":
+      return "https://todo.dev.totakn.com"
+    case "prd":
+      return "https://todo.totakn.com"
+  }
+}
