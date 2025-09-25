@@ -49,3 +49,9 @@ BETTER_AUTH_URL=""
 GOOGLE_CLIENT_ID=""
 GOOGLE_CLIENT_SECRET=""
 ```
+
+## TODO
+
+- [ ] ログインユーザごとにタスクの出し分け
+- [ ] ダークモードちらつきの解消
+- [ ] 言語の自動検知
