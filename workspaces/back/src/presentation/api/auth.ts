@@ -1,5 +1,5 @@
 import { Hono } from "hono"
-import { auth } from "../../../utils/auth"
+import { auth } from "../../utils/auth"
 
 /**
  * 認証関連のルートを処理するHonoアプリケーション
