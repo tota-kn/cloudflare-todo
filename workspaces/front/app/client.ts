@@ -1,6 +1,6 @@
 import { hc } from "hono/client"
 import type { ClientType } from "./types/shared"
-import { isDev, isLocal, isPrd } from "./utils/env"
+import { getApiUrl, isDev, isLocal, isPrd } from "./utils/env"
 
 export const createServerFetcher = (env: Env) => {
   if (isLocal(env)) {
@@ -14,14 +14,4 @@ export const createServerFetcher = (env: Env) => {
   }
 }
 
-export const createBrowserClient = () => {
-  if (isLocal()) {
-    return hc<ClientType>("http://localhost:8787")
-  } else if (isDev()) {
-    return hc<ClientType>("https://api.todo.dev.totakn.com")
-  } else if (isPrd()) {
-    return hc<ClientType>("https://api.todo.totakn.com")
-  }
-
-  throw new Error("Unknown environment")
-}
+export const createBrowserClient = () => hc<ClientType>(getApiUrl())

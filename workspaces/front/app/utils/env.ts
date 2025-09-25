@@ -66,3 +66,21 @@ export function getStage(env?: Env) {
 
   throw new Error("Unknown stage")
 }
+
+/**
+ * 環境に応じたAPI URLを取得
+ * @param env サーバーサイドの環境オブジェクト（オプション）
+ * @returns API URL
+ */
+export function getApiUrl(env?: Env): string {
+  const stage = getStage(env)
+
+  switch (stage) {
+    case "local":
+      return "http://localhost:8787"
+    case "dev":
+      return "https://api.todo.dev.totakn.com"
+    case "prd":
+      return "https://api.todo.totakn.com"
+  }
+}
