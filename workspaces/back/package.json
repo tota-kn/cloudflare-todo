@@ -11,7 +11,7 @@
     "test:unit:watch": "vitest --coverage",
     "test:api": "pnpm bucket:reset && pnpm db:reset && cd test/api && bru run --env local",
     "db:migrate": "wrangler d1 migrations apply todo-app-db-local --local -e local",
-    "db:reset": "wrangler d1 execute todo-app-db-local --local -e local --file ./migrations/0002_reset_and_seed_test_data.sql",
+    "db:reset": "wrangler d1 execute todo-app-db-local --local -e local --file ./migrations/0002_seed_test_data.sql",
     "bucket:reset": "cd buckets && ./init.sh",
     "deploy:dev": "wrangler deploy --minify -e dev",
     "deploy:prd": "wrangler deploy --minify -e prd"
