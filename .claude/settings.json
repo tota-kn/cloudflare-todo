@@ -21,11 +21,8 @@
     "deny": [
       "Bash(git reset:*)",
       "Bash(git rebase:*)",
-      "Bash(git push:*)",
       "Bash(git branch -D:*)",
       "Bash(git clean:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
       "Bash(sudo:*)",
       "Bash(wrangler:*)",
       "Bash(pnpx:*)",
@@ -33,7 +30,10 @@
       "Read(.env.*)"
     ],
     "ask": [
-      "Bash(gh:*)"
+      "Bash(gh:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   },
   "enabledMcpjsonServers": [
