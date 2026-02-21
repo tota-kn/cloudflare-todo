@@ -29,7 +29,12 @@ export class CreateTodoUseCase {
    */
   async execute(request: CreateTodoRequest): Promise<TodoDto> {
     const id = new TodoId(crypto.randomUUID())
-    const todo = Todo.create(id, request.userId, request.title, request.description)
+    const todo = Todo.create(
+      id,
+      request.userId,
+      request.title,
+      request.description
+    )
 
     await this.todoRepository.save(todo)
 
