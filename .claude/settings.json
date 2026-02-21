@@ -32,7 +32,9 @@
       "Bash(pnpm exec:*)",
       "Read(.env.*)"
     ],
-    "ask": []
+    "ask": [
+      "Bash(gh:*)"
+    ]
   },
   "enabledMcpjsonServers": [
     "playwright",
