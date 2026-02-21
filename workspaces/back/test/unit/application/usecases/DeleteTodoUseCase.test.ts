@@ -3,6 +3,9 @@ import { DeleteTodoUseCase } from "../../../../src/application/usecases/DeleteTo
 import { MockTodoRepository } from "../../mocks/MockTodoRepository"
 import { TestFactory } from "../../mocks/TestFactory"
 
+const TEST_USER_ID = TestFactory.DEFAULT_USER_ID
+const OTHER_USER_ID = "other-user-002"
+
 describe("DeleteTodoUseCase", () => {
   let useCase: DeleteTodoUseCase
   let mockRepository: MockTodoRepository
@@ -26,7 +29,7 @@ describe("DeleteTodoUseCase", () => {
       expect(mockRepository.has(todoId)).toBe(true)
       expect(mockRepository.size()).toBe(1)
 
-      const result = await useCase.execute(todoId.getValue())
+      const result = await useCase.execute(todoId.getValue(), TEST_USER_ID)
 
       expect(result).toBe(true)
       // 削除後の状態確認
@@ -45,7 +48,7 @@ describe("DeleteTodoUseCase", () => {
 
       expect(mockRepository.has(todoId)).toBe(true)
 
-      const result = await useCase.execute(todoId.getValue())
+      const result = await useCase.execute(todoId.getValue(), TEST_USER_ID)
 
       expect(result).toBe(true)
       expect(mockRepository.has(todoId)).toBe(false)
@@ -54,7 +57,7 @@ describe("DeleteTodoUseCase", () => {
     it("存在しないTodoに対してfalseを返す", async () => {
       const nonExistentId = "non-existent-id"
 
-      const result = await useCase.execute(nonExistentId)
+      const result = await useCase.execute(nonExistentId, TEST_USER_ID)
 
       expect(result).toBe(false)
       expect(mockRepository.size()).toBe(0)
@@ -75,7 +78,7 @@ describe("DeleteTodoUseCase", () => {
 
       expect(mockRepository.size()).toBe(3)
 
-      const result = await useCase.execute(todoId2.getValue())
+      const result = await useCase.execute(todoId2.getValue(), TEST_USER_ID)
 
       expect(result).toBe(true)
       expect(mockRepository.size()).toBe(2)
@@ -85,7 +88,7 @@ describe("DeleteTodoUseCase", () => {
     })
 
     it("無効なTodoId文字列でエラーを投げる", async () => {
-      await expect(useCase.execute("")).rejects.toThrow(
+      await expect(useCase.execute("", TEST_USER_ID)).rejects.toThrow(
         "TodoId cannot be empty"
       )
     })
@@ -99,12 +102,15 @@ describe("DeleteTodoUseCase", () => {
       await mockRepository.save(todo)
 
       // 一回目の削除
-      const firstResult = await useCase.execute(todoId.getValue())
+      const firstResult = await useCase.execute(todoId.getValue(), TEST_USER_ID)
       expect(firstResult).toBe(true)
       expect(mockRepository.has(todoId)).toBe(false)
 
       // 二回目の削除
-      const secondResult = await useCase.execute(todoId.getValue())
+      const secondResult = await useCase.execute(
+        todoId.getValue(),
+        TEST_USER_ID
+      )
       expect(secondResult).toBe(false)
       expect(mockRepository.size()).toBe(0)
     })
@@ -120,11 +126,11 @@ describe("DeleteTodoUseCase", () => {
       await mockRepository.save(todo2)
 
       // todo1を削除
-      await useCase.execute(todoId1.getValue())
+      await useCase.execute(todoId1.getValue(), TEST_USER_ID)
 
       // findById で確認
-      const remaining = await mockRepository.findById(todoId1)
-      const stillExists = await mockRepository.findById(todoId2)
+      const remaining = await mockRepository.findById(todoId1, TEST_USER_ID)
+      const stillExists = await mockRepository.findById(todoId2, TEST_USER_ID)
 
       expect(remaining).toBeNull()
       expect(stillExists).not.toBeNull()
@@ -151,11 +157,30 @@ describe("DeleteTodoUseCase", () => {
       // 中間のTodoを削除
       const targetIndex = 25
       const targetTodo = todos[targetIndex]
-      const result = await useCase.execute(targetTodo.getId().getValue())
+      const result = await useCase.execute(
+        targetTodo.getId().getValue(),
+        TEST_USER_ID
+      )
 
       expect(result).toBe(true)
       expect(mockRepository.size()).toBe(todoCount - 1)
       expect(mockRepository.has(targetTodo.getId())).toBe(false)
+    })
+
+    it("他のユーザーのTodoは削除できない", async () => {
+      const todoId = TestFactory.createTodoId("other-user-todo")
+      const todo = TestFactory.createTodo({
+        id: todoId,
+        userId: OTHER_USER_ID,
+        title: "他ユーザーのタスク",
+      })
+      await mockRepository.save(todo)
+
+      const result = await useCase.execute(todoId.getValue(), TEST_USER_ID)
+
+      expect(result).toBe(false)
+      // 元のTodoはまだ存在する
+      expect(mockRepository.has(todoId)).toBe(true)
     })
   })
 })

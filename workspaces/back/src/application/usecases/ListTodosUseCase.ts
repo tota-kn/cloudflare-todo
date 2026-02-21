@@ -9,11 +9,12 @@ export class ListTodosUseCase {
   constructor(private readonly todoRepository: ITodoRepository) {}
 
   /**
-   * 全てのTodoを取得する
+   * 指定ユーザーの全Todoを取得する
+   * @param userId ユーザーID
    * @returns TodoのDTO配列
    */
-  async execute(): Promise<TodoDto[]> {
-    const todos = await this.todoRepository.findAll()
+  async execute(userId: string): Promise<TodoDto[]> {
+    const todos = await this.todoRepository.findAll(userId)
     return todos.map(toTodoDto)
   }
 }

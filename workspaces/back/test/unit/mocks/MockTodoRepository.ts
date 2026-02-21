@@ -9,20 +9,29 @@ export class MockTodoRepository implements ITodoRepository {
     this.todos.set(todo.getId().getValue(), todo)
   }
 
-  async findById(id: TodoId): Promise<Todo | null> {
-    return this.todos.get(id.getValue()) || null
+  async findById(id: TodoId, userId: string): Promise<Todo | null> {
+    const todo = this.todos.get(id.getValue()) || null
+    if (todo && todo.getUserId() !== userId) {
+      return null
+    }
+    return todo
   }
 
-  async findAll(): Promise<Todo[]> {
-    return Array.from(this.todos.values())
+  async findAll(userId: string): Promise<Todo[]> {
+    return Array.from(this.todos.values()).filter(
+      (todo) => todo.getUserId() === userId
+    )
   }
 
   async update(todo: Todo): Promise<void> {
     this.todos.set(todo.getId().getValue(), todo)
   }
 
-  async delete(id: TodoId): Promise<void> {
-    this.todos.delete(id.getValue())
+  async delete(id: TodoId, userId: string): Promise<void> {
+    const todo = this.todos.get(id.getValue())
+    if (todo && todo.getUserId() === userId) {
+      this.todos.delete(id.getValue())
+    }
   }
 
   // テストヘルパーメソッド

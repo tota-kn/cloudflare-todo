@@ -9,6 +9,7 @@ import { getCurrentUtcTime } from "../../utils/dateTime"
 export class Todo {
   private constructor(
     private readonly id: TodoId,
+    private readonly userId: string,
     private title: string,
     private description: string,
     private status: TodoStatus,
@@ -21,14 +22,21 @@ export class Todo {
   /**
    * 新しいTodoを作成する
    * @param id TodoのID
+   * @param userId TodoのオーナーユーザーID
    * @param title Todoのタイトル
    * @param description Todoの説明（オプション）
    * @returns 作成されたTodoインスタンス
    */
-  static create(id: TodoId, title: string, description?: string): Todo {
+  static create(
+    id: TodoId,
+    userId: string,
+    title: string,
+    description?: string
+  ): Todo {
     const now = getCurrentUtcTime()
     return new Todo(
       id,
+      userId,
       title,
       description || "",
       TodoStatus.pending(),
@@ -44,6 +52,7 @@ export class Todo {
    */
   static fromData(data: {
     id: string
+    user_id: string
     title: string
     description: string
     completed: number
@@ -52,6 +61,7 @@ export class Todo {
   }): Todo {
     return new Todo(
       new TodoId(data.id),
+      data.user_id,
       data.title,
       data.description || "",
       data.completed === 1 ? TodoStatus.completed() : TodoStatus.pending(),
@@ -76,6 +86,14 @@ export class Todo {
    */
   getId(): TodoId {
     return this.id
+  }
+
+  /**
+   * TodoのオーナーユーザーIDを取得する
+   * @returns ユーザーID文字列
+   */
+  getUserId(): string {
+    return this.userId
   }
 
   /**

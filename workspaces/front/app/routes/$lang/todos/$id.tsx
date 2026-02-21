@@ -55,7 +55,7 @@ export function meta({ params }: Route.MetaArgs) {
   ]
 }
 
-export async function loader({ params, context }: Route.LoaderArgs) {
+export async function loader({ params, context, request }: Route.LoaderArgs) {
   const { lang, id: todoId } = params
 
   // 言語パラメータの検証
@@ -67,8 +67,20 @@ export async function loader({ params, context }: Route.LoaderArgs) {
     throw new Error("Todo ID is required")
   }
 
-  const client = createServerFetcher(context.cloudflare.env)
+  // セッションCookieをバックエンドに中継
+  const cookie = request.headers.get("Cookie")
+  const client = createServerFetcher(
+    context.cloudflare.env,
+    cookie ? { Cookie: cookie } : undefined
+  )
+
   const req = await client.v1.todos[":todoId"].$get({ param: { todoId } })
+
+  // authMiddlewareの401はHono RPCの型に含まれないため型アサーション
+  if ((req.status as number) === 401) {
+    return redirect(`/${lang}/todos`)
+  }
+
   const res = await req.json()
 
   if ("error" in res) {
@@ -94,7 +106,13 @@ export async function action({ params, request, context }: Route.ActionArgs) {
     throw new Error("Todo ID is required")
   }
 
-  const client = createServerFetcher(context.cloudflare.env)
+  // セッションCookieをバックエンドに中継
+  const cookie = request.headers.get("Cookie")
+  const client = createServerFetcher(
+    context.cloudflare.env,
+    cookie ? { Cookie: cookie } : undefined
+  )
+
   const formData = await request.formData()
   const title = String(formData.get("title") ?? "")
   const description = String(formData.get("description") ?? "")
@@ -103,6 +121,11 @@ export async function action({ params, request, context }: Route.ActionArgs) {
     param: { todoId },
     json: { title, description: description || undefined },
   })
+
+  // authMiddlewareの401はHono RPCの型に含まれないため型アサーション
+  if ((req.status as number) === 401) {
+    return redirect(`/${lang}/todos`)
+  }
 
   const res = await req.json()
 

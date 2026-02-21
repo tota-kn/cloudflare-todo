@@ -7,7 +7,11 @@ import type { ITodoRepository } from "../repositories/ITodoRepository"
  * Todo作成リクエスト
  */
 export interface CreateTodoRequest {
+  /** オーナーユーザーID */
+  userId: string
+  /** Todoのタイトル */
   title: string
+  /** Todoの説明（オプション） */
   description?: string
 }
 
@@ -25,7 +29,12 @@ export class CreateTodoUseCase {
    */
   async execute(request: CreateTodoRequest): Promise<TodoDto> {
     const id = new TodoId(crypto.randomUUID())
-    const todo = Todo.create(id, request.title, request.description)
+    const todo = Todo.create(
+      id,
+      request.userId,
+      request.title,
+      request.description
+    )
 
     await this.todoRepository.save(todo)
 

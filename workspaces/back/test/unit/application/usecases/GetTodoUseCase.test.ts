@@ -3,6 +3,9 @@ import { GetTodoUseCase } from "../../../../src/application/usecases/GetTodoUseC
 import { MockTodoRepository } from "../../mocks/MockTodoRepository"
 import { TestFactory } from "../../mocks/TestFactory"
 
+const TEST_USER_ID = TestFactory.DEFAULT_USER_ID
+const OTHER_USER_ID = "other-user-002"
+
 describe("GetTodoUseCase", () => {
   let useCase: GetTodoUseCase
   let mockRepository: MockTodoRepository
@@ -22,7 +25,7 @@ describe("GetTodoUseCase", () => {
       })
       await mockRepository.save(todo)
 
-      const result = await useCase.execute(todoId.getValue())
+      const result = await useCase.execute(todoId.getValue(), TEST_USER_ID)
 
       expect(result).not.toBeNull()
       expect(result!.id).toBe(todoId.getValue())
@@ -35,7 +38,6 @@ describe("GetTodoUseCase", () => {
 
     it("完了状態のTodoを正常に取得する", async () => {
       const todoId = TestFactory.createTodoId("completed-todo-id")
-      // IDを手動で設定
       const todoWithId = TestFactory.createTodo({
         id: todoId,
         title: "完了済みタスク",
@@ -44,7 +46,7 @@ describe("GetTodoUseCase", () => {
       todoWithId.complete()
       await mockRepository.save(todoWithId)
 
-      const result = await useCase.execute(todoId.getValue())
+      const result = await useCase.execute(todoId.getValue(), TEST_USER_ID)
 
       expect(result).not.toBeNull()
       expect(result!.completed).toBe(true)
@@ -53,13 +55,13 @@ describe("GetTodoUseCase", () => {
     it("存在しないTodoに対してnullを返す", async () => {
       const nonExistentId = "non-existent-id"
 
-      const result = await useCase.execute(nonExistentId)
+      const result = await useCase.execute(nonExistentId, TEST_USER_ID)
 
       expect(result).toBeNull()
     })
 
     it("無効なTodoId文字列でエラーを投げる", async () => {
-      await expect(useCase.execute("")).rejects.toThrow(
+      await expect(useCase.execute("", TEST_USER_ID)).rejects.toThrow(
         "TodoId cannot be empty"
       )
     })
@@ -77,7 +79,7 @@ describe("GetTodoUseCase", () => {
       await mockRepository.save(todo2)
       await mockRepository.save(todo3)
 
-      const result = await useCase.execute(todo2Id.getValue())
+      const result = await useCase.execute(todo2Id.getValue(), TEST_USER_ID)
 
       expect(result).not.toBeNull()
       expect(result!.id).toBe(todo2Id.getValue())
@@ -89,14 +91,28 @@ describe("GetTodoUseCase", () => {
       const todo = TestFactory.createTodo({
         id: todoId,
         title: "説明なしタスク",
-        description: undefined, // これによりnullになる
+        description: undefined,
       })
       await mockRepository.save(todo)
 
-      const result = await useCase.execute(todoId.getValue())
+      const result = await useCase.execute(todoId.getValue(), TEST_USER_ID)
 
       expect(result).not.toBeNull()
       expect(result!.description).toBe("")
+    })
+
+    it("他のユーザーのTodoにはアクセスできない", async () => {
+      const todoId = TestFactory.createTodoId("other-user-todo")
+      const todo = TestFactory.createTodo({
+        id: todoId,
+        userId: OTHER_USER_ID,
+        title: "他ユーザーのタスク",
+      })
+      await mockRepository.save(todo)
+
+      const result = await useCase.execute(todoId.getValue(), TEST_USER_ID)
+
+      expect(result).toBeNull()
     })
   })
 })

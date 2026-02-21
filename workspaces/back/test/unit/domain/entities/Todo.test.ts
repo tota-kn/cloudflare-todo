@@ -29,11 +29,13 @@ describe("Todo", () => {
       it("正常な値でTodoを作成する", () => {
         const title = "テストタスク"
         const description = "テスト用の説明"
+        const userId = "user-123"
 
         const todoId = TestFactory.createTodoId()
-        const todo = Todo.create(todoId, title, description)
+        const todo = Todo.create(todoId, userId, title, description)
 
         expect(todo.getId()).toBe(todoId)
+        expect(todo.getUserId()).toBe(userId)
         expect(todo.getTitle()).toBe(title)
         expect(todo.getDescription()).toBe(description)
         expect(todo.getStatus().isPending()).toBe(true)
@@ -43,11 +45,13 @@ describe("Todo", () => {
 
       it("説明なしでTodoを作成する", () => {
         const title = "タイトルのみ"
+        const userId = "user-123"
 
         const todoId = TestFactory.createTodoId()
-        const todo = Todo.create(todoId, title)
+        const todo = Todo.create(todoId, userId, title)
 
         expect(todo.getId()).toBe(todoId)
+        expect(todo.getUserId()).toBe(userId)
         expect(todo.getTitle()).toBe(title)
         expect(todo.getDescription()).toBe("")
         expect(todo.getStatus().isPending()).toBe(true)
@@ -58,6 +62,7 @@ describe("Todo", () => {
       it("データベース形式からTodoを作成する", () => {
         const data = {
           id: "test-id-123",
+          user_id: "user-456",
           title: "データベースタスク",
           description: "DB形式のデータ",
           completed: 0,
@@ -68,6 +73,7 @@ describe("Todo", () => {
         const todo = Todo.fromData(data)
 
         expect(todo.getId().getValue()).toBe(data.id)
+        expect(todo.getUserId()).toBe(data.user_id)
         expect(todo.getTitle()).toBe(data.title)
         expect(todo.getDescription()).toBe(data.description)
         expect(todo.getStatus().isPending()).toBe(true)
@@ -78,6 +84,7 @@ describe("Todo", () => {
       it("完了状態のTodoをデータベース形式から作成する", () => {
         const data = {
           id: "completed-id",
+          user_id: "user-456",
           title: "完了タスク",
           description: "",
           completed: 1,
@@ -96,7 +103,7 @@ describe("Todo", () => {
   describe("バリデーション", () => {
     it("空のタイトルでエラーを投げる", () => {
       const todoId = TestFactory.createTodoId()
-      expect(() => Todo.create(todoId, "")).toThrow(
+      expect(() => Todo.create(todoId, "user-123", "")).toThrow(
         "Todo title cannot be empty"
       )
     })
@@ -108,6 +115,12 @@ describe("Todo", () => {
       const todo = createTestTodo({ id: todoId })
 
       expect(todo.getId()).toBe(todoId)
+    })
+
+    it("getUserId()が正しいユーザーIDを返す", () => {
+      const todo = createTestTodo({ userId: "custom-user" })
+
+      expect(todo.getUserId()).toBe("custom-user")
     })
 
     it("getTitle()が正しいタイトルを返す", () => {

@@ -3,6 +3,9 @@ import { ListTodosUseCase } from "../../../../src/application/usecases/ListTodos
 import { MockTodoRepository } from "../../mocks/MockTodoRepository"
 import { TestFactory } from "../../mocks/TestFactory"
 
+const TEST_USER_ID = TestFactory.DEFAULT_USER_ID
+const OTHER_USER_ID = "other-user-002"
+
 describe("ListTodosUseCase", () => {
   let useCase: ListTodosUseCase
   let mockRepository: MockTodoRepository
@@ -14,7 +17,7 @@ describe("ListTodosUseCase", () => {
 
   describe("execute()", () => {
     it("空のリストを正常に返す", async () => {
-      const result = await useCase.execute()
+      const result = await useCase.execute(TEST_USER_ID)
 
       expect(result).toEqual([])
       expect(result).toHaveLength(0)
@@ -27,7 +30,7 @@ describe("ListTodosUseCase", () => {
       })
       await mockRepository.save(todo)
 
-      const result = await useCase.execute()
+      const result = await useCase.execute(TEST_USER_ID)
 
       expect(result).toHaveLength(1)
       expect(result[0]).toEqual({
@@ -55,7 +58,7 @@ describe("ListTodosUseCase", () => {
       await mockRepository.save(todo2)
       await mockRepository.save(todo3)
 
-      const result = await useCase.execute()
+      const result = await useCase.execute(TEST_USER_ID)
 
       expect(result).toHaveLength(3)
 
@@ -72,7 +75,7 @@ describe("ListTodosUseCase", () => {
       await mockRepository.save(pendingTodo)
       await mockRepository.save(completedTodo)
 
-      const result = await useCase.execute()
+      const result = await useCase.execute(TEST_USER_ID)
 
       expect(result).toHaveLength(2)
 
@@ -96,7 +99,7 @@ describe("ListTodosUseCase", () => {
       await mockRepository.save(todoWithDescription)
       await mockRepository.save(todoWithoutDescription)
 
-      const result = await useCase.execute()
+      const result = await useCase.execute(TEST_USER_ID)
 
       expect(result).toHaveLength(2)
 
@@ -120,13 +123,31 @@ describe("ListTodosUseCase", () => {
         await mockRepository.save(todo)
       }
 
-      const result = await useCase.execute()
+      const result = await useCase.execute(TEST_USER_ID)
 
       expect(result).toHaveLength(todoCount)
       expect(result.every((todo) => todo.title.startsWith("タスク"))).toBe(true)
       expect(result.every((todo) => todo.description?.startsWith("説明"))).toBe(
         true
       )
+    })
+
+    it("指定ユーザーのTodoのみを返す", async () => {
+      const user1Todo = TestFactory.createTodo({
+        userId: TEST_USER_ID,
+        title: "User1のタスク",
+      })
+      const user2Todo = TestFactory.createTodo({
+        userId: OTHER_USER_ID,
+        title: "User2のタスク",
+      })
+      await mockRepository.save(user1Todo)
+      await mockRepository.save(user2Todo)
+
+      const result = await useCase.execute(TEST_USER_ID)
+
+      expect(result).toHaveLength(1)
+      expect(result[0].title).toBe("User1のタスク")
     })
   })
 })

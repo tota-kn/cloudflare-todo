@@ -12,11 +12,12 @@ export class GetTodoUseCase {
   /**
    * 指定されたIDのTodoを取得する
    * @param id TodoのID文字列
+   * @param userId ユーザーID
    * @returns 見つかった場合はTodoのDTO、見つからない場合はnull
    */
-  async execute(id: string): Promise<TodoDto | null> {
+  async execute(id: string, userId: string): Promise<TodoDto | null> {
     const todoId = new TodoId(id)
-    const todo = await this.todoRepository.findById(todoId)
+    const todo = await this.todoRepository.findById(todoId, userId)
     return todo ? toTodoDto(todo) : null
   }
 }

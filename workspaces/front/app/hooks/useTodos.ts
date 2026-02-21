@@ -13,14 +13,20 @@ const client = createBrowserClient()
 
 /**
  * Todo一覧を取得するカスタムフック
- * @param initialData 初期データ（オプション）
- * @returns Todo一覧のクエリ結果
+ * @param initialData 初期データ（オプション）。undefinedの場合はクエリを実行しない（未認証時）
+ * @returns Todo一覧のクエリ結果。data が null の場合は未認証状態を示す
  */
 export const useTodos = (initialData?: TodoDto[]) => {
   return useQuery({
     queryKey: ["todos"],
     queryFn: async () => {
       const res = await client.v1.todos.$get()
+
+      // 未認証の場合は null を返す（空配列との区別を明確にする）
+      if (res.status === 401) {
+        return null
+      }
+
       const data = await res.json()
 
       if ("error" in data) {
