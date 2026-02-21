@@ -16,7 +16,8 @@
       "WebFetch",
       "Bash(git status:*)",
       "Bash(git log:*)",
-      "Bash(git diff:*)"
+      "Bash(git diff:*)",
+      "Bash(gh pr:*)"
     ],
     "deny": [
       "Bash(git reset:*)",
@@ -26,7 +27,6 @@
       "Bash(sudo:*)",
       "Bash(wrangler:*)",
       "Bash(pnpx:*)",
-      "Bash(pnpm exec:*)",
       "Read(.env.*)"
     ],
     "ask": [
