@@ -6,6 +6,12 @@ INSERT OR IGNORE INTO user (id, name, email, email_verified, created_at, updated
   ('test-user-001', 'Test User 1', 'testuser1@example.com', 1, unixepoch(), unixepoch()),
   ('test-user-002', 'Test User 2', 'testuser2@example.com', 1, unixepoch(), unixepoch());
 
+-- テスト用セッションを作成（APIテスト用の固定トークン）
+DELETE FROM session;
+INSERT INTO session (id, expires_at, token, created_at, updated_at, user_id) VALUES
+  ('test-session-001', strftime('%s', '2099-12-31'), 'test-session-token-001', unixepoch(), unixepoch(), 'test-user-001'),
+  ('test-session-002', strftime('%s', '2099-12-31'), 'test-session-token-002', unixepoch(), unixepoch(), 'test-user-002');
+
 -- 既存データを削除
 DELETE FROM todos;
 

@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
+import { bearer } from "better-auth/plugins"
 import { drizzle } from "drizzle-orm/d1"
 import * as schema from "../infrastructure/database/auth-schema"
 
@@ -9,6 +10,7 @@ export const auth = (env: CloudflareEnv) => {
     database: drizzleAdapter(db, {
       provider: "sqlite",
     }),
+    plugins: [bearer()],
     trustedOrigins: [
       "http://localhost:5173",
       "https://todo.dev.totakn.com",
