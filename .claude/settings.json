@@ -2,6 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(find:*)",
+      "Bash(echo:*)",
+      "Bash(touch:*)",
       "Bash(mkdir:*)",
       "Bash(cp:*)",
       "Bash(curl:*)",
@@ -30,7 +32,6 @@
       "Read(.env.*)"
     ],
     "ask": [
-      "Bash(gh:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)"

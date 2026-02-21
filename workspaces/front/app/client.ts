@@ -3,6 +3,23 @@ import type { ClientType } from "./types/shared"
 import { getApiUrl, isDev, isLocal, isPrd } from "./utils/env"
 
 /**
+ * 環境に応じたバックエンドへの接続設定を解決する
+ * @param env Cloudflare環境変数
+ * @returns 基底URLとfetch関数
+ */
+const resolveBackend = (env: Env): { baseUrl: string; fetcher: typeof fetch } => {
+  if (isLocal(env)) {
+    return { baseUrl: env.API_BASE_URL, fetcher: fetch }
+  } else if (isDev(env) || isPrd(env)) {
+    return {
+      baseUrl: "http://example/",
+      fetcher: env.BACKEND_API.fetch.bind(env.BACKEND_API) as typeof fetch,
+    }
+  }
+  throw new Error("Unknown environment")
+}
+
+/**
  * サーバーサイド用のAPIクライアントを作成する
  * @param env Cloudflare環境変数
  * @param headers リクエストから転送するヘッダー（Cookie等）
@@ -12,16 +29,8 @@ export const createServerFetcher = (
   env: Env,
   headers?: Record<string, string>
 ) => {
-  if (isLocal(env)) {
-    return hc<ClientType>(env.API_BASE_URL, { headers })
-  } else if (isDev(env) || isPrd(env)) {
-    return hc<ClientType>("http://example/", {
-      fetch: env.BACKEND_API.fetch.bind(env.BACKEND_API),
-      headers,
-    })
-  } else {
-    throw new Error("Unknown environment")
-  }
+  const { baseUrl, fetcher } = resolveBackend(env)
+  return hc<ClientType>(baseUrl, { fetch: fetcher, headers })
 }
 
 /**
@@ -44,19 +53,11 @@ export const checkSession = async (
   cookie?: string | null
 ): Promise<boolean> => {
   const headers: Record<string, string> = cookie ? { Cookie: cookie } : {}
+  const { baseUrl, fetcher } = resolveBackend(env)
 
-  let response: Response
-  if (isLocal(env)) {
-    response = await fetch(`${env.API_BASE_URL}/api/auth/get-session`, {
-      headers,
-    })
-  } else if (isDev(env) || isPrd(env)) {
-    response = await env.BACKEND_API.fetch(
-      new Request("http://example/api/auth/get-session", { headers })
-    )
-  } else {
-    throw new Error("Unknown environment")
-  }
+  const response = await fetcher(
+    new Request(new URL("/api/auth/get-session", baseUrl).href, { headers })
+  )
 
   if (!response.ok) return false
   const data = await response.json()

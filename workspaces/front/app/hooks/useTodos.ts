@@ -13,8 +13,8 @@ const client = createBrowserClient()
 
 /**
  * Todo一覧を取得するカスタムフック
- * @param initialData 初期データ（オプション）
- * @returns Todo一覧のクエリ結果
+ * @param initialData 初期データ（オプション）。undefinedの場合はクエリを実行しない（未認証時）
+ * @returns Todo一覧のクエリ結果。data が null の場合は未認証状態を示す
  */
 export const useTodos = (initialData?: TodoDto[]) => {
   return useQuery({

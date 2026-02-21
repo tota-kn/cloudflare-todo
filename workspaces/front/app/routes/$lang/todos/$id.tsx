@@ -76,8 +76,8 @@ export async function loader({ params, context, request }: Route.LoaderArgs) {
 
   const req = await client.v1.todos[":todoId"].$get({ param: { todoId } })
 
-  // 未認証チェック
-  if (req.status === 401) {
+  // authMiddlewareの401はHono RPCの型に含まれないため型アサーション
+  if ((req.status as number) === 401) {
     return redirect(`/${lang}/todos`)
   }
 
@@ -122,8 +122,8 @@ export async function action({ params, request, context }: Route.ActionArgs) {
     json: { title, description: description || undefined },
   })
 
-  // 未認証チェック
-  if (req.status === 401) {
+  // authMiddlewareの401はHono RPCの型に含まれないため型アサーション
+  if ((req.status as number) === 401) {
     return redirect(`/${lang}/todos`)
   }
 

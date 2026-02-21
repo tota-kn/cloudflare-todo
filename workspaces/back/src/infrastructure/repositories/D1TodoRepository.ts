@@ -95,6 +95,9 @@ export class D1TodoRepository implements ITodoRepository {
   /**
    * Todoを更新する
    * @param todo 更新するTodoエンティティ
+   * @remarks
+   * WHERE句にuserIdを含めることで、ユースケース層のfindByIdチェックが
+   * 漏れた場合でも他ユーザーのTodoを上書きしないようにするための安全弁。
    */
   async update(todo: Todo): Promise<void> {
     await this.drizzle

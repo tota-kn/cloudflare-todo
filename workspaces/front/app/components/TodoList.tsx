@@ -78,7 +78,7 @@ export function TodoList({
       )}
 
       {todos.length === 0 && !showNewTodoForm ? (
-        <p className="text-black text-center py-8">
+        <p className="text-foreground text-center py-8">
           No todos found. Create your first todo!
         </p>
       ) : (
