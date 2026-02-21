@@ -57,12 +57,25 @@ export function meta({ params }: Route.MetaArgs) {
   ]
 }
 
-export async function loader({ params, context }: Route.LoaderArgs) {
+export async function loader({ params, context, request }: Route.LoaderArgs) {
   const { lang } = params
 
   // 言語パラメータの検証
   if (!isSupportedLanguage(lang)) {
     return redirect(`/${defaultLanguage}/todos/new`)
+  }
+
+  // 未認証チェック: Cookieを使ってセッション確認
+  const cookie = request.headers.get("Cookie")
+  const client = createServerFetcher(
+    context.cloudflare.env,
+    cookie ? { Cookie: cookie } : undefined
+  )
+
+  // Todo一覧APIを使って認証確認（軽量なエンドポイント）
+  const req = await client.v1.todos.$get()
+  if (req.status === 401) {
+    return redirect(`/${lang}/todos`)
   }
 
   return {
@@ -79,7 +92,12 @@ export async function action({ params, request, context }: Route.ActionArgs) {
     return redirect(`/${defaultLanguage}/todos/new`)
   }
 
-  const client = createServerFetcher(context.cloudflare.env)
+  // セッションCookieをバックエンドに中継
+  const cookie = request.headers.get("Cookie")
+  const client = createServerFetcher(
+    context.cloudflare.env,
+    cookie ? { Cookie: cookie } : undefined
+  )
 
   const formData = await request.formData()
   const title = String(formData.get("title") ?? "")
@@ -88,6 +106,11 @@ export async function action({ params, request, context }: Route.ActionArgs) {
   const req = await client.v1.todos.$post({
     json: { title, description: description || undefined },
   })
+
+  // authMiddlewareの401はHono RPCの型に含まれないため型アサーション
+  if ((req.status as number) === 401) {
+    return redirect(`/${lang}/todos`)
+  }
 
   const res = await req.json()
 

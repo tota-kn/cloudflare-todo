@@ -3,6 +3,9 @@ import { UpdateTodoUseCase } from "../../../../src/application/usecases/UpdateTo
 import { MockTodoRepository } from "../../mocks/MockTodoRepository"
 import { TestFactory } from "../../mocks/TestFactory"
 
+const TEST_USER_ID = TestFactory.DEFAULT_USER_ID
+const OTHER_USER_ID = "other-user-002"
+
 describe("UpdateTodoUseCase", () => {
   let useCase: UpdateTodoUseCase
   let mockRepository: MockTodoRepository
@@ -23,6 +26,7 @@ describe("UpdateTodoUseCase", () => {
       await mockRepository.save(todo)
 
       const request = {
+        userId: TEST_USER_ID,
         todoId: todoId.getValue(),
         title: "更新されたタイトル",
       }
@@ -35,7 +39,7 @@ describe("UpdateTodoUseCase", () => {
       expect(result!.completed).toBe(false) // 変更されていない
 
       // リポジトリの状態も確認
-      const updatedTodo = await mockRepository.findById(todoId)
+      const updatedTodo = await mockRepository.findById(todoId, TEST_USER_ID)
       expect(updatedTodo!.getTitle()).toBe("更新されたタイトル")
     })
 
@@ -49,6 +53,7 @@ describe("UpdateTodoUseCase", () => {
       await mockRepository.save(todo)
 
       const request = {
+        userId: TEST_USER_ID,
         todoId: todoId.getValue(),
         description: "更新された説明",
       }
@@ -63,7 +68,6 @@ describe("UpdateTodoUseCase", () => {
 
     it("存在するTodoの完了状態をtrueに更新する", async () => {
       const todoId = TestFactory.createTodoId("complete-test-id")
-      // IDを手動で設定
       const todoWithId = TestFactory.createTodo({
         id: todoId,
         title: "未完了タスク",
@@ -71,6 +75,7 @@ describe("UpdateTodoUseCase", () => {
       await mockRepository.save(todoWithId)
 
       const request = {
+        userId: TEST_USER_ID,
         todoId: todoId.getValue(),
         completed: true,
       }
@@ -81,7 +86,7 @@ describe("UpdateTodoUseCase", () => {
       expect(result!.completed).toBe(true)
 
       // リポジトリの状態も確認
-      const updatedTodo = await mockRepository.findById(todoId)
+      const updatedTodo = await mockRepository.findById(todoId, TEST_USER_ID)
       expect(updatedTodo!.getStatus().isCompleted()).toBe(true)
     })
 
@@ -95,6 +100,7 @@ describe("UpdateTodoUseCase", () => {
       await mockRepository.save(todo)
 
       const request = {
+        userId: TEST_USER_ID,
         todoId: todoId.getValue(),
         completed: false,
       }
@@ -105,7 +111,7 @@ describe("UpdateTodoUseCase", () => {
       expect(result!.completed).toBe(false)
 
       // リポジトリの状態も確認
-      const updatedTodo = await mockRepository.findById(todoId)
+      const updatedTodo = await mockRepository.findById(todoId, TEST_USER_ID)
       expect(updatedTodo!.getStatus().isPending()).toBe(true)
     })
 
@@ -119,6 +125,7 @@ describe("UpdateTodoUseCase", () => {
       await mockRepository.save(todo)
 
       const request = {
+        userId: TEST_USER_ID,
         todoId: todoId.getValue(),
         title: "新しいタイトル",
         description: "新しい説明",
@@ -143,6 +150,7 @@ describe("UpdateTodoUseCase", () => {
       await mockRepository.save(todo)
 
       const request = {
+        userId: TEST_USER_ID,
         todoId: todoId.getValue(),
         description: "",
       }
@@ -153,12 +161,13 @@ describe("UpdateTodoUseCase", () => {
       expect(result!.description).toBe("")
 
       // リポジトリの状態も確認
-      const updatedTodo = await mockRepository.findById(todoId)
+      const updatedTodo = await mockRepository.findById(todoId, TEST_USER_ID)
       expect(updatedTodo!.getDescription()).toBe("")
     })
 
     it("存在しないTodoに対してnullを返す", async () => {
       const request = {
+        userId: TEST_USER_ID,
         todoId: "non-existent-id",
         title: "更新タイトル",
       }
@@ -170,6 +179,7 @@ describe("UpdateTodoUseCase", () => {
 
     it("無効なTodoId文字列でエラーを投げる", async () => {
       const request = {
+        userId: TEST_USER_ID,
         todoId: "",
         title: "更新タイトル",
       }
@@ -185,6 +195,7 @@ describe("UpdateTodoUseCase", () => {
       await mockRepository.save(todo)
 
       const request = {
+        userId: TEST_USER_ID,
         todoId: todoId.getValue(),
         title: "",
       }
@@ -204,6 +215,7 @@ describe("UpdateTodoUseCase", () => {
       await mockRepository.save(todo)
 
       const request = {
+        userId: TEST_USER_ID,
         todoId: todoId.getValue(),
       }
 
@@ -213,6 +225,26 @@ describe("UpdateTodoUseCase", () => {
       expect(result!.title).toBe("変更なしタイトル")
       expect(result!.description).toBe("変更なし説明")
       expect(result!.completed).toBe(false)
+    })
+
+    it("他のユーザーのTodoは更新できない", async () => {
+      const todoId = TestFactory.createTodoId("other-user-todo")
+      const todo = TestFactory.createTodo({
+        id: todoId,
+        userId: OTHER_USER_ID,
+        title: "他ユーザーのタスク",
+      })
+      await mockRepository.save(todo)
+
+      const request = {
+        userId: TEST_USER_ID,
+        todoId: todoId.getValue(),
+        title: "不正な更新",
+      }
+
+      const result = await useCase.execute(request)
+
+      expect(result).toBeNull()
     })
   })
 })

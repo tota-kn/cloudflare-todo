@@ -6,9 +6,15 @@ import type { ITodoRepository } from "../repositories/ITodoRepository"
  * Todo更新リクエスト
  */
 export interface UpdateTodoRequest {
+  /** オーナーユーザーID */
+  userId: string
+  /** 更新対象のTodoのID */
   todoId: string
+  /** 新しいタイトル（オプション） */
   title?: string
+  /** 新しい説明（オプション） */
   description?: string
+  /** 完了状態（オプション） */
   completed?: boolean
 }
 
@@ -26,7 +32,7 @@ export class UpdateTodoUseCase {
    */
   async execute(request: UpdateTodoRequest): Promise<TodoDto | null> {
     const todoId = new TodoId(request.todoId)
-    const todo = await this.todoRepository.findById(todoId)
+    const todo = await this.todoRepository.findById(todoId, request.userId)
 
     if (!todo) {
       return null

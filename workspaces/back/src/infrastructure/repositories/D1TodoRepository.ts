@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm"
+import { and, desc, eq } from "drizzle-orm"
 import { drizzle } from "drizzle-orm/d1"
 import type { ITodoRepository } from "../../application/repositories/ITodoRepository"
 import { Todo } from "../../domain/entities/Todo"
@@ -27,6 +27,7 @@ export class D1TodoRepository implements ITodoRepository {
   async save(todo: Todo): Promise<void> {
     await this.drizzle.insert(todosTable).values({
       id: todo.getId().toString(),
+      userId: todo.getUserId(),
       title: todo.getTitle(),
       description: todo.getDescription(),
       completed: todo.getStatus().toBoolean(),
@@ -36,15 +37,18 @@ export class D1TodoRepository implements ITodoRepository {
   }
 
   /**
-   * 指定されたIDのTodoを取得する
+   * 指定ユーザーの特定IDのTodoを取得する
    * @param id 取得するTodoのID
+   * @param userId ユーザーID
    * @returns 見つかったTodoエンティティ、または見つからない場合はnull
    */
-  async findById(id: TodoId): Promise<Todo | null> {
+  async findById(id: TodoId, userId: string): Promise<Todo | null> {
     const result = await this.drizzle
       .select()
       .from(todosTable)
-      .where(eq(todosTable.id, id.toString()))
+      .where(
+        and(eq(todosTable.id, id.toString()), eq(todosTable.userId, userId))
+      )
       .get()
 
     if (!result) {
@@ -53,6 +57,7 @@ export class D1TodoRepository implements ITodoRepository {
 
     return Todo.fromData({
       id: result.id,
+      user_id: result.userId,
       title: result.title,
       description: result.description,
       completed: result.completed ? 1 : 0,
@@ -62,19 +67,22 @@ export class D1TodoRepository implements ITodoRepository {
   }
 
   /**
-   * 全てのTodoを取得する
+   * 指定ユーザーの全Todoを取得する
+   * @param userId ユーザーID
    * @returns 全てのTodoエンティティの配列（作成日時の降順でソート）
    */
-  async findAll(): Promise<Todo[]> {
+  async findAll(userId: string): Promise<Todo[]> {
     const results = await this.drizzle
       .select()
       .from(todosTable)
+      .where(eq(todosTable.userId, userId))
       .orderBy(desc(todosTable.createdAt))
       .all()
 
     return results.map((result) =>
       Todo.fromData({
         id: result.id,
+        user_id: result.userId,
         title: result.title,
         description: result.description,
         completed: result.completed ? 1 : 0,
@@ -97,16 +105,24 @@ export class D1TodoRepository implements ITodoRepository {
         completed: todo.getStatus().toBoolean(),
         updatedAt: todo.getUpdatedAt().toISOString(),
       })
-      .where(eq(todosTable.id, todo.getId().toString()))
+      .where(
+        and(
+          eq(todosTable.id, todo.getId().toString()),
+          eq(todosTable.userId, todo.getUserId())
+        )
+      )
   }
 
   /**
-   * 指定されたIDのTodoを削除する
+   * 指定ユーザーの特定IDのTodoを削除する
    * @param id 削除するTodoのID
+   * @param userId ユーザーID
    */
-  async delete(id: TodoId): Promise<void> {
+  async delete(id: TodoId, userId: string): Promise<void> {
     await this.drizzle
       .delete(todosTable)
-      .where(eq(todosTable.id, id.toString()))
+      .where(
+        and(eq(todosTable.id, id.toString()), eq(todosTable.userId, userId))
+      )
   }
 }

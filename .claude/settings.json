@@ -8,13 +8,13 @@
       "Bash(rm:*)",
       "Bash(mv:*)",
       "Bash(pnpm:*)",
+      "Bash(ls:*)",
       "mcp__serena",
       "mcp__cloudflare-docs",
       "mcp__context7",
       "WebSearch",
       "WebFetch"
     ],
-    "ask": [],
     "deny": [
       "Bash(git reset:*)",
       "Bash(git rebase:*)",
@@ -28,7 +28,8 @@
       "Bash(pnpx:*)",
       "Bash(pnpm exec:*)",
       "Read(.env.*)"
-    ]
+    ],
+    "ask": []
   },
   "enabledMcpjsonServers": [
     "playwright",

@@ -21,6 +21,12 @@ export const useTodos = (initialData?: TodoDto[]) => {
     queryKey: ["todos"],
     queryFn: async () => {
       const res = await client.v1.todos.$get()
+
+      // 未認証の場合は空配列を返す
+      if (res.status === 401) {
+        return []
+      }
+
       const data = await res.json()
 
       if ("error" in data) {

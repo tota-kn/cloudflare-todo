@@ -11,17 +11,18 @@ export class DeleteTodoUseCase {
   /**
    * Todoを削除する
    * @param id 削除するTodoのID文字列
+   * @param userId ユーザーID
    * @returns 削除が成功した場合はtrue、Todoが見つからない場合はfalse
    */
-  async execute(id: string): Promise<boolean> {
+  async execute(id: string, userId: string): Promise<boolean> {
     const todoId = new TodoId(id)
-    const todo = await this.todoRepository.findById(todoId)
+    const todo = await this.todoRepository.findById(todoId, userId)
 
     if (!todo) {
       return false
     }
 
-    await this.todoRepository.delete(todoId)
+    await this.todoRepository.delete(todoId, userId)
 
     return true
   }

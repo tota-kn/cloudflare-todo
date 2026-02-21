@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { CreateTodoUseCase } from "../../../../src/application/usecases/CreateTodoUseCase"
 import { MockTodoRepository } from "../../mocks/MockTodoRepository"
+import { TestFactory } from "../../mocks/TestFactory"
 import { TodoId } from "../../../../src/domain/value-objects/TodoId"
 
 // crypto.randomUUIDをモック化
@@ -8,6 +9,8 @@ const mockUUID = "test-uuid-123"
 vi.stubGlobal("crypto", {
   randomUUID: () => mockUUID,
 })
+
+const TEST_USER_ID = TestFactory.DEFAULT_USER_ID
 
 describe("CreateTodoUseCase", () => {
   let useCase: CreateTodoUseCase
@@ -21,6 +24,7 @@ describe("CreateTodoUseCase", () => {
   describe("execute()", () => {
     it("正常にTodoを作成する", async () => {
       const request = {
+        userId: TEST_USER_ID,
         title: "テストタスク",
         description: "テスト用の説明",
       }
@@ -43,6 +47,7 @@ describe("CreateTodoUseCase", () => {
 
     it("説明なしでTodoを作成する", async () => {
       const request = {
+        userId: TEST_USER_ID,
         title: "タイトルのみ",
       }
 
@@ -62,6 +67,7 @@ describe("CreateTodoUseCase", () => {
 
     it("作成されたTodoのステータスが未完了である", async () => {
       const request = {
+        userId: TEST_USER_ID,
         title: "ステータステスト",
       }
 
@@ -69,12 +75,16 @@ describe("CreateTodoUseCase", () => {
 
       expect(result.completed).toBe(false)
 
-      const savedTodo = await mockRepository.findById(new TodoId(mockUUID))
+      const savedTodo = await mockRepository.findById(
+        new TodoId(mockUUID),
+        TEST_USER_ID
+      )
       expect(savedTodo!.getStatus().isPending()).toBe(true)
     })
 
     it("UUIDが正しく設定される", async () => {
       const request = {
+        userId: TEST_USER_ID,
         title: "UUIDテスト",
       }
 
@@ -82,7 +92,10 @@ describe("CreateTodoUseCase", () => {
 
       expect(result.id).toBe(mockUUID)
 
-      const savedTodo = await mockRepository.findById(new TodoId(mockUUID))
+      const savedTodo = await mockRepository.findById(
+        new TodoId(mockUUID),
+        TEST_USER_ID
+      )
       expect(savedTodo!.getId().getValue()).toBe(mockUUID)
     })
 
@@ -93,8 +106,8 @@ describe("CreateTodoUseCase", () => {
         randomUUID: () => `uuid-${callCount++}`,
       })
 
-      const request1 = { title: "タスク1" }
-      const request2 = { title: "タスク2" }
+      const request1 = { userId: TEST_USER_ID, title: "タスク1" }
+      const request2 = { userId: TEST_USER_ID, title: "タスク2" }
 
       await useCase.execute(request1)
       await useCase.execute(request2)

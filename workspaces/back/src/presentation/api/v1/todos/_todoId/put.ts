@@ -2,6 +2,8 @@ import { zValidator } from "@hono/zod-validator"
 import { Hono } from "hono"
 import { z } from "zod"
 import { Dependencies } from "../../../../../Dependencies"
+import type { AuthVariables } from "../../../../middleware/authMiddleware"
+import { authMiddleware } from "../../../../middleware/authMiddleware"
 
 export const updateTodoSchema = z.object({
   title: z.string().min(1, "Title cannot be empty").optional(),
@@ -12,15 +14,21 @@ export const updateTodoSchema = z.object({
 export function v1TodosTodoIdPut(dependencies: Dependencies) {
   const updateTodoUseCase = dependencies.getUpdateTodoUseCase()
 
-  return new Hono<{ Bindings: CloudflareEnv }>().put(
+  return new Hono<{
+    Bindings: CloudflareEnv
+    Variables: AuthVariables
+  }>().put(
     "/v1/todos/:todoId",
+    authMiddleware,
     zValidator("json", updateTodoSchema),
     async (c) => {
       try {
+        const userId = c.get("userId")
         const todoId = c.req.param("todoId")
         const validatedData = c.req.valid("json")
 
         const todo = await updateTodoUseCase.execute({
+          userId,
           todoId,
           title: validatedData.title,
           description: validatedData.description,

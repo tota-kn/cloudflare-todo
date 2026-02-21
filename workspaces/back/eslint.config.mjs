@@ -147,6 +147,14 @@ export default tseslint.config(
               message:
                 "Infrastructure layer can only depend on domain and application layers",
             },
+            // Presentation層: 同じPresentation層内のファイルに依存可能
+            {
+              from: "presentation",
+              allow: ["presentation"],
+              disallow: ["domain", "application", "infrastructure"],
+              message:
+                "Presentation layer can only depend on other presentation files (use Dependencies for cross-layer access)",
+            },
           ],
         },
       ],

@@ -1,12 +1,18 @@
 import { Hono } from "hono"
 import { Dependencies } from "../../../../Dependencies"
+import type { AuthVariables } from "../../../middleware/authMiddleware"
+import { authMiddleware } from "../../../middleware/authMiddleware"
 
 export function v1TodosGet(dependencies: Dependencies) {
   const listTodosUseCase = dependencies.getListTodosUseCase()
 
-  return new Hono<{ Bindings: CloudflareEnv }>().get("/v1/todos", async (c) => {
+  return new Hono<{
+    Bindings: CloudflareEnv
+    Variables: AuthVariables
+  }>().get("/v1/todos", authMiddleware, async (c) => {
     try {
-      const todos = await listTodosUseCase.execute()
+      const userId = c.get("userId")
+      const todos = await listTodosUseCase.execute(userId)
       return c.json({
         items: todos,
       })
