@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router"
-import { createServerFetcher } from "~/client"
+import { checkSession, createServerFetcher } from "~/client"
 import { PageHeader } from "~/components/PageHeader"
 import { TodoEditor } from "~/components/TodoEditor"
 import { useCreateTodo } from "~/hooks/useTodos"
@@ -65,16 +65,10 @@ export async function loader({ params, context, request }: Route.LoaderArgs) {
     return redirect(`/${defaultLanguage}/todos/new`)
   }
 
-  // 未認証チェック: Cookieを使ってセッション確認
+  // 未認証チェック: BetterAuthのセッション確認エンドポイントを直接呼ぶ
   const cookie = request.headers.get("Cookie")
-  const client = createServerFetcher(
-    context.cloudflare.env,
-    cookie ? { Cookie: cookie } : undefined
-  )
-
-  // Todo一覧APIを使って認証確認（軽量なエンドポイント）
-  const req = await client.v1.todos.$get()
-  if (req.status === 401) {
+  const authenticated = await checkSession(context.cloudflare.env, cookie)
+  if (!authenticated) {
     return redirect(`/${lang}/todos`)
   }
 

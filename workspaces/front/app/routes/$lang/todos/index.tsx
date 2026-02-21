@@ -104,7 +104,7 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
     initI18nClient(loaderData.language)
   }, [loaderData.language])
 
-  if (!loaderData.isAuthenticated) {
+  if (!loaderData.isAuthenticated || todos === null) {
     return (
       <div className="max-w-4xl mx-auto p-6">
         <PageHeader
