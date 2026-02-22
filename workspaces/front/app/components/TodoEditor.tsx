@@ -85,9 +85,9 @@ export function TodoEditor({
             : "bg-card border-border"
       }`}
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-center">
         {mode === "edit" && (
-          <div className="mr-3">
+          <div className="mr-3 shrink-0">
             <ActionButton
               onClick={() => {}}
               variant={todo?.completed ? "toggle-pending" : "toggle-complete"}
@@ -96,41 +96,38 @@ export function TodoEditor({
           </div>
         )}
 
-        <TodoInput
-          title={title}
-          description={description}
-          onTitleChange={handleTitleChange}
-          onDescriptionChange={handleDescriptionChange}
-          onTitleKeyDown={handleTitleKeyDown}
-          onDescriptionKeyDown={handleDescriptionKeyDown}
-          autoFocusTitle={true}
-          showHelpText={mode === "create"}
-          mode={mode}
-        />
+        <div className="flex-1 min-w-0">
+          <TodoInput
+            title={title}
+            description={description}
+            onTitleChange={handleTitleChange}
+            onDescriptionChange={handleDescriptionChange}
+            onTitleKeyDown={handleTitleKeyDown}
+            onDescriptionKeyDown={handleDescriptionKeyDown}
+            autoFocusTitle={true}
+            showHelpText={mode === "create"}
+            mode={mode}
+          />
 
-        <div className="flex items-center space-x-2 ml-3">
           {showTimestamps && todo && (
-            <div className="text-xs text-muted-foreground text-right">
+            <div className="text-xs text-muted-foreground mt-1">
               {todo.updated_at !== todo.created_at && (
                 <div>{`${t("Updated")}: ${formatDateTime(todo.updated_at)}`}</div>
               )}
-              <div
-                className={todo.updated_at !== todo.created_at ? "mt-0.5" : ""}
-              >
-                {`${t("Created")}: ${formatDateTime(todo.created_at)}`}
-              </div>
-            </div>
-          )}
-          {mode === "edit" && (
-            <div>
-              <ActionButton
-                onClick={() => {}}
-                disabled={true}
-                variant="delete"
-              />
+              <div>{`${t("Created")}: ${formatDateTime(todo.created_at)}`}</div>
             </div>
           )}
         </div>
+
+        {mode === "edit" && (
+          <div className="ml-3 shrink-0">
+            <ActionButton
+              onClick={() => {}}
+              disabled={true}
+              variant="delete"
+            />
+          </div>
+        )}
       </div>
     </div>
   )

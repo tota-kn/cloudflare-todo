@@ -31,16 +31,22 @@ export function PageHeader({
   const currentLang = getCurrentLanguage(location.pathname)
 
   return (
-    <div className="flex items-center justify-between mb-6">
-      <div className="flex items-center gap-3">
-        <img src={logoUrl} alt={t("Test")} className="h-12 object-contain" />
-        <h1 className="text-3xl font-bold text-foreground">{t(titleKey)}</h1>
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
+      <div className="flex items-center gap-2 sm:gap-3">
+        <img
+          src={logoUrl}
+          alt={t("Test")}
+          className="h-8 sm:h-10 object-contain"
+        />
+        <h1 className="text-xl sm:text-2xl font-bold text-foreground">
+          {t(titleKey)}
+        </h1>
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center flex-wrap gap-2">
         {/* ユーザー情報表示 */}
         {session?.user ? (
-          <div className="flex items-center space-x-2 px-3 py-1 bg-secondary/50 rounded-md">
-            <span className="text-sm text-foreground font-medium">
+          <div className="flex items-center gap-2 px-3 py-1 bg-secondary/50 rounded-md min-w-0">
+            <span className="text-sm text-foreground font-medium truncate max-w-[120px] sm:max-w-[200px]">
               {session.user.name || session.user.email}
             </span>
             <button

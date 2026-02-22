@@ -75,9 +75,9 @@ export default function Login({ loaderData }: Route.ComponentProps) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4 sm:p-6">
       {/* 言語切り替え・テーマ切り替え（右上に配置） */}
-      <div className="absolute top-4 right-4 flex items-center space-x-2">
+      <div className="absolute top-3 right-3 sm:top-4 sm:right-4 flex items-center gap-2">
         <LanguageSwitcher />
         <button
           onClick={toggleTheme}
@@ -120,7 +120,7 @@ export default function Login({ loaderData }: Route.ComponentProps) {
         </button>
       </div>
 
-      <div className="w-full max-w-sm bg-card border border-border rounded-xl shadow-lg p-8 flex flex-col items-center gap-6">
+      <div className="w-full max-w-sm bg-card border border-border rounded-xl shadow-lg p-6 sm:p-8 flex flex-col items-center gap-6">
         <h1 className="text-2xl font-bold text-foreground">{t("Sign In")}</h1>
         <p className="text-sm text-muted-foreground text-center">
           {t("Sign in to manage your todos")}

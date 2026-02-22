@@ -50,8 +50,8 @@ export function TodoItem({ todo }: TodoItemProps) {
       onClick={handleEdit}
       title={t("Click to edit")}
     >
-      <div className="flex items-center justify-between">
-        <div className="mr-3" onClick={(e) => e.stopPropagation()}>
+      <div className="flex items-center">
+        <div className="mr-3 shrink-0" onClick={(e) => e.stopPropagation()}>
           <ActionButton
             onClick={handleToggleComplete}
             disabled={toggleTodo.isPending}
@@ -61,7 +61,7 @@ export function TodoItem({ todo }: TodoItemProps) {
         </div>
         <div className="flex-1 min-w-0">
           <h3
-            className={`text-base font-semibold ${
+            className={`text-base font-semibold break-words ${
               todo.completed
                 ? "line-through text-muted-foreground"
                 : "text-card-foreground"
@@ -71,7 +71,7 @@ export function TodoItem({ todo }: TodoItemProps) {
           </h3>
           {todo.description && (
             <p
-              className={`mt-0.5 text-sm ${
+              className={`mt-0.5 text-sm break-words ${
                 todo.completed
                   ? "text-muted-foreground"
                   : "text-card-foreground"
@@ -80,26 +80,20 @@ export function TodoItem({ todo }: TodoItemProps) {
               {todo.description}
             </p>
           )}
-        </div>
-        <div className="flex items-center space-x-2 ml-3">
-          <div className="text-xs text-muted-foreground text-right">
+          <div className="text-xs text-muted-foreground mt-1">
             {todo.updated_at !== todo.created_at && (
               <div>{`${t("Updated")}: ${formatDateTime(todo.updated_at)}`}</div>
             )}
-            <div
-              className={todo.updated_at !== todo.created_at ? "mt-0.5" : ""}
-            >
-              {`${t("Created")}: ${formatDateTime(todo.created_at)}`}
-            </div>
+            <div>{`${t("Created")}: ${formatDateTime(todo.created_at)}`}</div>
           </div>
-          <div onClick={(e) => e.stopPropagation()}>
-            <ActionButton
-              onClick={handleDelete}
-              disabled={deleteTodo.isPending}
-              variant="delete"
-              isLoading={deleteTodo.isPending}
-            />
-          </div>
+        </div>
+        <div className="ml-3 shrink-0" onClick={(e) => e.stopPropagation()}>
+          <ActionButton
+            onClick={handleDelete}
+            disabled={deleteTodo.isPending}
+            variant="delete"
+            isLoading={deleteTodo.isPending}
+          />
         </div>
       </div>
     </div>

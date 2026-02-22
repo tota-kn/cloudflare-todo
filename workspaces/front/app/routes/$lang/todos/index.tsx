@@ -117,7 +117,7 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
   const currentTodos = todos || []
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-4 sm:p-6">
       <PageHeader
         titleKey="Todo List"
         logoUrl={`${loaderData.apiBaseUrl}/v1/assets/logo.png`}
