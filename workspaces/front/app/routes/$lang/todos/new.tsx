@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router"
+import { useEffect, useState } from "react"
+import { redirect, useNavigate } from "react-router"
 import { checkSession, createServerFetcher } from "~/client"
 import { PageHeader } from "~/components/PageHeader"
 import { TodoEditor } from "~/components/TodoEditor"
 import { useCreateTodo } from "~/hooks/useTodos"
-import { isSupportedLanguage, defaultLanguage } from "~/i18n/config"
 import { initI18nClient, useTranslation } from "~/i18n/client"
-import { redirect } from "react-router"
+import { defaultLanguage, isSupportedLanguage } from "~/i18n/config"
 import type { Route } from "./+types/new"
 
 export const links: Route.LinksFunction = () => {
@@ -69,7 +68,7 @@ export async function loader({ params, context, request }: Route.LoaderArgs) {
   const cookie = request.headers.get("Cookie")
   const authenticated = await checkSession(context.cloudflare.env, cookie)
   if (!authenticated) {
-    return redirect(`/${lang}/todos`)
+    return redirect(`/${lang}/login`)
   }
 
   return {
@@ -103,7 +102,7 @@ export async function action({ params, request, context }: Route.ActionArgs) {
 
   // authMiddlewareの401はHono RPCの型に含まれないため型アサーション
   if ((req.status as number) === 401) {
-    return redirect(`/${lang}/todos`)
+    return redirect(`/${lang}/login`)
   }
 
   const res = await req.json()

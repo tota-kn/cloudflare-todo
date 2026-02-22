@@ -13,5 +13,9 @@
   "Todo title...": "Todoタイトル...",
   "Add description...": "説明を追加...",
   "Test": "テスト",
-  "Please sign in to view your todos": "Todoを表示するにはログインしてください"
+  "Please sign in to view your todos": "Todoを表示するにはログインしてください",
+  "Sign In": "ログイン",
+  "Sign in to manage your todos": "Todoを管理するにはログインしてください",
+  "Signing in...": "ログイン中...",
+  "Sign in with Google": "Googleでログイン"
 }
