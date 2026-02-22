@@ -1,13 +1,14 @@
+import { useEffect } from "react"
+import { redirect } from "react-router"
 import { createServerFetcher } from "~/client"
 import { ErrorMessage } from "~/components/ErrorMessage"
 import { LoadingSpinner } from "~/components/LoadingSpinner"
 import { PageHeader } from "~/components/PageHeader"
 import { TodoList } from "~/components/TodoList"
 import { useTodos } from "~/hooks/useTodos"
-import { isSupportedLanguage, defaultLanguage } from "~/i18n/config"
 import { initI18nClient, useTranslation } from "~/i18n/client"
-import { redirect } from "react-router"
-import { useEffect } from "react"
+import { defaultLanguage, isSupportedLanguage } from "~/i18n/config"
+import { useSession } from "~/utils/auth-client"
 import type { Route } from "./+types/index"
 
 export const links: Route.LinksFunction = () => {
@@ -92,11 +93,15 @@ export async function loader({ params, context, request }: Route.LoaderArgs) {
 }
 
 export default function Todos({ loaderData }: Route.ComponentProps) {
+  const { data: session } = useSession()
+  // SSRではcross-originのためセッションCookieが取得できない場合がある
+  // クライアントサイドのuseSession()で補完する
+  const isAuthenticated = loaderData.isAuthenticated || !!session?.user
   const {
     data: todos,
     isLoading,
     error,
-  } = useTodos(loaderData.isAuthenticated ? loaderData.todos : undefined)
+  } = useTodos(isAuthenticated ? (loaderData.todos ?? []) : undefined)
   const { t } = useTranslation()
 
   // クライアントサイドでの言語初期化
@@ -104,7 +109,7 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
     initI18nClient(loaderData.language)
   }, [loaderData.language])
 
-  if (!loaderData.isAuthenticated || todos === null) {
+  if (!isAuthenticated || todos === null) {
     return (
       <div className="max-w-4xl mx-auto p-6">
         <PageHeader
