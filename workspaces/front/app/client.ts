@@ -7,7 +7,9 @@ import { getApiUrl, isDev, isLocal, isPrd } from "./utils/env"
  * @param env Cloudflare環境変数
  * @returns 基底URLとfetch関数
  */
-const resolveBackend = (env: Env): { baseUrl: string; fetcher: typeof fetch } => {
+const resolveBackend = (
+  env: Env
+): { baseUrl: string; fetcher: typeof fetch } => {
   if (isLocal(env)) {
     return { baseUrl: env.API_BASE_URL, fetcher: fetch }
   } else if (isDev(env) || isPrd(env)) {
