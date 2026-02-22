@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { redirect, useNavigate } from "react-router"
-import { createServerFetcher } from "~/client"
+import { createServerFetcher, requireAuth } from "~/client"
 import { PageHeader } from "~/components/PageHeader"
 import { TodoEditor } from "~/components/TodoEditor"
 import { useUpdateTodo } from "~/hooks/useTodos"
@@ -66,19 +66,17 @@ export async function loader({ params, context, request }: Route.LoaderArgs) {
     throw new Error("Todo ID is required")
   }
 
-  // セッションCookieをバックエンドに中継
+  // 未認証の場合は/:lang/loginへリダイレクト
   const cookie = request.headers.get("Cookie")
+  await requireAuth(context.cloudflare.env, lang, cookie)
+
+  // セッションCookieをバックエンドに中継
   const client = createServerFetcher(
     context.cloudflare.env,
     cookie ? { Cookie: cookie } : undefined
   )
 
   const req = await client.v1.todos[":todoId"].$get({ param: { todoId } })
-
-  // authMiddlewareの401はHono RPCの型に含まれないため型アサーション
-  if ((req.status as number) === 401) {
-    return redirect(`/${lang}/login`)
-  }
 
   const res = await req.json()
 
@@ -105,8 +103,11 @@ export async function action({ params, request, context }: Route.ActionArgs) {
     throw new Error("Todo ID is required")
   }
 
-  // セッションCookieをバックエンドに中継
+  // 未認証の場合は/:lang/loginへリダイレクト
   const cookie = request.headers.get("Cookie")
+  await requireAuth(context.cloudflare.env, lang, cookie)
+
+  // セッションCookieをバックエンドに中継
   const client = createServerFetcher(
     context.cloudflare.env,
     cookie ? { Cookie: cookie } : undefined
@@ -120,11 +121,6 @@ export async function action({ params, request, context }: Route.ActionArgs) {
     param: { todoId },
     json: { title, description: description || undefined },
   })
-
-  // authMiddlewareの401はHono RPCの型に含まれないため型アサーション
-  if ((req.status as number) === 401) {
-    return redirect(`/${lang}/login`)
-  }
 
   const res = await req.json()
 

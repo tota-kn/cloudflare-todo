@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { redirect, useNavigate } from "react-router"
-import { createServerFetcher } from "~/client"
+import { createServerFetcher, requireAuth } from "~/client"
 import { ErrorMessage } from "~/components/ErrorMessage"
 import { LoadingSpinner } from "~/components/LoadingSpinner"
 import { PageHeader } from "~/components/PageHeader"
@@ -60,18 +60,17 @@ export async function loader({ params, context, request }: Route.LoaderArgs) {
     return redirect(`/${defaultLanguage}/todos`)
   }
 
-  // セッションCookieをバックエンドに中継
+  // 未認証の場合は/:lang/loginへリダイレクト
   const cookie = request.headers.get("Cookie")
+  await requireAuth(context.cloudflare.env, lang, cookie)
+
+  // セッションCookieをバックエンドに中継
   const client = createServerFetcher(
     context.cloudflare.env,
     cookie ? { Cookie: cookie } : undefined
   )
 
   const req = await client.v1.todos.$get()
-
-  if (req.status === 401) {
-    return redirect(`/${lang}/login`)
-  }
 
   const res = await req.json()
 
