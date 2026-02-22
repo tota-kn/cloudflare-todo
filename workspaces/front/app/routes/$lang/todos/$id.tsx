@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router"
-import { createServerFetcher } from "~/client"
+import { useEffect, useState } from "react"
+import { redirect, useNavigate } from "react-router"
+import { createServerFetcher, requireAuth } from "~/client"
 import { PageHeader } from "~/components/PageHeader"
 import { TodoEditor } from "~/components/TodoEditor"
 import { useUpdateTodo } from "~/hooks/useTodos"
-import { isSupportedLanguage, defaultLanguage } from "~/i18n/config"
 import { initI18nClient, useTranslation } from "~/i18n/client"
-import { redirect } from "react-router"
+import { defaultLanguage, isSupportedLanguage } from "~/i18n/config"
 import type { Route } from "./+types/$id"
 
 export const links: Route.LinksFunction = () => {
@@ -67,19 +66,17 @@ export async function loader({ params, context, request }: Route.LoaderArgs) {
     throw new Error("Todo ID is required")
   }
 
-  // セッションCookieをバックエンドに中継
+  // 未認証の場合は/:lang/loginへリダイレクト
   const cookie = request.headers.get("Cookie")
+  await requireAuth(context.cloudflare.env, lang, cookie)
+
+  // セッションCookieをバックエンドに中継
   const client = createServerFetcher(
     context.cloudflare.env,
     cookie ? { Cookie: cookie } : undefined
   )
 
   const req = await client.v1.todos[":todoId"].$get({ param: { todoId } })
-
-  // authMiddlewareの401はHono RPCの型に含まれないため型アサーション
-  if ((req.status as number) === 401) {
-    return redirect(`/${lang}/todos`)
-  }
 
   const res = await req.json()
 
@@ -106,8 +103,11 @@ export async function action({ params, request, context }: Route.ActionArgs) {
     throw new Error("Todo ID is required")
   }
 
-  // セッションCookieをバックエンドに中継
+  // 未認証の場合は/:lang/loginへリダイレクト
   const cookie = request.headers.get("Cookie")
+  await requireAuth(context.cloudflare.env, lang, cookie)
+
+  // セッションCookieをバックエンドに中継
   const client = createServerFetcher(
     context.cloudflare.env,
     cookie ? { Cookie: cookie } : undefined
@@ -121,11 +121,6 @@ export async function action({ params, request, context }: Route.ActionArgs) {
     param: { todoId },
     json: { title, description: description || undefined },
   })
-
-  // authMiddlewareの401はHono RPCの型に含まれないため型アサーション
-  if ((req.status as number) === 401) {
-    return redirect(`/${lang}/todos`)
-  }
 
   const res = await req.json()
 

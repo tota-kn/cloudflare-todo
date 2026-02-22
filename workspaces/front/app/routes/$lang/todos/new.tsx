@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router"
-import { checkSession, createServerFetcher } from "~/client"
+import { useEffect, useState } from "react"
+import { redirect, useNavigate } from "react-router"
+import { createServerFetcher, requireAuth } from "~/client"
 import { PageHeader } from "~/components/PageHeader"
 import { TodoEditor } from "~/components/TodoEditor"
 import { useCreateTodo } from "~/hooks/useTodos"
-import { isSupportedLanguage, defaultLanguage } from "~/i18n/config"
 import { initI18nClient, useTranslation } from "~/i18n/client"
-import { redirect } from "react-router"
+import { defaultLanguage, isSupportedLanguage } from "~/i18n/config"
 import type { Route } from "./+types/new"
 
 export const links: Route.LinksFunction = () => {
@@ -65,12 +64,9 @@ export async function loader({ params, context, request }: Route.LoaderArgs) {
     return redirect(`/${defaultLanguage}/todos/new`)
   }
 
-  // 未認証チェック: BetterAuthのセッション確認エンドポイントを直接呼ぶ
+  // 未認証の場合は/:lang/loginへリダイレクト
   const cookie = request.headers.get("Cookie")
-  const authenticated = await checkSession(context.cloudflare.env, cookie)
-  if (!authenticated) {
-    return redirect(`/${lang}/todos`)
-  }
+  await requireAuth(context.cloudflare.env, lang, cookie)
 
   return {
     apiBaseUrl: context.cloudflare.env.API_BASE_URL,
@@ -86,8 +82,11 @@ export async function action({ params, request, context }: Route.ActionArgs) {
     return redirect(`/${defaultLanguage}/todos/new`)
   }
 
-  // セッションCookieをバックエンドに中継
+  // 未認証の場合は/:lang/loginへリダイレクト
   const cookie = request.headers.get("Cookie")
+  await requireAuth(context.cloudflare.env, lang, cookie)
+
+  // セッションCookieをバックエンドに中継
   const client = createServerFetcher(
     context.cloudflare.env,
     cookie ? { Cookie: cookie } : undefined
@@ -100,11 +99,6 @@ export async function action({ params, request, context }: Route.ActionArgs) {
   const req = await client.v1.todos.$post({
     json: { title, description: description || undefined },
   })
-
-  // authMiddlewareの401はHono RPCの型に含まれないため型アサーション
-  if ((req.status as number) === 401) {
-    return redirect(`/${lang}/todos`)
-  }
 
   const res = await req.json()
 

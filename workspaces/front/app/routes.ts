@@ -6,6 +6,7 @@ export default [
 
   // 言語パラメータ付きルート
   route("/:lang", "routes/$lang/index.tsx"),
+  route("/:lang/login", "routes/$lang/login.tsx"),
   route("/:lang/todos", "routes/$lang/todos/index.tsx"),
   route("/:lang/todos/new", "routes/$lang/todos/new.tsx"),
   route("/:lang/todos/:id", "routes/$lang/todos/$id.tsx"),

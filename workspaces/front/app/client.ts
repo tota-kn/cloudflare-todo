@@ -1,4 +1,5 @@
 import { hc } from "hono/client"
+import { redirect } from "react-router"
 import type { ClientType } from "./types/shared"
 import { getApiUrl, isDev, isLocal, isPrd } from "./utils/env"
 
@@ -64,4 +65,22 @@ export const checkSession = async (
   if (!response.ok) return false
   const data = await response.json()
   return data !== null
+}
+
+/**
+ * 認証が必要なページのloader/actionの先頭で呼び出す認証チェックヘルパー
+ * 未認証の場合はログインページへのリダイレクトをthrowする
+ * @param env Cloudflare環境変数
+ * @param lang 現在の言語パラメータ（リダイレクト先URLに使用）
+ * @param cookie リクエストから転送するCookie文字列
+ */
+export const requireAuth = async (
+  env: Env,
+  lang: string,
+  cookie?: string | null
+): Promise<void> => {
+  const authenticated = await checkSession(env, cookie)
+  if (!authenticated) {
+    throw redirect(`/${lang}/login`)
+  }
 }

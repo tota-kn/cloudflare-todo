@@ -1,12 +1,12 @@
 import { useEffect } from "react"
-import { redirect } from "react-router"
-import { createServerFetcher } from "~/client"
+import { redirect, useNavigate } from "react-router"
+import { createServerFetcher, requireAuth } from "~/client"
 import { ErrorMessage } from "~/components/ErrorMessage"
 import { LoadingSpinner } from "~/components/LoadingSpinner"
 import { PageHeader } from "~/components/PageHeader"
 import { TodoList } from "~/components/TodoList"
 import { useTodos } from "~/hooks/useTodos"
-import { initI18nClient, useTranslation } from "~/i18n/client"
+import { initI18nClient } from "~/i18n/client"
 import { defaultLanguage, isSupportedLanguage } from "~/i18n/config"
 import { useSession } from "~/utils/auth-client"
 import type { Route } from "./+types/index"
@@ -60,23 +60,17 @@ export async function loader({ params, context, request }: Route.LoaderArgs) {
     return redirect(`/${defaultLanguage}/todos`)
   }
 
-  // セッションCookieをバックエンドに中継
+  // 未認証の場合は/:lang/loginへリダイレクト
   const cookie = request.headers.get("Cookie")
+  await requireAuth(context.cloudflare.env, lang, cookie)
+
+  // セッションCookieをバックエンドに中継
   const client = createServerFetcher(
     context.cloudflare.env,
     cookie ? { Cookie: cookie } : undefined
   )
 
   const req = await client.v1.todos.$get()
-
-  if (req.status === 401) {
-    return {
-      todos: [],
-      apiBaseUrl: context.cloudflare.env.API_BASE_URL,
-      language: lang,
-      isAuthenticated: false,
-    }
-  }
 
   const res = await req.json()
 
@@ -93,6 +87,7 @@ export async function loader({ params, context, request }: Route.LoaderArgs) {
 }
 
 export default function Todos({ loaderData }: Route.ComponentProps) {
+  const navigate = useNavigate()
   const { data: session } = useSession()
   // SSRではcross-originのためセッションCookieが取得できない場合がある
   // クライアントサイドのuseSession()で補完する
@@ -102,28 +97,21 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
     isLoading,
     error,
   } = useTodos(isAuthenticated ? (loaderData.todos ?? []) : undefined)
-  const { t } = useTranslation()
 
   // クライアントサイドでの言語初期化
   useEffect(() => {
     initI18nClient(loaderData.language)
   }, [loaderData.language])
 
+  // クライアントサイドで未認証が確定した場合はログインページへリダイレクト
+  useEffect(() => {
+    if (!isAuthenticated || todos === null) {
+      navigate(`/${loaderData.language}/login`)
+    }
+  }, [isAuthenticated, todos, navigate, loaderData.language])
+
   if (!isAuthenticated || todos === null) {
-    return (
-      <div className="max-w-4xl mx-auto p-6">
-        <PageHeader
-          titleKey="Todo List"
-          logoUrl={`${loaderData.apiBaseUrl}/v1/assets/logo.png`}
-          showNewTodoButton={false}
-        />
-        <div className="text-center py-12">
-          <p className="text-muted-foreground text-lg">
-            {t("Please sign in to view your todos")}
-          </p>
-        </div>
-      </div>
-    )
+    return null
   }
 
   const currentTodos = todos || []

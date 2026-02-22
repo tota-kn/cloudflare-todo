@@ -13,5 +13,9 @@
   "Todo title...": "Todo title...",
   "Add description...": "Add description...",
   "Test": "Test",
-  "Please sign in to view your todos": "Please sign in to view your todos"
+  "Please sign in to view your todos": "Please sign in to view your todos",
+  "Sign In": "Sign In",
+  "Sign in to manage your todos": "Sign in to manage your todos",
+  "Signing in...": "Signing in...",
+  "Sign in with Google": "Sign in with Google"
 }
