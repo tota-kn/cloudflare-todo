@@ -4,23 +4,6 @@ import { bearer } from "better-auth/plugins"
 import { drizzle } from "drizzle-orm/d1"
 import * as schema from "../infrastructure/database/auth-schema"
 
-/**
- * STAGEに応じたクッキードメインを返す
- * - local: localhost
- * - dev: todo.dev.totakn.com
- * - prd: todo.totakn.com
- */
-const getCookieDomain = (stage: CloudflareEnv["STAGE"]): string => {
-  switch (stage) {
-    case "local":
-      return "localhost"
-    case "dev":
-      return "todo.dev.totakn.com"
-    case "prd":
-      return "todo.totakn.com"
-  }
-}
-
 /** Better Auth インスタンスを生成する */
 export const auth = (env: CloudflareEnv) => {
   const db = drizzle(env.DB, { schema })
@@ -52,7 +35,7 @@ export const auth = (env: CloudflareEnv) => {
     advanced: {
       cookiePrefix: "cloudflare-todo",
       defaultCookieAttributes: {
-        domain: getCookieDomain(env.STAGE),
+        domain: env.DOMAIN,
         sameSite: "lax",
         secure: env.STAGE !== "local",
       },
