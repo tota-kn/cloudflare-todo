@@ -4,6 +4,7 @@ import { bearer } from "better-auth/plugins"
 import { drizzle } from "drizzle-orm/d1"
 import * as schema from "../infrastructure/database/auth-schema"
 
+/** Better Auth インスタンスを生成する */
 export const auth = (env: CloudflareEnv) => {
   const db = drizzle(env.DB, { schema })
   return betterAuth({
@@ -29,6 +30,14 @@ export const auth = (env: CloudflareEnv) => {
         expiresIn: 60 * 60 * 24 * 7, // 7日間
         updateAge: 60 * 60 * 24, // 24時間後に更新
         maxAge: 60 * 60 * 24, // 24時間
+      },
+    },
+    advanced: {
+      cookiePrefix: "cloudflare-todo",
+      defaultCookieAttributes: {
+        domain: env.DOMAIN,
+        sameSite: "lax",
+        secure: env.STAGE !== "local",
       },
     },
   })

@@ -11,6 +11,7 @@
       "name": "todo-back-local",
       "vars": {
         "STAGE": "local",
+        "DOMAIN": "localhost",
         "CORS_ORIGIN": "http://localhost:5173",
       },
       "r2_buckets": [
@@ -31,6 +32,7 @@
       "name": "todo-back-dev",
       "vars": {
         "STAGE": "dev",
+        "DOMAIN": "todo.dev.totakn.com",
         "CORS_ORIGIN": "https://todo.dev.totakn.com",
       },
       "r2_buckets": [
@@ -57,6 +59,7 @@
       "name": "todo-back-prd",
       "vars": {
         "STAGE": "prd",
+        "DOMAIN": "todo.totakn.com",
         "CORS_ORIGIN": "https://todo.totakn.com",
       },
       "r2_buckets": [
