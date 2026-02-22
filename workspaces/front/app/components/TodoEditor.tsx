@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
+import { useTranslation } from "~/i18n/client"
 import { formatDateTime } from "~/utils/dateFormat"
 import type { TodoDto } from "../types/shared"
 import { ActionButton } from "./CircleButton"
 import { TodoInput } from "./TodoInput"
-import { useTranslation } from "~/i18n/client"
 
 interface TodoEditorProps {
   mode: "create" | "edit"
@@ -121,11 +121,7 @@ export function TodoEditor({
 
         {mode === "edit" && (
           <div className="ml-3 shrink-0">
-            <ActionButton
-              onClick={() => {}}
-              disabled={true}
-              variant="delete"
-            />
+            <ActionButton onClick={() => {}} disabled={true} variant="delete" />
           </div>
         )}
       </div>
