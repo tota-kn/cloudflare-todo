@@ -7,7 +7,11 @@ meta {
 put {
   url: {{BASE_URL}}/v1/todos/test-put-success-001
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{AUTH_TOKEN}}
 }
 
 body:json {
