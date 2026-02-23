@@ -1,4 +1,6 @@
-# バックエンド (workspaces/back/) - CLAUDE.md
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 このファイルはバックエンドワークスペース固有のClaude Codeガイダンスを提供します。
 
@@ -9,97 +11,90 @@
 - **フレームワーク**: Hono with TypeScript
 - **パターン**: オニオンアーキテクチャ（関心の分離が明確）
 - **構造**:
-  - `src/domain/` - エンティティ、リポジトリ、値オブジェクト
-  - `src/application/` - ユースケースとDTO
-  - `src/infrastructure/` - D1/R2実装、依存性注入
-  - `src/presentation/` - コントローラー、ルート、バリデーター
+  - `src/domain/` - エンティティ（`Todo`）、値オブジェクト（`TodoId`, `TodoStatus`）
+  - `src/application/` - ユースケース、DTO、リポジトリインターフェース（`ITodoRepository`）
+  - `src/infrastructure/` - D1/R2実装（`D1TodoRepository`）、Drizzle ORMスキーマ
+  - `src/presentation/` - ルートハンドラー、ミドルウェア（`authMiddleware`）
+  - `src/utils/` - 共通ユーティリティ（`auth.ts`でbetter-auth設定、`dateTime.ts`）
+  - `src/types/` - Cloudflare環境型（`env.d.ts`は自動生成）
 - **バリデーション**: `@hono/zod-validator`でZodスキーマ
-- **エントリーポイント**: `src/index.ts` - Worker実行環境、`src/presentation/app.ts` - アプリケーション構成
-- **データベース**: `migrations/`でCloudflare D1マイグレーション
+- **エントリーポイント**: `src/index.ts` → `src/presentation/app.ts`
+- **認証**: better-auth + Google OAuth、Drizzle ORM（SQLiteアダプタ）、bearerプラグイン
+- **データベース**: Cloudflare D1（SQLite）、マイグレーションは`migrations/`
 - **ストレージ**: ファイルアップロード用のCloudflare R2
-- **型安全性**: ルートがフロントエンドで使用される型をエクスポート
-- **テスト**: Vitestで単体テスト、Brunoで統合テスト
+- **型安全性**: `app.ts`から`AppType`をエクスポートし、フロントエンドで`hc<AppType>()`として利用
+- **テスト**: Vitestで単体テスト、Bruno CLIでAPI統合テスト
 
-### オニオンアーキテクチャ実装
+### オニオンアーキテクチャの依存ルール
 
-- **ドメイン層**: エンティティと値オブジェクトによる純粋なビジネスロジック
-- **アプリケーション層**: ユースケースがビジネス操作を統率
-- **インフラストラクチャ層**: リポジトリの具体的実装
-- **プレゼンテーション層**: HTTPコントローラーとルート定義
-- **依存性注入**: `Dependencies.ts`で一元化
-- **依存方向制御**: ESLintの`import/no-restricted-paths`ルールでオニオンアーキテクチャの依存方向を強制
+ESLintの`import/no-restricted-paths`と`eslint-plugin-boundaries`で依存方向を強制：
+- **Domain層** → 他の層をimportできない（純粋なビジネスロジック）
+- **Application層** → Domain層のみ依存可能
+- **Infrastructure層** → Domain層とApplication層（リポジトリインターフェースのみ）に依存可能
+- **Presentation層** → 同じPresentation層内のファイルのみ依存可能
+- **`Dependencies.ts`** → 境界ルールから除外。全層を結合するDIコンテナとして機能し、Presentation層からのみ利用される
+
+### ルートファイル規約
+
+`src/presentation/api/`以下でファイルベースルーティングパターンを採用：
+- パスセグメントがディレクトリ構造に対応（例: `v1/todos/_todoId/put.ts` → `PUT /v1/todos/:todoId`）
+- 動的パラメータは`_`プレフィックスのディレクトリ（`_todoId`）
+- HTTPメソッドがファイル名（`get.ts`, `post.ts`, `put.ts`, `delete.ts`）
+- 各ファイルは`Dependencies`を受け取りHonoアプリケーションを返す関数をエクスポート
+- 全ルートは`app.ts`で`.route("", handler(dependencies))`として登録
 
 ## 開発コマンド
 
-### 開発サーバー
-
 ```bash
+# 開発サーバー（マイグレーション自動適用）
 pnpm dev              # local envでlocalhost:8787で実行
-```
 
-### 型生成とチェック
+# 型生成・チェック
+pnpm typegen          # Cloudflare環境の型を生成（src/types/env.d.ts）
+pnpm typecheck        # typegen + tsc --declaration
 
-```bash
-pnpm typegen          # Cloudflare環境の型を生成
-pnpm typecheck        # 型チェックと宣言ファイル生成
-```
+# リント（ESLint --fix + Prettier --write を両方実行）
+pnpm lint
 
-### リント & 修正
+# テスト
+pnpm test:unit        # Vitest実行（カバレッジ付き）
+pnpm test:unit:watch  # ウォッチモード
+pnpm test:api         # bucket:reset + db:reset後にBruno APIテスト実行
 
-```bash
-pnpm lint             # ESLintでコード品質チェック
-```
+# 単一テストファイルの実行
+npx vitest run test/unit/domain/entities/Todo.test.ts
 
-### デプロイ
-
-```bash
-pnpm deploy:dev       # dev環境にデプロイ
-pnpm deploy:prd       # productionにデプロイ
-```
-
-### テスト
-
-```bash
-pnpm test:unit        # 単体テスト実行（カバレッジ付き）
-pnpm test:unit:watch  # 単体テストウォッチモード
-pnpm test:api         # Bruno APIテストを実行
-```
-
-### データベース操作
-
-```bash
-pnpm db:migrate       # D1データベースマイグレーションを適用
-pnpm db:reset         # テストデータでデータベースリセット
+# データベース操作
+pnpm db:migrate       # D1マイグレーション適用
+pnpm db:reset         # テストデータでシード
 pnpm bucket:reset     # R2バケットリセット
+
+# デプロイ
+pnpm deploy:dev       # dev環境
+pnpm deploy:prd       # production環境
 ```
 
 ## 重要なファイル
 
-- `src/index.ts` - メインバックエンドエントリーポイントとWorker設定
-- `src/presentation/app.ts` - Honoアプリケーション構成、AppType型エクスポート
-- `src/Dependencies.ts` - 依存性注入コンテナ
-- `wrangler.jsonc` - Cloudflare Workers設定
-- `migrations/0001_todos_table.sql` - 初期データベーススキーマ
-- `migrations/0002_reset_and_seed_test_data.sql` - テストデータ用のリセット/シードスクリプト
-- `eslint.config.mjs` - オニオンアーキテクチャ強制のESLint設定
+- `src/index.ts` - Workerエントリーポイント
+- `src/presentation/app.ts` - Honoアプリ構成、`AppType`型エクスポート（フロントエンドとの型共有の起点）
+- `src/Dependencies.ts` - DIコンテナ（`CloudflareEnv`から全ユースケース・リポジトリを初期化）
+- `src/utils/auth.ts` - better-auth設定（Google OAuth、セッション、Cookie設定）
+- `src/presentation/middleware/authMiddleware.ts` - セッション検証ミドルウェア
+- `src/application/repositories/ITodoRepository.ts` - リポジトリインターフェース（Domain層のエンティティを扱う）
+- `eslint.config.mjs` - オニオンアーキテクチャ依存方向の強制ルール
+- `wrangler.jsonc` - 環境別Cloudflare Workers設定（local/dev/prd）
+- `migrations/0001_create_tables.sql` - 初期スキーマ
+- `migrations/0002_seed_test_data.sql` - テストデータシード
 
-## 開発ワークフロー
+## テスト構成
 
-1. バックエンドの変更: `src/presentation/api/v1/`でルートを編集
-2. 型は自動的にフロントエンドに流れる（`AppType`エクスポート経由）
-3. `test/api/`のテストスイートでBrunoを使用したAPIテスト
-4. 変更前に`pnpm typecheck`で型チェック、`pnpm lint`でコード品質確認
+- **単体テスト** (`test/unit/`): `src/`のディレクトリ構造をミラー。`test/unit/mocks/`にモックリポジトリとテストファクトリ
+- **API統合テスト** (`test/api/`): Brunoコレクション。`environments/`に環境設定（local/dev/prd）。エンドポイントごとにディレクトリ分割
 
-### テスト戦略
+## 開発指針
 
-- **単体テスト**: Vitestを使用、各層を独立してテスト
-- **統合テスト**: Bruno APIテストでエンドツーエンドのAPI動作確認
-- **カバレッジ**: 単体テスト実行時に自動的にカバレッジレポート生成
-
-### バックエンド固有の開発指針
-
-- オニオンアーキテクチャの依存方向を厳守する
-- 各層の責任を明確に分離する
-- ドメイン層にインフラストラクチャの詳細を漏らさない
-- ユースケースで複雑なビジネスロジックを統率する
-- バリデーションはプレゼンテーション層で行い、型安全性を保つ
+- オニオンアーキテクチャの依存方向を厳守（`pnpm lint`で検証可能）
+- Presentation層からは`Dependencies`経由でのみ他層にアクセス
+- バリデーションはPresentation層のZodスキーマで実施
+- 新しいルートを追加する場合：ルートハンドラー作成 → `app.ts`に登録 → Brunoテスト追加

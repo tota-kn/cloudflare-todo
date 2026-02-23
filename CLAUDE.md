@@ -6,108 +6,63 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト構造
 
-これは、pnpm ワークスペースモノレポを使用したフルスタックCloudflare Todoアプリケーションです：
+pnpm ワークスペースモノレポによるフルスタックCloudflare Todoアプリケーション。各ワークスペースの詳細は個別の CLAUDE.md を参照：
 
-- **workspaces/back/**: Cloudflare Workersにデプロイされる Hono ベースのAPIサーバー（詳細は @workspaces/back/CLAUDE.md を参照）
-- **workspaces/front/**: Cloudflare Pagesにデプロイされる React Router v7 SSRアプリケーション（詳細は @workspaces/front/CLAUDE.md を参照）
-- **workspaces/e2e/**: Playwrightを使用したE2Eテスト（詳細は @workspaces/e2e/CLAUDE.md を参照）
+- **workspaces/back/**: Hono APIサーバー（Cloudflare Workers）— オニオンアーキテクチャ
+- **workspaces/front/**: React Router v7 SSRアプリ（Cloudflare Pages）— TanStack Query + i18n
+- **workspaces/e2e/**: Playwright E2Eテスト
 
 ## 開発コマンド
 
-### ルートレベル
 ```bash
-# 依存関係をインストール
-pnpm install
+pnpm install              # 依存関係インストール
 
-# バックエンドで作業
-pnpm b [command]
+# ワークスペースへのコマンド委譲
+pnpm b [command]          # バックエンド（例: pnpm b dev, pnpm b test:unit）
+pnpm f [command]          # フロントエンド（例: pnpm f dev, pnpm f lint）
+pnpm e2e [command]        # E2Eテスト
 
-# フロントエンドで作業
-pnpm f [command]
-
-# E2Eテストで作業
-pnpm e2e [command]
-
-# 両方の型チェックを実行
-pnpm typecheck
-
-# ルートレベルから直接実行可能な便利コマンド
-pnpm b dev                # バックエンド開発サーバー起動
-pnpm f dev                # フロントエンド開発サーバー起動
-pnpm b test:unit          # バックエンド単体テスト実行
-pnpm b test:api           # API統合テスト実行
-pnpm test:e2e             # E2Eテスト実行（DB/バケットリセット含む）
-
-# 全品質チェック（重要）
-pnpm check-all            # lint + typecheck + 全テスト実行
+# 横断コマンド
+pnpm typecheck            # back + front の型チェック
+pnpm test:e2e             # DB/バケットリセット → E2Eテスト実行
+pnpm check-all            # lint + typecheck + 全テスト（CI相当）
 ```
 
-### ワークスペース固有コマンド
-各ワークスペースの詳細なコマンドについては、以下の個別ドキュメントを参照してください：
-- **バックエンド**: @workspaces/back/CLAUDE.md
-- **フロントエンド**: @workspaces/front/CLAUDE.md 
-- **E2Eテスト**: @workspaces/e2e/CLAUDE.md
+### タスク完了時のチェックリスト
+1. `pnpm typecheck` — 型エラーがないこと
+2. `pnpm b lint` && `pnpm f lint` — リントエラーがないこと
+3. `pnpm b test:unit` — バックエンド単体テスト
+4. `pnpm b test:api` — API統合テスト（Bruno）
+5. `pnpm test:e2e` — E2Eテスト（UI変更時）
 
 ## アーキテクチャ概要
 
-### 全体アーキテクチャ
-このプロジェクトは、Cloudflareプラットフォーム上で動作するフルスタックアプリケーションです。各ワークスペースの詳細なアーキテクチャについては、以下を参照してください：
-
-- **バックエンド**: オニオンアーキテクチャによるHono API（詳細は @workspaces/back/CLAUDE.md）
-- **フロントエンド**: React Router v7 SSRアプリケーション（詳細は @workspaces/front/CLAUDE.md）
-- **E2Eテスト**: Playwrightによる統合テスト（詳細は @workspaces/e2e/CLAUDE.md）
-
 ### 型共有戦略
-- バックエンドルートが`workspaces/back/src/presentation/app.ts`から`AppType`をエクスポート
-- フロントエンドが`workspaces/front/app/types/shared.ts`で`ClientType = AppType`として型を取得
-- フロントエンドが完全に型付けされたAPIクライアント用に`hc<ClientType>()`を使用
-- これによりバックエンドからフロントエンドへのエンドツーエンドの型安全性を実現
+バックエンドからフロントエンドへのエンドツーエンド型安全性：
+1. バックエンド: `workspaces/back/src/presentation/app.ts` → `AppType`をエクスポート
+2. フロントエンド: `workspaces/front/app/types/shared.ts` → `ClientType = AppType`として取得
+3. フロントエンド: `hc<ClientType>()`で完全に型付けされたAPIクライアントを生成
+4. バックエンドの型変更時は `pnpm b typecheck`（`tsc --declaration`）で型を再生成
 
 ### 環境設定
-両アプリはWranglerを環境固有の設定で使用：
-- **local**: `http://localhost:5173` CORS origin
-- **dev**: `https://todo.dev.totakn.com` CORS origin  
-- **prd**: `https://todo.totakn.com` CORS origin
+両アプリはWranglerで環境別設定を使用（`workspaces/*/wrangler.jsonc`）：
+- **local**: localhost開発（back:8787, front:5173）
+- **dev**: `https://todo.dev.totakn.com`
+- **prd**: `https://todo.totakn.com`
+
+### 認証
+BetterAuth + Google OAuthによる認証。バックエンドでセッション管理、フロントエンドの認証必須ルートでは`requireAuth()`ヘルパーで未認証時にログインページへリダイレクト。
 
 ## 重要なファイル
 
-### プロジェクト全体
-- `workspaces/front/app/types/shared.ts` - バックエンドとフロントエンド間の型ブリッジ
-- `workspaces/*/wrangler.jsonc` - Cloudflare Workers設定
-- `pnpm-workspace.yaml` - pnpmワークスペース設定
-
-### ワークスペース固有のファイル
-各ワークスペースの重要なファイルについては、以下の個別ドキュメントを参照してください：
-- **バックエンド**: @workspaces/back/CLAUDE.md
-- **フロントエンド**: @workspaces/front/CLAUDE.md 
-- **E2Eテスト**: @workspaces/e2e/CLAUDE.md
-
-## 開発ワークフロー
-
-### 全体的な開発フロー
-1. バックエンドの変更: 型は自動的にフロントエンドに流れる（型共有戦略による）
-2. フロントエンドの変更: 型付きクライアントで完全なIntelliSenseが利用可能
-3. 両アプリはホットリロードで同時に開発可能
-4. Cloudflare Workers（バックエンド）とPages（フロントエンド）に別々にデプロイ
-5. 変更前に品質チェックを実行
-
-### タスク完了時のチェックリスト
-1. `pnpm typecheck` - 型エラーがないこと
-2. `pnpm b lint` && `pnpm f lint` - リントエラーがないこと  
-3. `pnpm b test:unit` - 単体テストが通ること
-4. `pnpm b test:api` - API統合テストが通ること
-5. `pnpm test:e2e` - E2Eテストが通ること（UI変更時）
-
-### ワークスペース固有のワークフロー
-各ワークスペースの詳細なワークフローについては、以下を参照してください：
-- **バックエンド**: @workspaces/back/CLAUDE.md
-- **フロントエンド**: @workspaces/front/CLAUDE.md 
-- **E2Eテスト**: @workspaces/e2e/CLAUDE.md
+- `workspaces/front/app/types/shared.ts` — バックエンドとフロントエンド間の型ブリッジ
+- `workspaces/*/wrangler.jsonc` — Cloudflare Workers環境別設定
+- `pnpm-workspace.yaml` — ワークスペース設定
 
 ## メモリ
 
 ### 重要な指示と注意点
 - 常に日本語で応答する
 - ローカルサーバは手動で起動済みなので、動作確認時に起動しなおす必要ない
-- 反復のために一時的な新しいファイル、スクリプト、またはヘルパーファイルを作成した場合は、タスクの最後にこれらのファイルを削除してクリーンアップしてください。
+- 反復のために一時的な新しいファイル、スクリプト、またはヘルパーファイルを作成した場合は、タスクの最後にこれらのファイルを削除してクリーンアップしてください
 - TSDocを必ず記載してください
