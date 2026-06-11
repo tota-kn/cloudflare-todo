@@ -4,10 +4,11 @@ import { TodoUIヘルパー } from "../helpers/ui-helpers";
 test("Todo CRUD操作の完全なテストフロー", async ({ page }) => {
   const ui = new TodoUIヘルパー(page);
 
-  const testTodoTitle = "テスト Todo アイテム";
-  const testTodoDescription = "テスト用の説明文です";
-  const editedTitle = "編集されたテスト Todo アイテム";
-  const editedDescription = "編集された説明文です";
+  const uniqueSuffix = Date.now();
+  const testTodoTitle = `テスト Todo アイテム ${uniqueSuffix}`;
+  const testTodoDescription = `テスト用の説明文です ${uniqueSuffix}`;
+  const editedTitle = `編集されたテスト Todo アイテム ${uniqueSuffix}`;
+  const editedDescription = `編集された説明文です ${uniqueSuffix}`;
 
   await ui.Todoページへ移動();
   await ui.新規Todoページへ移動();
@@ -25,7 +26,7 @@ test("Todo CRUD操作の完全なテストフロー", async ({ page }) => {
 
   await ui.Todo表示確認(editedTitle, editedDescription);
 
-  await ui.Todo完了();
+  await ui.Todo完了(editedTitle);
 
   await ui.完了Todo表示確認(editedTitle);
 });

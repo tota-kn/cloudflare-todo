@@ -19,7 +19,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### ディレクトリ構成
 
-- `tests/` - テストスペック（現在 `todo-crud.spec.ts` のみ）
+- `tests/` - テストスペック（`todo-crud.spec.ts`, `todo-delete.spec.ts`, `todo-toggle.spec.ts`, `todo-validation.spec.ts`, `todo-list.spec.ts`）
 - `helpers/` - テストヘルパークラス（`ui-helpers.ts`）
 - `setup/` - globalSetup（ログイン済みstorageStateの生成）
 - `tests/.auth/` - 認証情報保存用ディレクトリ（globalSetupが生成、コミットしない）
@@ -60,7 +60,14 @@ npx playwright codegen
 
 ## テスト設計パターン
 
-現在のテスト（`todo-crud.spec.ts`）はシーケンシャルフロー：
-作成 → 表示確認 → 編集 → 表示確認 → 完了 → 完了確認
+各テストはシーケンシャルフロー（例: `todo-crud.spec.ts` は 作成 → 表示確認 → 編集 → 表示確認 → 完了 → 完了確認）。
 
 テストデータは日本語テキストを使用（例: "テスト Todo アイテム"）。
+
+### 並列実行の安全性
+
+`fullyParallel: true` で全テストが同一DBを共有するため：
+
+- 各テストは `Date.now()` サフィックス付きのユニークなタイトルで自前のTodoを作成して操作する
+- Todoアイテム内のボタン操作は `Todoアイテム取得(title)` でタイトルスコープする（`.first()` は他テストのTodoに誤爆するため使わない）
+- シードデータの既存Todoには依存しない（一覧が空でないことだけ前提にできる）
