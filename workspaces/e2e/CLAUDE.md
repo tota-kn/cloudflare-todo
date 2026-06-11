@@ -11,13 +11,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **baseURL**: `http://localhost:5173`（フロントエンド開発サーバー）
 - **タイムアウト**: 10秒、リトライ: 2回（CI時）
 - **トレース**: 初回リトライ時に記録
-- **前提条件**: フロントエンド・バックエンド両方の開発サーバーが起動済みであること
+- **前提条件**: フロントエンド・バックエンド両方の開発サーバーが起動済みであること、およびDBにテストデータがシード済みであること（`pnpm b db:reset`。ルートの `pnpm test:e2e` は自動で実行する）
+
+### 認証（ログイン状態の再現）
+
+実際のGoogle OAuthは使わない。`setup/global-setup.ts`（Playwright globalSetup）が、シード済みセッション（`workspaces/back/migrations/0002_seed_test_data.sql` の `test-session-token-001` / test-user-001）の署名済みCookieを `workspaces/back/.dev.vars` の `BETTER_AUTH_SECRET` から計算し、`tests/.auth/user.json`（storageState、gitignore済み）に書き出す。全テストはこのstorageStateによりログイン済み状態で開始される。
 
 ### ディレクトリ構成
 
 - `tests/` - テストスペック（現在 `todo-crud.spec.ts` のみ）
 - `helpers/` - テストヘルパークラス（`ui-helpers.ts`）
-- `tests/.auth/` - 認証情報保存用ディレクトリ
+- `setup/` - globalSetup（ログイン済みstorageStateの生成）
+- `tests/.auth/` - 認証情報保存用ディレクトリ（globalSetupが生成、コミットしない）
 
 ## 開発コマンド
 

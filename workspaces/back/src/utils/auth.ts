@@ -8,6 +8,9 @@ import * as schema from "../infrastructure/database/auth-schema"
 export const auth = (env: CloudflareEnv) => {
   const db = drizzle(env.DB, { schema })
   return betterAuth({
+    // Workersではprocess.envから自動取得されないため明示的に渡す
+    // （未指定だと既知のデフォルトシークレットで署名される）
+    secret: env.BETTER_AUTH_SECRET,
     database: drizzleAdapter(db, {
       provider: "sqlite",
     }),
