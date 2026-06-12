@@ -25,8 +25,19 @@ pnpm e2e [command]        # E2Eテスト
 # 横断コマンド
 pnpm typecheck            # back + front の型チェック
 pnpm test:e2e             # DB/バケットリセット → E2Eテスト実行
-pnpm check-all            # lint + typecheck + 全テスト（CI相当）
+pnpm template:check       # テンプレート生成スクリプトの整合性検査（高速・オフライン）
+pnpm check-all            # lint + template:check + typecheck + 全テスト（CI相当）
 ```
+
+### テンプレートからの新プロジェクト生成
+
+```bash
+node scripts/create-project.mjs <project-name>
+```
+
+このリポジトリをテンプレートとして新プロジェクトを生成する。固有値の置換、Cloudflareリソース（D1/R2）の作成、dev環境のworkers.devへのデプロイ、GitHubリポジトリ作成までを自動実行する。詳細は `scripts/create-project.mjs` のヘッダコメントを参照。
+
+**注意**: 環境固有値（ドメイン・リソース名など）をコードに新たに追加する場合は、既存の命名パターン（`todo-back` / `todo-app-db-` / `todo.totakn.com` 等）を踏襲すること。逸脱した固有値は生成スクリプトの置換対象にならず、`pnpm template:check` でも検知できない。スクリプトが壊れていないかは `pnpm template:check` で随時検査できる（check-all にも含まれる）。
 
 ### タスク完了時のチェックリスト
 1. `pnpm typecheck` — 型エラーがないこと
@@ -34,6 +45,7 @@ pnpm check-all            # lint + typecheck + 全テスト（CI相当）
 3. `pnpm b test:unit` — バックエンド単体テスト
 4. `pnpm b test:api` — API統合テスト（Bruno）
 5. `pnpm test:e2e` — E2Eテスト（UI変更時）
+6. `pnpm template:check` — テンプレート生成スクリプトの整合性検査（数秒で完了）
 
 ## アーキテクチャ概要
 

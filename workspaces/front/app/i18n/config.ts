@@ -1,4 +1,4 @@
-import i18next from "i18next"
+import i18next, { type i18n } from "i18next"
 import resourcesToBackend from "i18next-resources-to-backend"
 
 export const supportedLanguages = ["en", "ja"] as const
@@ -17,7 +17,16 @@ export function isSupportedLanguage(
   )
 }
 
-export function createI18nInstance(language: string = defaultLanguage) {
+/**
+ * 指定言語で初期化したi18nextインスタンスを生成する
+ *
+ * 戻り値型を明示しないと推論型がnode_modules内のパスを参照し、
+ * 宣言ファイル生成時にTS2742(not portable)エラーになるため注釈必須。
+ *
+ * @param language - 初期言語(デフォルト: defaultLanguage)
+ * @returns 初期化済みのi18nextインスタンス
+ */
+export function createI18nInstance(language: string = defaultLanguage): i18n {
   const instance = i18next.createInstance()
 
   instance

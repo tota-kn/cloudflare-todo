@@ -15,11 +15,9 @@ export const auth = (env: CloudflareEnv) => {
       provider: "sqlite",
     }),
     plugins: [bearer()],
-    trustedOrigins: [
-      "http://localhost:5173",
-      "https://todo.dev.totakn.com",
-      "https://todo.totakn.com",
-    ],
+    // 環境ごとに自オリジン(フロントエンドのURL)のみ信頼する。
+    // ドメインをハードコードしないことでテンプレートからのプロジェクト生成時の置換対象を減らす
+    trustedOrigins: [env.CORS_ORIGIN],
     socialProviders: {
       google: {
         clientId: env.GOOGLE_CLIENT_ID,

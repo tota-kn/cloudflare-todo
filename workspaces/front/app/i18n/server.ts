@@ -1,3 +1,4 @@
+import type { i18n } from "i18next"
 import {
   createI18nInstance,
   type SupportedLanguage,
@@ -5,7 +6,15 @@ import {
   defaultLanguage,
 } from "./config"
 
-export async function initI18nServer(language: SupportedLanguage) {
+/**
+ * サーバーサイド用にi18nextインスタンスを初期化し、翻訳リソースのロード完了まで待つ
+ *
+ * @param language - リクエストから判定した言語
+ * @returns 翻訳リソースロード済みのi18nextインスタンス
+ */
+export async function initI18nServer(
+  language: SupportedLanguage
+): Promise<i18n> {
   const i18n = createI18nInstance(language)
 
   // サーバーサイドでは翻訳リソースが完全にロードされるまで待つ
