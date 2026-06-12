@@ -1,0 +1,21 @@
+meta {
+  name: dev-login-invalid-callback
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{BASE_URL}}/api/auth/dev-login?callbackURL=https://evil.example.com/
+  body: none
+  auth: none
+}
+
+params:query {
+  callbackURL: https://evil.example.com/
+}
+
+tests {
+  test("Response status is 400 for external callbackURL", function() {
+    expect(res.getStatus()).to.equal(400);
+  });
+}

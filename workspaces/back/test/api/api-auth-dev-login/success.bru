@@ -1,0 +1,31 @@
+meta {
+  name: dev-login-success
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{BASE_URL}}/api/auth/dev-login?callbackURL={{FRONT_URL}}/en/todos
+  body: none
+  auth: none
+}
+
+params:query {
+  callbackURL: {{FRONT_URL}}/en/todos
+}
+
+script:post-response {
+  // dev-loginのSet-CookieがBrunoのCookieジャーに保存されたままだと、
+  // 後続のbearer認証テストでCookieとAuthorizationが競合して401になるためクリアする
+  bru.cookies.jar().clear();
+}
+
+tests {
+  // dev-loginはセッションCookieを設定してcallbackURLへ302リダイレクトする。
+  // Brunoはリダイレクトを追従するため、Cookieが有効ならフロントエンドの
+  // todosページ（認証必須）がシード済みTodoを含むHTMLを200で返すことを検証する。
+  test("Redirects to todos page as authenticated user", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(String(res.getBody())).to.include("List Test Todo 1");
+  });
+}

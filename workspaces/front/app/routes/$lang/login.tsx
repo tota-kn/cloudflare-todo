@@ -6,7 +6,7 @@ import { useTheme } from "~/contexts/ThemeContext"
 import { initI18nClient, useTranslation } from "~/i18n/client"
 import { defaultLanguage, isSupportedLanguage } from "~/i18n/config"
 import { signIn } from "~/utils/auth-client"
-import { getFrontUrl } from "~/utils/env"
+import { getApiUrl, getFrontUrl, isLocal } from "~/utils/env"
 import { getLanguageAwarePath } from "~/utils/language"
 import type { Route } from "./+types/login"
 
@@ -60,6 +60,13 @@ export default function Login({ loaderData }: Route.ComponentProps) {
   const todosPath = `${getFrontUrl()}${getLanguageAwarePath(loaderData.language, "/todos")}`
 
   const handleSignIn = async () => {
+    // local環境では実際のGoogle OAuthをスキップし、
+    // dev-loginエンドポイントでシード済みテストユーザーとしてログインする
+    if (isLocal()) {
+      window.location.href = `${getApiUrl()}/api/auth/dev-login?callbackURL=${encodeURIComponent(todosPath)}`
+      return
+    }
+
     setSigningIn(true)
     await signIn.social(
       {
