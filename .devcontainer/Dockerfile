@@ -66,7 +66,8 @@ RUN ARCH=$(dpkg --print-architecture) && \
   rm "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb"
 
 # Install global packages and Playwright dependencies
-RUN npm install -g pnpm@latest
+# pnpm@latest だとロックファイルを書いた版とずれるため mise.toml と同じ版に固定する
+RUN npm install -g pnpm@12.15.0
 RUN npm install -g playwright@latest
 RUN npx playwright install-deps
 
