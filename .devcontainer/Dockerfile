@@ -1,4 +1,4 @@
-FROM node:22
+FROM node:24
 
 ARG TZ
 ARG CLAUDE_CODE_VERSION=latest
