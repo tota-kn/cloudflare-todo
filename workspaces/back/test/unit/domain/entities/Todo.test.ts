@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest"
+import { describe, expect, it, vi } from "vite-plus/test"
 import { Todo } from "../../../../src/domain/entities/Todo"
 import { TestFactory } from "../../mocks/TestFactory"
 

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest"
+import { beforeEach, describe, expect, it } from "vite-plus/test"
 import { ListTodosUseCase } from "../../../../src/application/usecases/ListTodosUseCase"
 import { MockTodoRepository } from "../../mocks/MockTodoRepository"
 import { TestFactory } from "../../mocks/TestFactory"

@@ -1,7 +1,7 @@
 import React from "react"
 import { renderHook } from "@testing-library/react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { describe, expect, it, vi, beforeEach } from "vitest"
+import { describe, expect, it, vi, beforeEach } from "vite-plus/test"
 import { useTodos } from "~/hooks/useTodos"
 
 // clientのモック

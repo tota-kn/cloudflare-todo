@@ -17,5 +17,8 @@
 		"test:e2e": "pnpm b db:reset && pnpm e2e test",
 		"template:check": "node scripts/create-project.mjs --check",
 		"check-all": "pnpm lint && pnpm template:check && pnpm typecheck && pnpm test:unit && pnpm test:api && pnpm test:e2e"
+	},
+	"devDependencies": {
+		"vite-plus": "catalog:"
 	}
 }

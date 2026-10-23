@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import "@testing-library/jest-dom"
 import { render } from "@testing-library/react"
 import { BrowserRouter } from "react-router"
-import { describe, expect, it, vi } from "vitest"
+import { describe, expect, it, vi } from "vite-plus/test"
 import { TodoItem } from "~/components/TodoItem"
 import type { TodoDto } from "~/types/shared"
 

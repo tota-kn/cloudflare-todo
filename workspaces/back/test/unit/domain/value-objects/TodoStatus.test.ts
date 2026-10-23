@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest"
+import { describe, it, expect } from "vite-plus/test"
 import { TodoStatus } from "../../../../src/domain/value-objects/TodoStatus"
 
 describe("TodoStatus", () => {

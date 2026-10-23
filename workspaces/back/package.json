@@ -7,8 +7,8 @@
     "typegen": "wrangler types -e local --env-interface CloudflareEnv ./src/types/env.d.ts",
     "typecheck": "pnpm run typegen && tsc --declaration --emitDeclarationOnly --declarationDir ./dist/types",
     "typecheck:watch": "pnpm run typecheck --watch",
-    "test:unit": "vitest run --coverage",
-    "test:unit:watch": "vitest --coverage",
+    "test:unit": "vp test run --coverage",
+    "test:unit:watch": "vp test --coverage",
     "test:api": "pnpm bucket:reset && pnpm db:reset && cd test/api && bru run --env local",
     "db:migrate": "wrangler d1 migrations apply todo-app-db-local --local -e local",
     "db:reset": "wrangler d1 execute todo-app-db-local --local -e local --file ./migrations/0002_seed_test_data.sql",
@@ -28,7 +28,7 @@
     "@eslint/js": "^10.0.1",
     "@types/node": "^26.6.5",
     "@usebruno/cli": "^4.3.0",
-    "@vitest/coverage-v8": "^5.0.5",
+    "@vitest/coverage-v8": "catalog:",
     "drizzle-kit": "^0.31.11",
     "eslint": "^10.13.0",
     "eslint-config-prettier": "^10.1.8",
@@ -38,7 +38,8 @@
     "prettier": "^3.9.10",
     "typescript": "^7.0.2",
     "typescript-eslint": "^8.72.0",
-    "vitest": "^5.0.5",
-    "wrangler": "^4.152.0"
+    "vitest": "catalog:",
+    "wrangler": "^4.151.3",
+    "vite-plus": "catalog:"
   }
 }
