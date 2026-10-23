@@ -1,4 +1,4 @@
-import { zValidator } from "@hono/zod-validator"
+import { validator } from "../../../../middleware/validator"
 import { Hono } from "hono"
 import { z } from "zod"
 import { Dependencies } from "../../../../../Dependencies"
@@ -20,7 +20,7 @@ export function v1TodosTodoIdPut(dependencies: Dependencies) {
   }>().put(
     "/v1/todos/:todoId",
     authMiddleware,
-    zValidator("json", updateTodoSchema),
+    validator("json", updateTodoSchema),
     async (c) => {
       try {
         const userId = c.get("userId")

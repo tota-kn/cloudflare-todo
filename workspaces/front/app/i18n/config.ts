@@ -46,7 +46,7 @@ export function createI18nInstance(language: string = defaultLanguage): i18n {
         escapeValue: false, // React already escapes by default
       },
       // クライアントサイドでの初期化を同期的に行う
-      initImmediate: false,
+      initAsync: false,
     })
 
   return instance

@@ -1,7 +1,8 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "todo-back",
-  "compatibility_date": "2025-02-14",
+  "compatibility_date": "2026-10-19",
+  "compatibility_flags": ["nodejs_compat"],
   "main": "src/index.ts",
   "observability": {
     "enabled": true,

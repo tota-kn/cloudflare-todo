@@ -1,4 +1,4 @@
-import { zValidator } from "@hono/zod-validator"
+import { validator } from "../../../../middleware/validator"
 import { Hono } from "hono"
 import { z } from "zod"
 import { Dependencies } from "../../../../../Dependencies"
@@ -14,7 +14,7 @@ export function v1TodosTodoIdDelete(dependencies: Dependencies) {
   }>().delete(
     "/v1/todos/:todoId",
     authMiddleware,
-    zValidator("param", z.object({ todoId: z.string().min(1) })),
+    validator("param", z.object({ todoId: z.string().min(1) })),
     async (c) => {
       try {
         const userId = c.get("userId")

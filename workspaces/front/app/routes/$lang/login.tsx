@@ -1,3 +1,4 @@
+import { env } from "cloudflare:workers"
 import { useEffect, useState } from "react"
 import { redirect } from "react-router"
 import { checkSession } from "~/client"
@@ -23,7 +24,7 @@ export function meta({ params }: Route.MetaArgs) {
   ]
 }
 
-export async function loader({ params, context, request }: Route.LoaderArgs) {
+export async function loader({ params, request }: Route.LoaderArgs) {
   const { lang } = params
 
   // 言語パラメータの検証
@@ -33,7 +34,7 @@ export async function loader({ params, context, request }: Route.LoaderArgs) {
 
   // 認証済みの場合はtodosへリダイレクト
   const cookie = request.headers.get("Cookie")
-  const authenticated = await checkSession(context.cloudflare.env, cookie)
+  const authenticated = await checkSession(env, cookie)
   if (authenticated) {
     return redirect(`/${lang}/todos`)
   }

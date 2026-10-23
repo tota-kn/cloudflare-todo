@@ -1,3 +1,4 @@
+import { env } from "cloudflare:workers"
 import { useEffect } from "react"
 import { redirect, useNavigate } from "react-router"
 import { createServerFetcher, requireAuth } from "~/client"
@@ -52,7 +53,7 @@ export function meta({ params }: Route.MetaArgs) {
   ]
 }
 
-export async function loader({ params, context, request }: Route.LoaderArgs) {
+export async function loader({ params, request }: Route.LoaderArgs) {
   const { lang } = params
 
   // 言語パラメータの検証
@@ -62,11 +63,11 @@ export async function loader({ params, context, request }: Route.LoaderArgs) {
 
   // 未認証の場合は/:lang/loginへリダイレクト
   const cookie = request.headers.get("Cookie")
-  await requireAuth(context.cloudflare.env, lang, cookie)
+  await requireAuth(env, lang, cookie)
 
   // セッションCookieをバックエンドに中継
   const client = createServerFetcher(
-    context.cloudflare.env,
+    env,
     cookie ? { Cookie: cookie } : undefined
   )
 
@@ -80,7 +81,7 @@ export async function loader({ params, context, request }: Route.LoaderArgs) {
 
   return {
     todos: res.items,
-    apiBaseUrl: context.cloudflare.env.API_BASE_URL,
+    apiBaseUrl: env.API_BASE_URL,
     language: lang,
     isAuthenticated: true,
   }
