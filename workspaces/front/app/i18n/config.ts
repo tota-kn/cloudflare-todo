@@ -29,7 +29,7 @@ export function isSupportedLanguage(
 export function createI18nInstance(language: string = defaultLanguage): i18n {
   const instance = i18next.createInstance()
 
-  instance
+  void instance
     .use(
       resourcesToBackend(
         (language: string, namespace: string) =>

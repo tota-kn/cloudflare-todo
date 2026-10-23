@@ -62,7 +62,7 @@ export const useCreateTodo = () => {
       return data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] })
+      void queryClient.invalidateQueries({ queryKey: ["todos"] })
     },
     onMutate: async (newTodo) => {
       await queryClient.cancelQueries({ queryKey: ["todos"] })
@@ -115,7 +115,7 @@ export const useUpdateTodo = () => {
       return data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] })
+      void queryClient.invalidateQueries({ queryKey: ["todos"] })
     },
     onMutate: async ({ todoId, ...updates }) => {
       await queryClient.cancelQueries({ queryKey: ["todos"] })
@@ -161,7 +161,7 @@ export const useDeleteTodo = () => {
       return data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] })
+      void queryClient.invalidateQueries({ queryKey: ["todos"] })
     },
     onMutate: async (todoId) => {
       await queryClient.cancelQueries({ queryKey: ["todos"] })
@@ -209,7 +209,7 @@ export const useToggleTodo = () => {
       return data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] })
+      void queryClient.invalidateQueries({ queryKey: ["todos"] })
     },
     onMutate: async ({ todoId, completed }) => {
       await queryClient.cancelQueries({ queryKey: ["todos"] })

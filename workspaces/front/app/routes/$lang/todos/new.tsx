@@ -4,6 +4,7 @@ import { redirect, useNavigate } from "react-router"
 import { createServerFetcher, requireAuth } from "~/client"
 import { PageHeader } from "~/components/PageHeader"
 import { TodoEditor } from "~/components/TodoEditor"
+import { getFormString } from "~/utils/form"
 import { useCreateTodo } from "~/hooks/useTodos"
 import { initI18nClient, useTranslation } from "~/i18n/client"
 import { defaultLanguage, isSupportedLanguage } from "~/i18n/config"
@@ -94,8 +95,8 @@ export async function action({ params, request }: Route.ActionArgs) {
   )
 
   const formData = await request.formData()
-  const title = String(formData.get("title") ?? "")
-  const description = String(formData.get("description") ?? "")
+  const title = getFormString(formData, "title")
+  const description = getFormString(formData, "description")
 
   const req = await client.v1.todos.$post({
     json: { title, description: description || undefined },
@@ -128,7 +129,7 @@ export default function TodoNew({ loaderData }: Route.ComponentProps) {
         { title, description },
         {
           onSuccess: () => {
-            navigate(`/${loaderData.language}/todos`)
+            void navigate(`/${loaderData.language}/todos`)
           },
         }
       )
@@ -138,7 +139,7 @@ export default function TodoNew({ loaderData }: Route.ComponentProps) {
   const handleCancel = () => {
     setTitle("")
     setDescription("")
-    navigate(`/${loaderData.language}/todos`)
+    void navigate(`/${loaderData.language}/todos`)
   }
 
   return (

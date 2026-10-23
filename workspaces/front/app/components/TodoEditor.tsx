@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useTranslation } from "~/i18n/client"
 import { formatDateTime } from "~/utils/dateFormat"
 import type { TodoDto } from "../types/shared"
@@ -28,11 +28,6 @@ export function TodoEditor({
   const { t } = useTranslation()
   const [title, setTitle] = useState(initialTitle)
   const [description, setDescription] = useState(initialDescription)
-
-  useEffect(() => {
-    setTitle(initialTitle)
-    setDescription(initialDescription)
-  }, [initialTitle, initialDescription])
 
   const handleSave = () => {
     if (canSave) {

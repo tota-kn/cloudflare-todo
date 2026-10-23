@@ -17,7 +17,7 @@ export function initI18nClient(language: SupportedLanguage = defaultLanguage) {
   if (clientI18nInstance) {
     // すでに初期化されている場合は言語を変更するだけ
     if (clientI18nInstance.language !== language) {
-      clientI18nInstance.changeLanguage(language)
+      void clientI18nInstance.changeLanguage(language)
     }
     return clientI18nInstance
   }
@@ -27,7 +27,7 @@ export function initI18nClient(language: SupportedLanguage = defaultLanguage) {
 
   // 同期的に初期化を完了させる
   if (!clientI18nInstance.isInitialized) {
-    clientI18nInstance.init()
+    void clientI18nInstance.init()
   }
 
   return clientI18nInstance
@@ -47,7 +47,7 @@ export function useTranslation() {
 
   const changeLanguage = (language: SupportedLanguage) => {
     if (clientI18nInstance) {
-      clientI18nInstance.changeLanguage(language)
+      void clientI18nInstance.changeLanguage(language)
       // 言語変更時にURLも更新する処理はここに追加可能
     }
   }

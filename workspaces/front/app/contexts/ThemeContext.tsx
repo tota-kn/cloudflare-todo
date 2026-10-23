@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useState } from "react"
 
 /**
  * テーマの種類（ライト・ダーク）
@@ -49,22 +49,14 @@ function getInitialTheme(): Theme {
  * @returns ThemeProviderコンポーネント
  */
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(getInitialTheme)
-  const [mounted, setMounted] = useState(false)
+  // 初回の data-theme は root.tsx のインラインスクリプトが hydration 前に付けている
+  const [theme, setThemeState] = useState<Theme>(getInitialTheme)
 
-  useEffect(() => {
-    setMounted(true)
-    const initialTheme = getInitialTheme()
-    setTheme(initialTheme)
-    document.documentElement.setAttribute("data-theme", initialTheme)
-  }, [])
-
-  useEffect(() => {
-    if (mounted) {
-      localStorage.setItem("theme", theme)
-      document.documentElement.setAttribute("data-theme", theme)
-    }
-  }, [theme, mounted])
+  const setTheme = (newTheme: Theme) => {
+    setThemeState(newTheme)
+    localStorage.setItem("theme", newTheme)
+    document.documentElement.setAttribute("data-theme", newTheme)
+  }
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light")

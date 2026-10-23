@@ -54,7 +54,7 @@ export function PageHeader({
                 await signOut({
                   fetchOptions: {
                     onSuccess: () => {
-                      navigate(getLanguageAwarePath(currentLang, "/todos"))
+                      void navigate(getLanguageAwarePath(currentLang, "/todos"))
                     },
                   },
                 })

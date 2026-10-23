@@ -52,7 +52,7 @@ export function LanguageSwitcher() {
     )
 
     changeLanguage(newLanguage)
-    navigate(newPath)
+    void navigate(newPath)
     setIsOpen(false)
   }
 

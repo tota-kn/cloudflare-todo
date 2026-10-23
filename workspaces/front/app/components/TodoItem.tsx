@@ -39,7 +39,7 @@ export function TodoItem({ todo }: TodoItemProps) {
   }
 
   const handleEdit = () => {
-    navigate(getLanguageAwarePath(currentLang, `/todos/${todo.id}`))
+    void navigate(getLanguageAwarePath(currentLang, `/todos/${todo.id}`))
   }
 
   return (

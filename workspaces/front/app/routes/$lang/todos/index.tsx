@@ -107,7 +107,7 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
   // クライアントサイドで未認証が確定した場合はログインページへリダイレクト
   useEffect(() => {
     if (!isAuthenticated || todos === null) {
-      navigate(`/${loaderData.language}/login`)
+      void navigate(`/${loaderData.language}/login`)
     }
   }, [isAuthenticated, todos, navigate, loaderData.language])
 
