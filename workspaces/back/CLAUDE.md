@@ -23,11 +23,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **データベース**: Cloudflare D1（SQLite）、マイグレーションは`migrations/`
 - **ストレージ**: ファイルアップロード用のCloudflare R2
 - **型安全性**: `app.ts`から`AppType`をエクスポートし、フロントエンドで`hc<AppType>()`として利用
-- **テスト**: Vitestで単体テスト、Bruno CLIでAPI統合テスト
+- **テスト**: Vitest（Vite+ の `vp test`）で単体テスト、Bruno CLIでAPI統合テスト
 
 ### オニオンアーキテクチャの依存ルール
 
-ESLintの`import/no-restricted-paths`と`eslint-plugin-boundaries`で依存方向を強制：
+ルートの `vite.config.ts` の `lint.overrides`（oxlint の `no-restricted-imports`）で依存方向を強制：
 
 - **Domain層** → 他の層をimportできない（純粋なビジネスロジック）
 - **Application層** → Domain層のみ依存可能
@@ -55,7 +55,7 @@ pnpm dev              # local envでlocalhost:8787で実行
 pnpm typegen          # Cloudflare環境の型を生成（src/types/env.d.ts）
 pnpm typecheck        # typegen + tsc --declaration
 
-# リント（ESLint --fix + Prettier --write を両方実行）
+# リント（vp lint --fix + vp fmt を両方実行。設定はルートの vite.config.ts）
 pnpm lint
 
 # テスト
@@ -64,7 +64,7 @@ pnpm test:unit:watch  # ウォッチモード
 pnpm test:api         # bucket:reset + db:reset後にBruno APIテスト実行
 
 # 単一テストファイルの実行
-npx vitest run test/unit/domain/entities/Todo.test.ts
+pnpm exec vp test run test/unit/domain/entities/Todo.test.ts
 
 # データベース操作
 pnpm db:migrate       # D1マイグレーション適用
@@ -84,7 +84,7 @@ pnpm deploy:prd       # production環境
 - `src/utils/auth.ts` - better-auth設定（Google OAuth、セッション、Cookie設定）
 - `src/presentation/middleware/authMiddleware.ts` - セッション検証ミドルウェア
 - `src/application/repositories/ITodoRepository.ts` - リポジトリインターフェース（Domain層のエンティティを扱う）
-- `eslint.config.mjs` - オニオンアーキテクチャ依存方向の強制ルール
+- `../../vite.config.ts` - lint / fmt 設定（オニオンアーキテクチャ依存方向の強制ルールを含む）
 - `wrangler.jsonc` - 環境別Cloudflare Workers設定（local/dev/prd）
 - `migrations/0001_create_tables.sql` - 初期スキーマ
 - `migrations/0002_seed_test_data.sql` - テストデータシード

@@ -20,8 +20,7 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "dbaeumer.vscode-eslint",
-                "esbenp.prettier-vscode",
+                "VoidZero.vite-plus-extension-pack",
                 "eamodio.gitlens",
                 "Anthropic.claude-code",
                 "ms-vscode.vscode-typescript-next",
@@ -30,8 +29,7 @@
                 "usernamehw.errorlens",
                 "christian-kohler.path-intellisense",
                 "ms-vscode.vscode-json",
-                "antfu.browse-lite",
-                "vitest.explorer"
+                "antfu.browse-lite"
             ],
             "settings": {
                 "terminal.integrated.defaultProfile.linux": "zsh",

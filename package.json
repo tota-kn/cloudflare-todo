@@ -1,24 +1,24 @@
 {
-	"name": "cloudflare-todo",
-	"version": "1.0.0",
-	"workspaces": [
-		"front",
-		"back",
-		"e2e"
-	],
-	"scripts": {
-		"b": "pnpm --filter \"back\" run",
-		"f": "pnpm --filter \"front\" run",
-		"e2e": "pnpm --filter \"e2e\" run",
-		"lint": "pnpm -r lint",
-		"typecheck": "pnpm b typecheck && pnpm f typecheck",
-		"test:unit": "pnpm -r test:unit",
-		"test:api": "pnpm b test:api",
-		"test:e2e": "pnpm b db:reset && pnpm e2e test",
-		"template:check": "node scripts/create-project.mjs --check",
-		"check-all": "pnpm lint && pnpm template:check && pnpm typecheck && pnpm test:unit && pnpm test:api && pnpm test:e2e"
-	},
-	"devDependencies": {
-		"vite-plus": "catalog:"
-	}
+  "name": "cloudflare-todo",
+  "version": "1.0.0",
+  "workspaces": [
+    "front",
+    "back",
+    "e2e"
+  ],
+  "scripts": {
+    "b": "pnpm --filter \"back\" run",
+    "f": "pnpm --filter \"front\" run",
+    "e2e": "pnpm --filter \"e2e\" run",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm b typecheck && pnpm f typecheck",
+    "test:unit": "pnpm -r test:unit",
+    "test:api": "pnpm b test:api",
+    "test:e2e": "pnpm b db:reset && pnpm e2e test",
+    "template:check": "node scripts/create-project.mjs --check",
+    "check-all": "pnpm lint && pnpm template:check && pnpm typecheck && pnpm test:unit && pnpm test:api && pnpm test:e2e"
+  },
+  "devDependencies": {
+    "vite-plus": "catalog:"
+  }
 }

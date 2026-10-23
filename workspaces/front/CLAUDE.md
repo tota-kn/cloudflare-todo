@@ -9,13 +9,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 pnpm dev                # local envでlocalhost:5173で実行
 pnpm build              # アプリケーションをビルド
-pnpm lint               # ESLint --fix + Prettier --write を実行
+pnpm lint               # vp lint --fix + vp fmt を実行
 pnpm typecheck          # CF types + RR types生成 → tsc -b
 pnpm typegen            # wrangler typesでCloudflare環境の型を生成
 
 # テスト
-pnpm test:unit          # vitest run（単発実行）
-pnpm test:unit:watch    # vitest（ウォッチモード）
+pnpm test:unit          # vp test run（単発実行）
+pnpm test:unit:watch    # vp test（ウォッチモード）
 
 # デプロイ
 pnpm deploy:dev         # CLOUDFLARE_ENV=dev でビルド→デプロイ
@@ -32,7 +32,7 @@ pnpm deploy:prd         # CLOUDFLARE_ENV=prd でビルド→デプロイ
 
 ### 技術スタック
 
-- **フレームワーク**: React Router v7（SSR）+ Cloudflare Pages
+- **フレームワーク**: React Router v8（SSR）+ Cloudflare Pages
 - **APIクライアント**: Hono RPCクライアント（`hc<ClientType>()`）
 - **状態管理**: TanStack Query（サーバー状態）
 - **認証**: BetterAuth（`better-auth/react`）
@@ -42,7 +42,7 @@ pnpm deploy:prd         # CLOUDFLARE_ENV=prd でビルド→デプロイ
 
 ### エントリーポイント
 
-- `workers/app.ts` - Cloudflare Workerエントリーポイント。`AppLoadContext`に`cloudflare.env`と`cloudflare.ctx`を注入
+- `workers/app.ts` - Cloudflare Workerエントリーポイント。リクエストを React Router に渡すだけ
 - `app/entry.server.tsx` - SSRレンダリング（`renderToReadableStream`）
 - `app/root.tsx` - ルートレイアウト。QueryClientProvider → ThemeProvider → Outlet
 
@@ -65,14 +65,16 @@ pnpm deploy:prd         # CLOUDFLARE_ENV=prd でビルド→デプロイ
 
 ### loader/actionパターン
 
-Cloudflare環境変数は`context.cloudflare.env`経由でアクセスする：
+Cloudflare環境変数は`cloudflare:workers`の`env`を直接importしてアクセスする（React Router v8 では`AppLoadContext`が使えない）：
 
 ```typescript
-export async function loader({ params, context, request }: Route.LoaderArgs) {
+import { env } from "cloudflare:workers"
+
+export async function loader({ params, request }: Route.LoaderArgs) {
   const cookie = request.headers.get("Cookie")
-  await requireAuth(context.cloudflare.env, params.lang, cookie)
+  await requireAuth(env, params.lang, cookie)
   const client = createServerFetcher(
-    context.cloudflare.env,
+    env,
     cookie ? { Cookie: cookie } : undefined
   )
   // ...

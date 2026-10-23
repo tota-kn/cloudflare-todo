@@ -1,7 +1,6 @@
 {
     "recommendations": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
+        "VoidZero.vite-plus-extension-pack",
         "eamodio.gitlens",
         "Anthropic.claude-code",
         "ms-vscode.vscode-typescript-next",

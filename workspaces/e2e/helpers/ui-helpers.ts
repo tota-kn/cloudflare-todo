@@ -1,4 +1,4 @@
-import { Locator, Page, expect } from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test"
 
 /**
  * Todo画面のE2Eテスト操作を集約するヘルパークラス
@@ -12,7 +12,7 @@ export class TodoUIヘルパー {
    * @returns タイトル入力フィールドのロケータ
    */
   Todoタイトル入力(): Locator {
-    return this.page.getByPlaceholder("Todo title...");
+    return this.page.getByPlaceholder("Todo title...")
   }
 
   /**
@@ -20,7 +20,7 @@ export class TodoUIヘルパー {
    * @returns 説明入力フィールドのロケータ
    */
   Todo説明入力(): Locator {
-    return this.page.getByPlaceholder("Add description...");
+    return this.page.getByPlaceholder("Add description...")
   }
 
   /**
@@ -28,7 +28,7 @@ export class TodoUIヘルパー {
    * @returns 追加ボタンのロケータ
    */
   Todo追加ボタン(): Locator {
-    return this.page.locator('button[title="Add Todo"]');
+    return this.page.locator('button[title="Add Todo"]')
   }
 
   /**
@@ -36,7 +36,7 @@ export class TodoUIヘルパー {
    * @returns 保存ボタンのロケータ
    */
   保存ボタン(): Locator {
-    return this.page.locator('button:has-text("Save")');
+    return this.page.locator('button:has-text("Save")')
   }
 
   /**
@@ -44,7 +44,7 @@ export class TodoUIヘルパー {
    * @returns キャンセルボタンのロケータ
    */
   キャンセルボタン(): Locator {
-    return this.page.getByRole("button", { name: "Cancel", exact: true });
+    return this.page.getByRole("button", { name: "Cancel", exact: true })
   }
 
   /**
@@ -56,7 +56,7 @@ export class TodoUIヘルパー {
   Todoアイテム取得(title: string): Locator {
     return this.page.locator("div.cursor-pointer").filter({
       has: this.page.getByRole("heading", { level: 3, name: title }),
-    });
+    })
   }
 
   /**
@@ -65,7 +65,7 @@ export class TodoUIヘルパー {
    * @returns 完了ボタンのロケータ
    */
   完了ボタン(title: string): Locator {
-    return this.Todoアイテム取得(title).getByTitle("Mark Complete");
+    return this.Todoアイテム取得(title).getByTitle("Mark Complete")
   }
 
   /**
@@ -74,7 +74,7 @@ export class TodoUIヘルパー {
    * @returns 未完了に戻すボタンのロケータ
    */
   未完了ボタン(title: string): Locator {
-    return this.Todoアイテム取得(title).getByTitle("Mark Pending");
+    return this.Todoアイテム取得(title).getByTitle("Mark Pending")
   }
 
   /**
@@ -83,7 +83,7 @@ export class TodoUIヘルパー {
    * @returns 削除ボタンのロケータ
    */
   削除ボタン(title: string): Locator {
-    return this.Todoアイテム取得(title).getByTitle("Delete");
+    return this.Todoアイテム取得(title).getByTitle("Delete")
   }
 
   /**
@@ -95,7 +95,7 @@ export class TodoUIヘルパー {
     return this.page
       .getByRole("heading", { level: 3 })
       .filter({ hasText: title })
-      .first();
+      .first()
   }
 
   /**
@@ -104,7 +104,7 @@ export class TodoUIヘルパー {
    * @returns 説明テキストのロケータ
    */
   Todo説明取得(description: string): Locator {
-    return this.page.getByText(description).first();
+    return this.page.getByText(description).first()
   }
 
   /**
@@ -117,7 +117,7 @@ export class TodoUIヘルパー {
       .getByRole("heading", { level: 3 })
       .filter({ hasText: title })
       .and(this.page.locator(".line-through"))
-      .first();
+      .first()
   }
 
   /**
@@ -125,7 +125,7 @@ export class TodoUIヘルパー {
    * @returns Completed Tasksセクション見出しのロケータ
    */
   完了タスクセクション取得(): Locator {
-    return this.page.getByText("Completed Tasks");
+    return this.page.getByText("Completed Tasks")
   }
 
   /**
@@ -133,7 +133,7 @@ export class TodoUIヘルパー {
    * @returns Pending Tasksセクション見出しのロケータ
    */
   未完了タスクセクション取得(): Locator {
-    return this.page.getByText("Pending Tasks");
+    return this.page.getByText("Pending Tasks")
   }
 
   /**
@@ -145,25 +145,25 @@ export class TodoUIヘルパー {
   プレフィックスでTodo見出し取得(prefix: string): Locator {
     return this.page
       .getByRole("heading", { level: 3 })
-      .filter({ hasText: prefix });
+      .filter({ hasText: prefix })
   }
 
   /**
    * Todo一覧ページへ移動する
    */
   async Todoページへ移動(): Promise<void> {
-    await this.page.goto("/en/todos");
-    await this.page.waitForLoadState("networkidle");
+    await this.page.goto("/en/todos")
+    await this.page.waitForLoadState("networkidle")
   }
 
   /**
    * 追加ボタンから新規Todo作成ページへ移動する
    */
   async 新規Todoページへ移動(): Promise<void> {
-    await expect(this.Todo追加ボタン()).toBeVisible();
-    await this.Todo追加ボタン().click();
-    await expect(this.page).toHaveURL(/\/en\/todos\/new/);
-    await this.page.waitForLoadState("networkidle");
+    await expect(this.Todo追加ボタン()).toBeVisible()
+    await this.Todo追加ボタン().click()
+    await expect(this.page).toHaveURL(/\/en\/todos\/new/)
+    await this.page.waitForLoadState("networkidle")
   }
 
   /**
@@ -171,10 +171,10 @@ export class TodoUIヘルパー {
    * @param title 対象Todoのタイトル
    */
   async Todo編集ページへ移動(title: string): Promise<void> {
-    await expect(this.タイトルでTodo取得(title)).toBeVisible();
-    await this.タイトルでTodo取得(title).click();
-    await expect(this.page).toHaveURL(/\/en\/todos\/[a-f0-9-]+/);
-    await this.page.waitForLoadState("networkidle");
+    await expect(this.タイトルでTodo取得(title)).toBeVisible()
+    await this.タイトルでTodo取得(title).click()
+    await expect(this.page).toHaveURL(/\/en\/todos\/[a-f0-9-]+/)
+    await this.page.waitForLoadState("networkidle")
   }
 
   /**
@@ -183,10 +183,10 @@ export class TodoUIヘルパー {
    * @param description 入力する説明
    */
   async Todoフォーム入力(title: string, description: string): Promise<void> {
-    await expect(this.Todoタイトル入力()).toBeVisible();
-    await expect(this.Todo説明入力()).toBeVisible();
-    await this.Todoタイトル入力().fill(title);
-    await this.Todo説明入力().fill(description);
+    await expect(this.Todoタイトル入力()).toBeVisible()
+    await expect(this.Todo説明入力()).toBeVisible()
+    await this.Todoタイトル入力().fill(title)
+    await this.Todo説明入力().fill(description)
   }
 
   /**
@@ -196,34 +196,34 @@ export class TodoUIヘルパー {
    */
   async Todoフォームクリア入力(
     title: string,
-    description: string,
+    description: string
   ): Promise<void> {
-    await expect(this.Todoタイトル入力()).toBeVisible();
-    await expect(this.Todo説明入力()).toBeVisible();
-    await this.Todoタイトル入力().clear();
-    await this.Todoタイトル入力().fill(title);
-    await this.Todo説明入力().clear();
-    await this.Todo説明入力().fill(description);
+    await expect(this.Todoタイトル入力()).toBeVisible()
+    await expect(this.Todo説明入力()).toBeVisible()
+    await this.Todoタイトル入力().clear()
+    await this.Todoタイトル入力().fill(title)
+    await this.Todo説明入力().clear()
+    await this.Todo説明入力().fill(description)
   }
 
   /**
    * 保存ボタンをクリックしてTodo一覧ページへ戻ることを確認する
    */
   async Todo保存(): Promise<void> {
-    await expect(this.保存ボタン()).toBeVisible();
-    await this.保存ボタン().click();
-    await expect(this.page).toHaveURL("/en/todos");
-    await this.page.waitForLoadState("networkidle");
+    await expect(this.保存ボタン()).toBeVisible()
+    await this.保存ボタン().click()
+    await expect(this.page).toHaveURL("/en/todos")
+    await this.page.waitForLoadState("networkidle")
   }
 
   /**
    * キャンセルボタンをクリックして保存せずにTodo一覧ページへ戻ることを確認する
    */
   async キャンセル(): Promise<void> {
-    await expect(this.キャンセルボタン()).toBeVisible();
-    await this.キャンセルボタン().click();
-    await expect(this.page).toHaveURL("/en/todos");
-    await this.page.waitForLoadState("networkidle");
+    await expect(this.キャンセルボタン()).toBeVisible()
+    await this.キャンセルボタン().click()
+    await expect(this.page).toHaveURL("/en/todos")
+    await this.page.waitForLoadState("networkidle")
   }
 
   /**
@@ -232,9 +232,9 @@ export class TodoUIヘルパー {
    * @param description 作成するTodoの説明
    */
   async Todo作成(title: string, description: string): Promise<void> {
-    await this.新規Todoページへ移動();
-    await this.Todoフォーム入力(title, description);
-    await this.Todo保存();
+    await this.新規Todoページへ移動()
+    await this.Todoフォーム入力(title, description)
+    await this.Todo保存()
   }
 
   /**
@@ -243,8 +243,8 @@ export class TodoUIヘルパー {
    * @param description 確認する説明
    */
   async Todo表示確認(title: string, description: string): Promise<void> {
-    await expect(this.タイトルでTodo取得(title)).toBeVisible();
-    await expect(this.Todo説明取得(description)).toBeVisible();
+    await expect(this.タイトルでTodo取得(title)).toBeVisible()
+    await expect(this.Todo説明取得(description)).toBeVisible()
   }
 
   /**
@@ -252,7 +252,7 @@ export class TodoUIヘルパー {
    * @param title 確認するタイトル
    */
   async Todo非表示確認(title: string): Promise<void> {
-    await expect(this.Todoアイテム取得(title)).toHaveCount(0);
+    await expect(this.Todoアイテム取得(title)).toHaveCount(0)
   }
 
   /**
@@ -260,8 +260,8 @@ export class TodoUIヘルパー {
    * @param title 確認するタイトル
    */
   async 完了Todo表示確認(title: string): Promise<void> {
-    await expect(this.完了タスクセクション取得()).toBeVisible();
-    await expect(this.完了済みTodo取得(title)).toBeVisible();
+    await expect(this.完了タスクセクション取得()).toBeVisible()
+    await expect(this.完了済みTodo取得(title)).toBeVisible()
   }
 
   /**
@@ -269,11 +269,9 @@ export class TodoUIヘルパー {
    * @param title 確認するタイトル
    */
   async 未完了Todo表示確認(title: string): Promise<void> {
-    await expect(this.未完了タスクセクション取得()).toBeVisible();
-    await expect(this.タイトルでTodo取得(title)).toBeVisible();
-    await expect(this.タイトルでTodo取得(title)).not.toHaveClass(
-      /line-through/,
-    );
+    await expect(this.未完了タスクセクション取得()).toBeVisible()
+    await expect(this.タイトルでTodo取得(title)).toBeVisible()
+    await expect(this.タイトルでTodo取得(title)).not.toHaveClass(/line-through/)
   }
 
   /**
@@ -281,8 +279,8 @@ export class TodoUIヘルパー {
    * @param title 対象Todoのタイトル
    */
   async Todo完了(title: string): Promise<void> {
-    await expect(this.完了ボタン(title)).toBeVisible();
-    await this.完了ボタン(title).click();
+    await expect(this.完了ボタン(title)).toBeVisible()
+    await this.完了ボタン(title).click()
   }
 
   /**
@@ -290,8 +288,8 @@ export class TodoUIヘルパー {
    * @param title 対象Todoのタイトル
    */
   async Todo未完了に戻す(title: string): Promise<void> {
-    await expect(this.未完了ボタン(title)).toBeVisible();
-    await this.未完了ボタン(title).click();
+    await expect(this.未完了ボタン(title)).toBeVisible()
+    await this.未完了ボタン(title).click()
   }
 
   /**
@@ -299,10 +297,10 @@ export class TodoUIヘルパー {
    * @param title 対象Todoのタイトル
    */
   async Todo削除(title: string): Promise<void> {
-    this.page.once("dialog", (dialog) => void dialog.accept());
-    await expect(this.削除ボタン(title)).toBeVisible();
-    await this.削除ボタン(title).click();
-    await this.Todo非表示確認(title);
+    this.page.once("dialog", (dialog) => void dialog.accept())
+    await expect(this.削除ボタン(title)).toBeVisible()
+    await this.削除ボタン(title).click()
+    await this.Todo非表示確認(title)
   }
 
   /**
@@ -310,23 +308,23 @@ export class TodoUIヘルパー {
    * @param title 対象Todoのタイトル
    */
   async Todo削除キャンセル(title: string): Promise<void> {
-    this.page.once("dialog", (dialog) => void dialog.dismiss());
-    await expect(this.削除ボタン(title)).toBeVisible();
-    await this.削除ボタン(title).click();
-    await expect(this.Todoアイテム取得(title)).toBeVisible();
+    this.page.once("dialog", (dialog) => void dialog.dismiss())
+    await expect(this.削除ボタン(title)).toBeVisible()
+    await this.削除ボタン(title).click()
+    await expect(this.Todoアイテム取得(title)).toBeVisible()
   }
 
   /**
    * 保存ボタンが無効化されていることを確認する
    */
   async 保存ボタン無効確認(): Promise<void> {
-    await expect(this.保存ボタン()).toBeDisabled();
+    await expect(this.保存ボタン()).toBeDisabled()
   }
 
   /**
    * 保存ボタンが有効であることを確認する
    */
   async 保存ボタン有効確認(): Promise<void> {
-    await expect(this.保存ボタン()).toBeEnabled();
+    await expect(this.保存ボタン()).toBeEnabled()
   }
 }

@@ -1,17 +1,17 @@
-import { createHmac } from "node:crypto";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import path from "node:path";
+import { createHmac } from "node:crypto"
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs"
+import path from "node:path"
 
 /**
  * BetterAuthのセッションCookie名（バックエンドの cookiePrefix "cloudflare-todo" に対応）
  */
-const SESSION_COOKIE_NAME = "cloudflare-todo.session_token";
+const SESSION_COOKIE_NAME = "cloudflare-todo.session_token"
 
 /**
  * シードデータ（workspaces/back/migrations/0002_seed_test_data.sql）の
  * test-user-001 に紐づく固定セッショントークン
  */
-const TEST_SESSION_TOKEN = "test-session-token-001";
+const TEST_SESSION_TOKEN = "test-session-token-001"
 
 /**
  * バックエンドの .dev.vars から BETTER_AUTH_SECRET を読み取る
@@ -20,13 +20,13 @@ const TEST_SESSION_TOKEN = "test-session-token-001";
  * @throws .dev.vars が存在しない、または BETTER_AUTH_SECRET が未定義の場合
  */
 function readBetterAuthSecret(): string {
-  const devVarsPath = path.resolve(__dirname, "../../back/.dev.vars");
-  const content = readFileSync(devVarsPath, "utf-8");
-  const match = content.match(/^BETTER_AUTH_SECRET=(.+)$/m);
+  const devVarsPath = path.resolve(__dirname, "../../back/.dev.vars")
+  const content = readFileSync(devVarsPath, "utf-8")
+  const match = content.match(/^BETTER_AUTH_SECRET=(.+)$/m)
   if (!match) {
-    throw new Error(`BETTER_AUTH_SECRET が ${devVarsPath} に見つかりません`);
+    throw new Error(`BETTER_AUTH_SECRET が ${devVarsPath} に見つかりません`)
   }
-  return match[1].trim();
+  return match[1].trim()
 }
 
 /**
@@ -40,8 +40,8 @@ function readBetterAuthSecret(): string {
  * @returns Cookieに設定する署名済み値
  */
 function signSessionToken(token: string, secret: string): string {
-  const signature = createHmac("sha256", secret).update(token).digest("base64");
-  return encodeURIComponent(`${token}.${signature}`);
+  const signature = createHmac("sha256", secret).update(token).digest("base64")
+  return encodeURIComponent(`${token}.${signature}`)
 }
 
 /**
@@ -54,7 +54,7 @@ function signSessionToken(token: string, secret: string): string {
 function writeStorageState(
   token: string,
   secret: string,
-  outputPath: string,
+  outputPath: string
 ): void {
   const storageState = {
     cookies: [
@@ -70,9 +70,9 @@ function writeStorageState(
       },
     ],
     origins: [],
-  };
-  mkdirSync(path.dirname(outputPath), { recursive: true });
-  writeFileSync(outputPath, JSON.stringify(storageState, null, 2));
+  }
+  mkdirSync(path.dirname(outputPath), { recursive: true })
+  writeFileSync(outputPath, JSON.stringify(storageState, null, 2))
 }
 
 /**
@@ -83,10 +83,10 @@ function writeStorageState(
  * 生成した storageState は playwright.config.ts の use.storageState で全テストに適用される。
  */
 export default function globalSetup(): void {
-  const secret = readBetterAuthSecret();
+  const secret = readBetterAuthSecret()
   writeStorageState(
     TEST_SESSION_TOKEN,
     secret,
-    path.resolve(__dirname, "../tests/.auth/user.json"),
-  );
+    path.resolve(__dirname, "../tests/.auth/user.json")
+  )
 }

@@ -9,13 +9,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 pnpm ワークスペースモノレポによるフルスタックCloudflare Todoアプリケーション。各ワークスペースの詳細は個別の CLAUDE.md を参照：
 
 - **workspaces/back/**: Hono APIサーバー（Cloudflare Workers）— オニオンアーキテクチャ
-- **workspaces/front/**: React Router v7 SSRアプリ（Cloudflare Pages）— TanStack Query + i18n
+- **workspaces/front/**: React Router v8 SSRアプリ（Cloudflare Pages）— TanStack Query + i18n
 - **workspaces/e2e/**: Playwright E2Eテスト
 
 ## 開発コマンド
 
 ```bash
-pnpm install              # 依存関係インストール
+pnpm install              # 依存関係インストール（Node / pnpm のバージョンは mise.toml で固定）
 
 # ワークスペースへのコマンド委譲
 pnpm b [command]          # バックエンド（例: pnpm b dev, pnpm b test:unit）

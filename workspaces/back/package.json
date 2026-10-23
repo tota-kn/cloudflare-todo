@@ -2,7 +2,7 @@
   "name": "back",
   "private": true,
   "scripts": {
-    "lint": "eslint . --fix && prettier --write .",
+    "lint": "vp lint --fix && vp fmt",
     "dev": "pnpm db:migrate && wrangler dev -e local --ip 0.0.0.0 --port 8787",
     "typegen": "wrangler types -e local --env-interface CloudflareEnv ./src/types/env.d.ts",
     "typecheck": "pnpm run typegen && tsc --declaration --emitDeclarationOnly --declarationDir ./dist/types",
@@ -12,7 +12,7 @@
     "test:api": "pnpm bucket:reset && pnpm db:reset && cd test/api && bru run --env local",
     "db:migrate": "wrangler d1 migrations apply todo-app-db-local --local -e local",
     "db:reset": "wrangler d1 execute todo-app-db-local --local -e local --file ./migrations/0002_seed_test_data.sql",
-    "bucket:reset": "cd buckets && ./init.sh",
+    "bucket:reset": "./buckets/init.sh",
     "deploy:dev": "wrangler deploy --minify -e dev",
     "deploy:prd": "wrangler deploy --minify -e prd"
   },
@@ -24,22 +24,13 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@eslint/compat": "^2.1.1",
-    "@eslint/js": "^10.0.1",
     "@types/node": "^26.6.5",
     "@usebruno/cli": "^4.3.0",
     "@vitest/coverage-v8": "catalog:",
     "drizzle-kit": "^0.31.11",
-    "eslint": "^10.13.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-import-resolver-typescript": "^4.4.5",
-    "eslint-plugin-boundaries": "^7.2.1",
-    "eslint-plugin-import": "^2.32.0",
-    "prettier": "^3.9.10",
     "typescript": "^7.0.2",
-    "typescript-eslint": "^8.72.0",
+    "vite-plus": "catalog:",
     "vitest": "catalog:",
-    "wrangler": "^4.151.3",
-    "vite-plus": "catalog:"
+    "wrangler": "^4.151.3"
   }
 }
