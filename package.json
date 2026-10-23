@@ -1,11 +1,6 @@
 {
   "name": "cloudflare-todo",
   "version": "1.0.0",
-  "workspaces": [
-    "front",
-    "back",
-    "e2e"
-  ],
   "scripts": {
     "b": "pnpm --filter \"back\" run",
     "f": "pnpm --filter \"front\" run",
