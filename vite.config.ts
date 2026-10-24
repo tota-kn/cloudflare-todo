@@ -37,7 +37,23 @@ export default defineConfig({
   lint: {
     plugins: ["typescript", "react", "import", "unicorn", "oxc"],
     jsPlugins: [{ name: "vite-plus", specifier: "vite-plus/oxlint-plugin" }],
-    rules: { "vite-plus/prefer-vite-plus-imports": "error" },
+    rules: {
+      "vite-plus/prefer-vite-plus-imports": "error",
+      // AI が肥大化・複雑化させたコードを機械的に止めるための上限
+      "max-lines": [
+        "error",
+        { max: 300, skipBlankLines: true, skipComments: true },
+      ],
+      "max-lines-per-function": [
+        "error",
+        { max: 50, skipBlankLines: true, skipComments: true },
+      ],
+      complexity: ["error", 10],
+      "max-depth": ["error", 3],
+      "max-params": ["error", 3],
+      "import/no-cycle": "error",
+      "typescript/no-explicit-any": "error",
+    },
     ignorePatterns: [
       "**/src/types/env.d.ts",
       "**/worker-configuration.d.ts",
@@ -47,6 +63,16 @@ export default defineConfig({
       "**/.react-router/**",
     ],
     overrides: [
+      {
+        // describe / it のコールバックはケースを足すほど長くなるのが正常
+        files: ["**/test/**", "**/tests/**"],
+        rules: { "max-lines-per-function": "off" },
+      },
+      {
+        // 引数は React Router が決めていて減らせない
+        files: ["workspaces/front/app/entry.server.tsx"],
+        rules: { "max-params": "off" },
+      },
       {
         files: ["workspaces/back/src/domain/**"],
         rules: {

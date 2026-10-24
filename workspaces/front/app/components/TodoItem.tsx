@@ -6,15 +6,42 @@ import {
 } from "~/hooks/useTodos"
 import { useTranslation } from "~/i18n/client"
 import type { TodoDto } from "~/types/shared"
-import { formatDateTime } from "~/utils/dateFormat"
 import { getCurrentLanguage, getLanguageAwarePath } from "~/utils/language"
 import { ActionButton } from "./CircleButton"
+import { TodoTimestamps } from "./TodoTimestamps"
 
 /**
  * TodoItemコンポーネントのProps
  */
 interface TodoItemProps {
   todo: TodoDto
+}
+
+/**
+ * Todoのタイトル・説明・日時。完了済みは取り消し線と沈んだ色で出す
+ * @param props.todo 表示するTodo
+ * @returns テキスト部分
+ */
+function TodoText({ todo }: TodoItemProps) {
+  const textColor = todo.completed
+    ? "text-muted-foreground"
+    : "text-card-foreground"
+
+  return (
+    <div className="flex-1 min-w-0">
+      <h3
+        className={`text-base font-semibold break-words ${todo.completed ? "line-through " : ""}${textColor}`}
+      >
+        {todo.title}
+      </h3>
+      {todo.description && (
+        <p className={`mt-0.5 text-sm break-words ${textColor}`}>
+          {todo.description}
+        </p>
+      )}
+      <TodoTimestamps todo={todo} />
+    </div>
+  )
 }
 
 /**
@@ -33,10 +60,6 @@ export function TodoItem({ todo }: TodoItemProps) {
   const currentLang = getCurrentLanguage(location.pathname)
   // 保存前のTodoは仮IDなので、遷移やAPI呼び出しに使うと存在しないTodoを指してしまう
   const isSaving = isOptimisticTodo(todo)
-
-  const handleToggleComplete = () => {
-    toggleTodo.mutate({ todoId: todo.id, completed: todo.completed })
-  }
 
   const handleDelete = () => {
     if (confirm(t("Are you sure you want to delete this todo?"))) {
@@ -61,40 +84,15 @@ export function TodoItem({ todo }: TodoItemProps) {
       <div className="flex items-center">
         <div className="mr-3 shrink-0" onClick={(e) => e.stopPropagation()}>
           <ActionButton
-            onClick={handleToggleComplete}
+            onClick={() =>
+              toggleTodo.mutate({ todoId: todo.id, completed: todo.completed })
+            }
             disabled={isSaving || toggleTodo.isPending}
             variant={todo.completed ? "toggle-pending" : "toggle-complete"}
             isLoading={toggleTodo.isPending}
           />
         </div>
-        <div className="flex-1 min-w-0">
-          <h3
-            className={`text-base font-semibold break-words ${
-              todo.completed
-                ? "line-through text-muted-foreground"
-                : "text-card-foreground"
-            }`}
-          >
-            {todo.title}
-          </h3>
-          {todo.description && (
-            <p
-              className={`mt-0.5 text-sm break-words ${
-                todo.completed
-                  ? "text-muted-foreground"
-                  : "text-card-foreground"
-              }`}
-            >
-              {todo.description}
-            </p>
-          )}
-          <div className="text-xs text-muted-foreground mt-1">
-            {todo.updated_at !== todo.created_at && (
-              <div>{`${t("Updated")}: ${formatDateTime(todo.updated_at)}`}</div>
-            )}
-            <div>{`${t("Created")}: ${formatDateTime(todo.created_at)}`}</div>
-          </div>
-        </div>
+        <TodoText todo={todo} />
         <div className="ml-3 shrink-0" onClick={(e) => e.stopPropagation()}>
           <ActionButton
             onClick={handleDelete}

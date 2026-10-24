@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   initReactI18next,
   useTranslation as useI18nextTranslation,
@@ -13,7 +13,7 @@ import {
 
 let clientI18nInstance: i18n | null = null
 
-export function initI18nClient(language: SupportedLanguage = defaultLanguage) {
+function initI18nClient(language: SupportedLanguage = defaultLanguage) {
   if (clientI18nInstance) {
     // すでに初期化されている場合は言語を変更するだけ
     if (clientI18nInstance.language !== language) {
@@ -31,6 +31,16 @@ export function initI18nClient(language: SupportedLanguage = defaultLanguage) {
   }
 
   return clientI18nInstance
+}
+
+/**
+ * ページの言語に合わせてクライアントの i18n を初期化・切り替えする
+ * @param language ページの言語（loader が URL から決めたもの）
+ */
+export function useI18nLanguage(language: SupportedLanguage) {
+  useEffect(() => {
+    initI18nClient(language)
+  }, [language])
 }
 
 export function useTranslation() {

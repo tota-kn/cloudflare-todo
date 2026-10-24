@@ -7,42 +7,62 @@ import { getCurrentUtcTime } from "../../utils/dateTime"
  * 業務ロジックを含むTodoの中心的なオブジェクト
  */
 export class Todo {
-  private constructor(
-    private readonly id: TodoId,
-    private readonly userId: string,
-    private title: string,
-    private description: string,
-    private status: TodoStatus,
-    private readonly createdAt: Date,
-    private updatedAt: Date
-  ) {
+  private readonly id: TodoId
+  private readonly userId: string
+  private title: string
+  private description: string
+  private status: TodoStatus
+  private readonly createdAt: Date
+  private updatedAt: Date
+
+  private constructor(props: {
+    id: TodoId
+    userId: string
+    title: string
+    description: string
+    status: TodoStatus
+    createdAt: Date
+    updatedAt: Date
+  }) {
+    this.id = props.id
+    this.userId = props.userId
+    this.title = props.title
+    this.description = props.description
+    this.status = props.status
+    this.createdAt = props.createdAt
+    this.updatedAt = props.updatedAt
     this.validateTitle()
   }
 
   /**
    * 新しいTodoを作成する
-   * @param id TodoのID
-   * @param userId TodoのオーナーユーザーID
-   * @param title Todoのタイトル
-   * @param description Todoの説明（オプション）
+   * @param params.id TodoのID
+   * @param params.userId TodoのオーナーユーザーID
+   * @param params.title Todoのタイトル
+   * @param params.description Todoの説明（オプション）
    * @returns 作成されたTodoインスタンス
    */
-  static create(
-    id: TodoId,
-    userId: string,
-    title: string,
+  static create({
+    id,
+    userId,
+    title,
+    description,
+  }: {
+    id: TodoId
+    userId: string
+    title: string
     description?: string
-  ): Todo {
+  }): Todo {
     const now = getCurrentUtcTime()
-    return new Todo(
+    return new Todo({
       id,
       userId,
       title,
-      description || "",
-      TodoStatus.pending(),
-      now,
-      now
-    )
+      description: description || "",
+      status: TodoStatus.pending(),
+      createdAt: now,
+      updatedAt: now,
+    })
   }
 
   /**
@@ -59,15 +79,16 @@ export class Todo {
     created_at: string
     updated_at: string
   }): Todo {
-    return new Todo(
-      new TodoId(data.id),
-      data.user_id,
-      data.title,
-      data.description || "",
-      data.completed === 1 ? TodoStatus.completed() : TodoStatus.pending(),
-      new Date(data.created_at),
-      new Date(data.updated_at)
-    )
+    return new Todo({
+      id: new TodoId(data.id),
+      userId: data.user_id,
+      title: data.title,
+      description: data.description || "",
+      status:
+        data.completed === 1 ? TodoStatus.completed() : TodoStatus.pending(),
+      createdAt: new Date(data.created_at),
+      updatedAt: new Date(data.updated_at),
+    })
   }
 
   /**

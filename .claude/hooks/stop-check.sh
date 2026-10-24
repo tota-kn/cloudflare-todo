@@ -16,4 +16,5 @@ block() {
 # 段階ごとに分けるのは、成功した段階の出力（wrangler のログなど）を Claude に返さないため
 out=$(pnpm -s typegen 2>&1) || block "型生成（pnpm typegen）が失敗している。" "$out"
 out=$(node_modules/.bin/vp check --quiet 2>&1) || block "vp check（整形・lint・型）が失敗している。pnpm fmt / pnpm lint で直せるものは直してから終えること。" "$out"
+out=$(node_modules/.bin/knip 2>&1) || block "knip が未使用のファイル・export・依存を見つけた。消すか、使っているなら knip.json で除外すること。" "$out"
 out=$(pnpm -s test:unit 2>&1) || block "単体テスト（pnpm test:unit）が失敗している。直してから終えること。" "$out"

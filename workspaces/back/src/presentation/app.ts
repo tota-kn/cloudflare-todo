@@ -35,4 +35,8 @@ export function createApp(env: CloudflareEnv) {
     .route("", auth())
 }
 
+/**
+ * front の hc クライアントに渡す API 全体の型
+ * @public front は dist/types 経由で読むので knip からは使用箇所が見えない
+ */
 export type AppType = ReturnType<typeof createApp>

@@ -53,7 +53,7 @@ export function isPrd(env?: Env): boolean {
 /**
  * 現在のステージを取得
  */
-export function getStage(env?: Env) {
+function getStage(env?: Env) {
   if (isLocal(env)) {
     return "local"
   }

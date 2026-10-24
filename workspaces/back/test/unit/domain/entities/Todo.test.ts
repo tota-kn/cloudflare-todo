@@ -32,7 +32,7 @@ describe("Todo", () => {
         const userId = "user-123"
 
         const todoId = TestFactory.createTodoId()
-        const todo = Todo.create(todoId, userId, title, description)
+        const todo = Todo.create({ id: todoId, userId, title, description })
 
         expect(todo.getId()).toBe(todoId)
         expect(todo.getUserId()).toBe(userId)
@@ -48,7 +48,7 @@ describe("Todo", () => {
         const userId = "user-123"
 
         const todoId = TestFactory.createTodoId()
-        const todo = Todo.create(todoId, userId, title)
+        const todo = Todo.create({ id: todoId, userId, title })
 
         expect(todo.getId()).toBe(todoId)
         expect(todo.getUserId()).toBe(userId)
@@ -103,9 +103,9 @@ describe("Todo", () => {
   describe("バリデーション", () => {
     it("空のタイトルでエラーを投げる", () => {
       const todoId = TestFactory.createTodoId()
-      expect(() => Todo.create(todoId, "user-123", "")).toThrow(
-        "Todo title cannot be empty"
-      )
+      expect(() =>
+        Todo.create({ id: todoId, userId: "user-123", title: "" })
+      ).toThrow("Todo title cannot be empty")
     })
   })
 

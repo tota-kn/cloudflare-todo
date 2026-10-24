@@ -5,7 +5,7 @@ import { Dependencies } from "../../../../../Dependencies"
 import type { AuthVariables } from "../../../../middleware/authMiddleware"
 import { authMiddleware } from "../../../../middleware/authMiddleware"
 
-export const updateTodoSchema = z.object({
+const updateTodoSchema = z.object({
   title: z.string().min(1, "Title cannot be empty").optional(),
   description: z.string().optional(),
   completed: z.boolean().optional(),

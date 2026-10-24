@@ -87,8 +87,8 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 ### i18n構成
 
 - 翻訳ファイル: `app/locales/{en,ja}/common.json`
-- サーバーサイド: `initI18nServer(language)` で非同期初期化
 - クライアントサイド: `initI18nClient(language)` でシングルトン初期化、`useTranslation()` で使用
+- 各ルートは `useI18nLanguage(loaderData.language)` でページの言語に合わせる
 - 言語はURLパスの先頭セグメント（`/:lang/...`）で決定
 
 ### 環境判定（`app/utils/env.ts`）

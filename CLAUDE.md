@@ -26,23 +26,25 @@ pnpm e2e [command]        # E2Eテスト
 # 横断コマンド
 pnpm lint                 # 全ワークスペースを lint（vp lint --fix）
 pnpm fmt                  # 全ワークスペースを整形（vp fmt）
+pnpm knip                 # 未使用のファイル・export・依存を検出（設定は knip.json）
 pnpm typegen              # 生成型（wrangler / back の dist/types / react-router）を作る。postinstall でも実行
 pnpm typecheck            # typegen → vp で型チェック
 pnpm test:unit            # back + front の単体テスト
 pnpm test:api             # API統合テスト（Bruno、DB/バケットをリセット）
 pnpm test:e2e             # DBリセット → E2Eテスト実行
-pnpm check-all            # typegen → vp check（fmt・lint・型、書き換えなし） + 全テスト（CI相当）
+pnpm check-all            # typegen → vp check（fmt・lint・型、書き換えなし） → knip + 全テスト（CI相当）
 ```
 
 ### タスク完了時のチェックリスト
 
-1〜3 は Claude Code の hooks（`.claude/hooks/`）が自動で実行する。Edit / Write の直後に編集したファイルを `vp check --fix` し、終了時に typegen → `vp check` → 単体テストを流して、失敗すれば差し戻す。4・5 は DB をリセットするので hooks では実行しない。
+1〜4 は Claude Code の hooks（`.claude/hooks/`）が自動で実行する。Edit / Write の直後に編集したファイルを `vp check --fix` し、終了時に typegen → `vp check` → knip → 単体テストを流して、失敗すれば差し戻す。5・6 は DB をリセットするので hooks では実行しない。
 
 1. `pnpm lint` && `pnpm fmt` — リントエラーがなく整形済みであること
 2. `pnpm typecheck` — 型エラーがないこと
-3. `pnpm test:unit` — 単体テスト（back + front）
-4. `pnpm test:api` — API統合テスト（Bruno）
-5. `pnpm test:e2e` — E2Eテスト（UI変更時）
+3. `pnpm knip` — 使われていないコードが残っていないこと
+4. `pnpm test:unit` — 単体テスト（back + front）
+5. `pnpm test:api` — API統合テスト（Bruno）
+6. `pnpm test:e2e` — E2Eテスト（UI変更時）
 
 ## アーキテクチャ概要
 

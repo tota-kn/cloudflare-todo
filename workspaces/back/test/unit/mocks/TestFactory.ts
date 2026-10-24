@@ -23,7 +23,7 @@ export class TestFactory {
     const title = overrides?.title || "テストタスク"
     const description = overrides?.description
 
-    return Todo.create(id, userId, title, description)
+    return Todo.create({ id, userId, title, description })
   }
 
   static createPendingTodo(

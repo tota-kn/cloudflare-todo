@@ -10,11 +10,7 @@ import {
   useLocation,
 } from "react-router"
 import { ThemeProvider } from "./contexts/ThemeContext"
-import {
-  defaultLanguage,
-  isSupportedLanguage,
-  type SupportedLanguage,
-} from "./i18n/config"
+import { getCurrentLanguage } from "./utils/language"
 
 import type { Route } from "./+types/root"
 import "./app.css"
@@ -41,17 +37,60 @@ export const links: Route.LinksFunction = () => [
   },
 ]
 
+/**
+ * 広告・計測タグと、テーマを hydration 前に当てるインラインスクリプト
+ * @returns head に入れる script 群
+ */
+function HeadScripts() {
+  return (
+    <>
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3508964772491118"
+        crossOrigin="anonymous"
+      ></script>
+      <script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-GR998F6FHS"
+      />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-GR998F6FHS');
+          `,
+        }}
+      />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              try {
+                var theme = localStorage.getItem('theme');
+                if (theme && (theme === 'light' || theme === 'dark')) {
+                  document.documentElement.setAttribute('data-theme', theme);
+                } else {
+                  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+                }
+              } catch (e) {}
+            })();
+          `,
+        }}
+      />
+    </>
+  )
+}
+
+/**
+ * 全ページ共通の html 骨組み。lang は URL 先頭の言語セグメントから決める
+ * @param props.children ページ本体
+ * @returns html 要素
+ */
 export function Layout({ children }: { children: React.ReactNode }) {
-  const location = useLocation()
-
-  // URLパスから言語を検出
-  const getCurrentLanguage = (): SupportedLanguage => {
-    const pathSegments = location.pathname.split("/").filter(Boolean)
-    const langFromPath = pathSegments[0]
-    return isSupportedLanguage(langFromPath) ? langFromPath : defaultLanguage
-  }
-
-  const currentLanguage = getCurrentLanguage()
+  const currentLanguage = getCurrentLanguage(useLocation().pathname)
 
   return (
     // data-theme は下のインラインスクリプトが hydration 前に付けるため、
@@ -62,42 +101,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3508964772491118"
-          crossOrigin="anonymous"
-        ></script>
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-GR998F6FHS"
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-GR998F6FHS');
-            `,
-          }}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var theme = localStorage.getItem('theme');
-                  if (theme && (theme === 'light' || theme === 'dark')) {
-                    document.documentElement.setAttribute('data-theme', theme);
-                  } else {
-                    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                    document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-                  }
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
+        <HeadScripts />
       </head>
       <body>
         {children}

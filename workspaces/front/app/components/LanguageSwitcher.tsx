@@ -1,8 +1,9 @@
-import { useState, useRef, useEffect } from "react"
+import { type RefObject, useEffect, useRef, useState } from "react"
 import { useLocation, useNavigate } from "react-router"
 import { useTranslation } from "~/i18n/client"
 import { supportedLanguages, type SupportedLanguage } from "~/i18n/config"
 import { getCurrentLanguage } from "~/utils/language"
+import { ChevronDownIcon } from "./CustomIcon"
 
 /**
  * 言語名を表示用に変換する
@@ -16,7 +17,64 @@ const getLanguageDisplayName = (lang: SupportedLanguage): string => {
 }
 
 /**
+ * ref の要素の外側がクリックされたら閉じる
+ * @param ref 内側とみなす要素
+ * @param setOpen 開閉の setState。毎回作り直す関数だとリスナーを張り直すので、setState をそのまま渡す
+ */
+const useCloseOnOutsideClick = (
+  ref: RefObject<HTMLElement | null>,
+  setOpen: (open: boolean) => void
+) => {
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [ref, setOpen])
+}
+
+/**
+ * 言語の選択肢。表示中の言語は選べない
+ * @param props.current 表示中の言語
+ * @param props.onSelect 言語を選んだときの処理
+ * @returns ドロップダウンメニュー
+ */
+function LanguageMenu({
+  current,
+  onSelect,
+}: {
+  current: SupportedLanguage
+  onSelect: (lang: SupportedLanguage) => void
+}) {
+  return (
+    <div className="absolute top-full right-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 min-w-[120px]">
+      {supportedLanguages.map((lang) => (
+        <button
+          key={lang}
+          onClick={() => onSelect(lang)}
+          className={`w-full text-left px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground transition-colors first:rounded-t-md last:rounded-b-md ${
+            lang === current
+              ? "bg-accent text-accent-foreground font-medium"
+              : "text-popover-foreground"
+          }`}
+          disabled={lang === current}
+        >
+          {getLanguageDisplayName(lang)}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+/**
  * 言語切り替えドロップダウンコンポーネント
+ * @returns LanguageSwitcherコンポーネント
  */
 export function LanguageSwitcher() {
   const [isOpen, setIsOpen] = useState(false)
@@ -27,22 +85,7 @@ export function LanguageSwitcher() {
 
   const currentLanguage = getCurrentLanguage(location.pathname)
 
-  // 外部クリックでドロップダウンを閉じる
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false)
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
+  useCloseOnOutsideClick(dropdownRef, setIsOpen)
 
   // 言語切り替え処理
   const handleLanguageSwitch = (newLanguage: SupportedLanguage) => {
@@ -58,7 +101,6 @@ export function LanguageSwitcher() {
 
   return (
     <div className="relative" ref={dropdownRef}>
-      {/* メインボタン */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="px-3 py-1 text-sm bg-accent text-accent-foreground rounded-md hover:bg-accent/80 transition-colors flex items-center gap-1"
@@ -66,39 +108,16 @@ export function LanguageSwitcher() {
         aria-haspopup="true"
       >
         {getLanguageDisplayName(currentLanguage)}
-        <svg
+        <ChevronDownIcon
           className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+        />
       </button>
 
-      {/* ドロップダウンメニュー */}
       {isOpen && (
-        <div className="absolute top-full right-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 min-w-[120px]">
-          {supportedLanguages.map((lang) => (
-            <button
-              key={lang}
-              onClick={() => handleLanguageSwitch(lang)}
-              className={`w-full text-left px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground transition-colors first:rounded-t-md last:rounded-b-md ${
-                lang === currentLanguage
-                  ? "bg-accent text-accent-foreground font-medium"
-                  : "text-popover-foreground"
-              }`}
-              disabled={lang === currentLanguage}
-            >
-              {getLanguageDisplayName(lang)}
-            </button>
-          ))}
-        </div>
+        <LanguageMenu
+          current={currentLanguage}
+          onSelect={handleLanguageSwitch}
+        />
       )}
     </div>
   )

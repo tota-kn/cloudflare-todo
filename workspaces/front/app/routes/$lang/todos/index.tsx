@@ -7,7 +7,7 @@ import { LoadingSpinner } from "~/components/LoadingSpinner"
 import { PageHeader } from "~/components/PageHeader"
 import { TodoList } from "~/components/TodoList"
 import { useTodos } from "~/hooks/useTodos"
-import { initI18nClient } from "~/i18n/client"
+import { useI18nLanguage } from "~/i18n/client"
 import { defaultLanguage, isSupportedLanguage } from "~/i18n/config"
 import { useSession } from "~/utils/auth-client"
 import type { Route } from "./+types/index"
@@ -87,35 +87,48 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   }
 }
 
-export default function Todos({ loaderData }: Route.ComponentProps) {
+/**
+ * ログイン済みなら Todo 一覧を取得し、未ログインが確定したらログインページへ送る
+ * @param loaderData loader の結果
+ * @returns 一覧のクエリ結果と、ログインページへ送るべきか
+ */
+const useTodosOrLogin = (loaderData: Route.ComponentProps["loaderData"]) => {
   const navigate = useNavigate()
   const { data: session } = useSession()
   // SSRではcross-originのためセッションCookieが取得できない場合がある
   // クライアントサイドのuseSession()で補完する
   const isAuthenticated = loaderData.isAuthenticated || !!session?.user
+  const query = useTodos(isAuthenticated ? (loaderData.todos ?? []) : undefined)
+  // todos が null なのは API が 401 を返したとき
+  const mustLogin = !isAuthenticated || query.data === null
+
+  useEffect(() => {
+    if (mustLogin) {
+      void navigate(`/${loaderData.language}/login`)
+    }
+  }, [mustLogin, navigate, loaderData.language])
+
+  return { ...query, mustLogin }
+}
+
+/**
+ * Todo一覧ページ
+ * @param props.loaderData loader の結果
+ * @returns Todo一覧ページ
+ */
+export default function Todos({ loaderData }: Route.ComponentProps) {
   const {
     data: todos,
     isLoading,
     error,
-  } = useTodos(isAuthenticated ? (loaderData.todos ?? []) : undefined)
+    mustLogin,
+  } = useTodosOrLogin(loaderData)
 
-  // クライアントサイドでの言語初期化
-  useEffect(() => {
-    initI18nClient(loaderData.language)
-  }, [loaderData.language])
+  useI18nLanguage(loaderData.language)
 
-  // クライアントサイドで未認証が確定した場合はログインページへリダイレクト
-  useEffect(() => {
-    if (!isAuthenticated || todos === null) {
-      void navigate(`/${loaderData.language}/login`)
-    }
-  }, [isAuthenticated, todos, navigate, loaderData.language])
-
-  if (!isAuthenticated || todos === null) {
+  if (mustLogin) {
     return null
   }
-
-  const currentTodos = todos || []
 
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6">
@@ -131,7 +144,7 @@ export default function Todos({ loaderData }: Route.ComponentProps) {
 
       {!isLoading && (
         <TodoList
-          todos={currentTodos}
+          todos={todos ?? []}
           showNewTodoForm={false}
           onCancelNewTodo={() => {}}
         />

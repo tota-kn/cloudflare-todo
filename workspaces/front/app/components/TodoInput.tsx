@@ -1,6 +1,8 @@
-import React from "react"
 import { useTranslation } from "~/i18n/client"
 
+/**
+ * TodoInputコンポーネントのProps
+ */
 interface TodoInputProps {
   title: string
   description: string
@@ -15,6 +17,11 @@ interface TodoInputProps {
   mode?: "create" | "edit"
 }
 
+/**
+ * Todoのタイトルと説明の入力欄。値は親が持つ
+ * @param props コンポーネントのProps
+ * @returns TodoInputコンポーネント
+ */
 export function TodoInput({
   title,
   description,
@@ -27,55 +34,23 @@ export function TodoInput({
   autoFocusTitle = false,
 }: TodoInputProps) {
   const { t } = useTranslation()
-  const titleInputRef = React.useRef<HTMLInputElement>(null)
-  const descriptionTextareaRef = React.useRef<HTMLTextAreaElement>(null)
-
-  React.useEffect(() => {
-    if (autoFocusTitle && titleInputRef.current) {
-      titleInputRef.current.focus()
-    }
-  }, [autoFocusTitle])
-
-  const handleTitleKeyDown = (e: React.KeyboardEvent) => {
-    if (onTitleKeyDown) {
-      onTitleKeyDown(e)
-    }
-
-    if (e.key === "Tab" && !e.shiftKey) {
-      e.preventDefault()
-      descriptionTextareaRef.current?.focus()
-    }
-  }
-
-  const handleDescriptionKeyDown = (e: React.KeyboardEvent) => {
-    if (onDescriptionKeyDown) {
-      onDescriptionKeyDown(e)
-    }
-
-    if (e.key === "Tab" && e.shiftKey) {
-      e.preventDefault()
-      titleInputRef.current?.focus()
-    }
-  }
 
   return (
     <div className="flex-1">
       <input
-        ref={titleInputRef}
         type="text"
         value={title}
         onChange={(e) => onTitleChange(e.target.value)}
-        onKeyDown={handleTitleKeyDown}
+        onKeyDown={onTitleKeyDown}
         className="font-semibold bg-transparent border-b border-primary focus:outline-none focus:border-primary w-full text-base"
         placeholder={titlePlaceholder || t("Todo title...")}
         autoFocus={autoFocusTitle}
         data-todo-title
       />
       <textarea
-        ref={descriptionTextareaRef}
         value={description}
         onChange={(e) => onDescriptionChange(e.target.value)}
-        onKeyDown={handleDescriptionKeyDown}
+        onKeyDown={onDescriptionKeyDown}
         className="mt-1 text-sm bg-transparent focus:outline-none w-full resize-none border-b border-primary focus:border-primary pb-0 leading-tight"
         rows={1}
         placeholder={descriptionPlaceholder || t("Add description...")}

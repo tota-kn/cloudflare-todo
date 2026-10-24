@@ -1,12 +1,13 @@
 import { env } from "cloudflare:workers"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { redirect, useNavigate } from "react-router"
 import { createServerFetcher, requireAuth } from "~/client"
+import { FormActions } from "~/components/FormActions"
 import { PageHeader } from "~/components/PageHeader"
 import { TodoEditor } from "~/components/TodoEditor"
 import { getFormString } from "~/utils/form"
 import { useCreateTodo } from "~/hooks/useTodos"
-import { initI18nClient, useTranslation } from "~/i18n/client"
+import { useI18nLanguage } from "~/i18n/client"
 import { defaultLanguage, isSupportedLanguage } from "~/i18n/config"
 import type { Route } from "./+types/new"
 
@@ -113,15 +114,11 @@ export async function action({ params, request }: Route.ActionArgs) {
 
 export default function TodoNew({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate()
-  const { t } = useTranslation()
   const createTodo = useCreateTodo()
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
 
-  // クライアントサイドでの言語初期化
-  useEffect(() => {
-    initI18nClient(loaderData.language)
-  }, [loaderData.language])
+  useI18nLanguage(loaderData.language)
 
   const handleSave = () => {
     if (title.length > 0) {
@@ -137,8 +134,6 @@ export default function TodoNew({ loaderData }: Route.ComponentProps) {
   }
 
   const handleCancel = () => {
-    setTitle("")
-    setDescription("")
     void navigate(`/${loaderData.language}/todos`)
   }
 
@@ -154,30 +149,18 @@ export default function TodoNew({ loaderData }: Route.ComponentProps) {
         mode="create"
         initialTitle={title}
         initialDescription={description}
-        todo={undefined}
-        onSave={(newTitle: string, newDescription?: string) => {
+        onSave={(newTitle, newDescription) => {
           setTitle(newTitle)
           setDescription(newDescription || "")
         }}
-        onCancel={() => {}}
-        showTimestamps={false}
       />
 
-      <div className="flex justify-end space-x-2 mt-4">
-        <button
-          onClick={handleCancel}
-          className="px-4 py-2 text-sm bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors"
-        >
-          {t("Cancel")}
-        </button>
-        <button
-          onClick={handleSave}
-          disabled={title.length === 0 || createTodo.isPending}
-          className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {createTodo.isPending ? t("Saving...") : t("Save")}
-        </button>
-      </div>
+      <FormActions
+        onCancel={handleCancel}
+        onSave={handleSave}
+        canSave={title.length > 0}
+        isSaving={createTodo.isPending}
+      />
     </div>
   )
 }
