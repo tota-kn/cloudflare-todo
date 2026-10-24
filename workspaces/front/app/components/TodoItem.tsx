@@ -30,12 +30,12 @@ function TodoText({ todo }: TodoItemProps) {
   return (
     <div className="flex-1 min-w-0">
       <h3
-        className={`text-base font-semibold break-words ${todo.completed ? "line-through " : ""}${textColor}`}
+        className={`text-base font-semibold wrap-break-word ${todo.completed ? "line-through " : ""}${textColor}`}
       >
         {todo.title}
       </h3>
       {todo.description && (
-        <p className={`mt-0.5 text-sm break-words ${textColor}`}>
+        <p className={`mt-0.5 text-sm wrap-break-word ${textColor}`}>
           {todo.description}
         </p>
       )}
