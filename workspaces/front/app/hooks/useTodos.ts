@@ -12,6 +12,19 @@ type UpdateTodoRequest = InferRequestType<
 const client = createBrowserClient()
 
 /**
+ * 楽観的更新で一覧に先出しする、サーバー保存前のTodoに付けるIDの接頭辞
+ */
+export const OPTIMISTIC_TODO_ID_PREFIX = "temp-"
+
+/**
+ * サーバーへの保存が終わっていない（楽観的更新で先出しした）Todoかどうかを判定する
+ * @param todo 判定するTodo
+ * @returns 保存前ならtrue
+ */
+export const isOptimisticTodo = (todo: TodoDto) =>
+  todo.id.startsWith(OPTIMISTIC_TODO_ID_PREFIX)
+
+/**
  * Todo一覧を取得するカスタムフック
  * @param initialData 初期データ（オプション）。undefinedの場合はクエリを実行しない（未認証時）
  * @returns Todo一覧のクエリ結果。data が null の場合は未認証状態を示す
@@ -70,7 +83,7 @@ export const useCreateTodo = () => {
       const previousTodos = queryClient.getQueryData<TodoDto[]>(["todos"])
 
       const optimisticTodo: TodoDto = {
-        id: `temp-${Date.now()}`,
+        id: `${OPTIMISTIC_TODO_ID_PREFIX}${Date.now()}`,
         title: newTodo.title,
         description: newTodo.description ?? "",
         completed: false,

@@ -1,5 +1,9 @@
 import { useLocation, useNavigate } from "react-router"
-import { useDeleteTodo, useToggleTodo } from "~/hooks/useTodos"
+import {
+  isOptimisticTodo,
+  useDeleteTodo,
+  useToggleTodo,
+} from "~/hooks/useTodos"
 import { useTranslation } from "~/i18n/client"
 import type { TodoDto } from "~/types/shared"
 import { formatDateTime } from "~/utils/dateFormat"
@@ -27,6 +31,8 @@ export function TodoItem({ todo }: TodoItemProps) {
   const toggleTodo = useToggleTodo()
 
   const currentLang = getCurrentLanguage(location.pathname)
+  // 保存前のTodoは仮IDなので、遷移やAPI呼び出しに使うと存在しないTodoを指してしまう
+  const isSaving = isOptimisticTodo(todo)
 
   const handleToggleComplete = () => {
     toggleTodo.mutate({ todoId: todo.id, completed: todo.completed })
@@ -39,6 +45,7 @@ export function TodoItem({ todo }: TodoItemProps) {
   }
 
   const handleEdit = () => {
+    if (isSaving) return
     void navigate(getLanguageAwarePath(currentLang, `/todos/${todo.id}`))
   }
 
@@ -46,15 +53,16 @@ export function TodoItem({ todo }: TodoItemProps) {
     <div
       className={`border rounded-lg py-2 px-4 cursor-pointer hover:bg-accent/10 transition-colors ${
         todo.completed ? "bg-muted border-border" : "bg-card border-border"
-      }`}
+      } ${isSaving ? "opacity-60 cursor-progress" : ""}`}
       onClick={handleEdit}
       title={t("Click to edit")}
+      aria-disabled={isSaving}
     >
       <div className="flex items-center">
         <div className="mr-3 shrink-0" onClick={(e) => e.stopPropagation()}>
           <ActionButton
             onClick={handleToggleComplete}
-            disabled={toggleTodo.isPending}
+            disabled={isSaving || toggleTodo.isPending}
             variant={todo.completed ? "toggle-pending" : "toggle-complete"}
             isLoading={toggleTodo.isPending}
           />
@@ -90,7 +98,7 @@ export function TodoItem({ todo }: TodoItemProps) {
         <div className="ml-3 shrink-0" onClick={(e) => e.stopPropagation()}>
           <ActionButton
             onClick={handleDelete}
-            disabled={deleteTodo.isPending}
+            disabled={isSaving || deleteTodo.isPending}
             variant="delete"
             isLoading={deleteTodo.isPending}
           />

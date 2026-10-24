@@ -172,6 +172,11 @@ export class TodoUIヘルパー {
    */
   async Todo編集ページへ移動(title: string): Promise<void> {
     await expect(this.タイトルでTodo取得(title)).toBeVisible()
+    // 保存直後は仮IDのまま操作不可になっている。見出しのクリックは Playwright が aria-disabled を待たないので、ここで待つ
+    await expect(this.Todoアイテム取得(title)).not.toHaveAttribute(
+      "aria-disabled",
+      "true"
+    )
     await this.タイトルでTodo取得(title).click()
     await expect(this.page).toHaveURL(/\/en\/todos\/[a-f0-9-]+/)
     await this.page.waitForLoadState("networkidle")
