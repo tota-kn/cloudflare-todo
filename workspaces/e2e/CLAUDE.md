@@ -1,72 +1,35 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+E2E テストワークスペース固有のガイダンス。設定値（ブラウザ・タイムアウト・リトライなど）は `playwright.config.ts` を見る。
 
-このファイルはE2Eテストワークスペース固有のClaude Codeガイダンスを提供します。
+## 前提
 
-## テストアーキテクチャ
+フロントエンド・バックエンド両方の開発サーバーが起動済みで、DB にテストデータがシード済みであること（`pnpm b db:reset`。ルートの `pnpm test:e2e` は自動で実行する）。
 
-- **フレームワーク**: Playwright with TypeScript
-- **ブラウザ**: Chromium のみ（playwright.config.tsで他はコメントアウト）
-- **baseURL**: `http://localhost:5173`（フロントエンド開発サーバー）
-- **タイムアウト**: 10秒、リトライ: 2回（CI時）
-- **トレース**: 初回リトライ時に記録
-- **前提条件**: フロントエンド・バックエンド両方の開発サーバーが起動済みであること、およびDBにテストデータがシード済みであること（`pnpm b db:reset`。ルートの `pnpm test:e2e` は自動で実行する）
+## 認証
 
-### 認証（ログイン状態の再現）
+実際の Google OAuth は使わない。`setup/global-setup.ts`（globalSetup）がシード済みセッション（`workspaces/back/migrations/0002_seed_test_data.sql` の `test-session-token-001` / test-user-001）の署名済み Cookie を `workspaces/back/.dev.vars` の `BETTER_AUTH_SECRET` から計算し、`tests/.auth/user.json`（storageState、gitignore 済み）に書き出す。全テストはログイン済み状態で始まる。
 
-実際のGoogle OAuthは使わない。`setup/global-setup.ts`（Playwright globalSetup）が、シード済みセッション（`workspaces/back/migrations/0002_seed_test_data.sql` の `test-session-token-001` / test-user-001）の署名済みCookieを `workspaces/back/.dev.vars` の `BETTER_AUTH_SECRET` から計算し、`tests/.auth/user.json`（storageState、gitignore済み）に書き出す。全テストはこのstorageStateによりログイン済み状態で開始される。
-
-### ディレクトリ構成
-
-- `tests/` - テストスペック（`todo-crud.spec.ts`, `todo-delete.spec.ts`, `todo-toggle.spec.ts`, `todo-validation.spec.ts`, `todo-list.spec.ts`）
-- `helpers/` - テストヘルパークラス（`ui-helpers.ts`）
-- `setup/` - globalSetup（ログイン済みstorageStateの生成）
-- `tests/.auth/` - 認証情報保存用ディレクトリ（globalSetupが生成、コミットしない）
-
-## 開発コマンド
+## コマンド
 
 ```bash
-pnpm test              # Playwrightテスト実行（line レポーター）
-pnpm test:ui           # UIモードでインタラクティブにテスト実行
-
-# 単一テスト実行
-npx playwright test tests/todo-crud.spec.ts
-
-# テストレポート表示
-npx playwright show-report
-
-# テストコード自動生成
-npx playwright codegen
+pnpm test                                       # line レポーターで実行
+pnpm test:ui                                    # UI モード
+pnpm exec playwright test tests/todo-crud.spec.ts  # 単一ファイル
 ```
 
-## ヘルパークラスパターン
+## テストの書き方
 
-`helpers/ui-helpers.ts` にテスト操作を集約した `TodoUIヘルパー` クラスがある。
-
-### 重要な規約
-
-- **メソッド名は日本語**: `Todoページへ移動()`, `Todo保存()`, `Todo完了()` など
-- **ロケータメソッド**（要素取得）と**アクションメソッド**（操作実行）に分離
-- ページ遷移後は `waitForLoadState("networkidle")` で安定化
-- URL マッチングに正規表現を使用
-
-### 新規テスト作成時
-
-1. 必要なロケータ/アクションを `TodoUIヘルパー` に追加
-2. テストスペックからヘルパーメソッドを呼び出す
-3. テストは `/en/todos`（英語ロケール）パスで実行
-
-## テスト設計パターン
-
-各テストはシーケンシャルフロー（例: `todo-crud.spec.ts` は 作成 → 表示確認 → 編集 → 表示確認 → 完了 → 完了確認）。
-
-テストデータは日本語テキストを使用（例: "テスト Todo アイテム"）。
+- 操作は `helpers/ui-helpers.ts` の `TodoUIヘルパー` に集約し、スペックからはヘルパーを呼ぶ
+- ヘルパーのメソッド名は日本語（`Todoページへ移動()`, `Todo保存()` など）。ロケータメソッド（要素取得）とアクションメソッド（操作）に分ける
+- ページ遷移後は `waitForLoadState("networkidle")` で安定させる。URL マッチングは正規表現
+- `/en/todos`（英語ロケール）で実行する。テストデータは日本語テキスト
+- 各テストはシーケンシャルフロー（例: 作成 → 表示確認 → 編集 → 表示確認 → 完了 → 完了確認）
 
 ### 並列実行の安全性
 
-`fullyParallel: true` で全テストが同一DBを共有するため：
+`fullyParallel: true` で全テストが同一 DB を共有するため：
 
-- 各テストは `Date.now()` サフィックス付きのユニークなタイトルで自前のTodoを作成して操作する
-- Todoアイテム内のボタン操作は `Todoアイテム取得(title)` でタイトルスコープする（`.first()` は他テストのTodoに誤爆するため使わない）
-- シードデータの既存Todoには依存しない（一覧が空でないことだけ前提にできる）
+- 各テストは `Date.now()` サフィックス付きのユニークなタイトルで自前の Todo を作って操作する
+- Todo アイテム内のボタン操作は `Todoアイテム取得(title)` でタイトルスコープする（`.first()` は他テストの Todo に誤爆する）
+- シードデータの既存 Todo には依存しない（一覧が空でないことだけ前提にできる）
