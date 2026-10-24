@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vite-plus/test"
+import { describe, expect, it, vi } from "vite-plus/test"
 import { formatDateTime } from "~/utils/dateFormat"
 
 /**
@@ -207,6 +207,18 @@ describe("formatDateTime", () => {
       // UTC 23:00 は同じ日付で表示される
       expect(formatted).toContain("2024/01/15")
       expect(formatted).toContain("23:00")
+    })
+
+    it("実行環境のタイムゾーンに依存せずUTCで表示されること", () => {
+      // SSR（UTC）とブラウザ（例: JST）で結果が変わるとハイドレーション不一致になる
+      vi.stubEnv("TZ", "Asia/Tokyo")
+      try {
+        expect(formatDateTime("2024-01-15T23:00:00.000Z")).toBe(
+          "2024/01/15 23:00"
+        )
+      } finally {
+        vi.unstubAllEnvs()
+      }
     })
   })
 })
