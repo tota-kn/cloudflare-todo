@@ -11,9 +11,6 @@
       "Bash(mv:*)",
       "Bash(pnpm:*)",
       "Bash(ls:*)",
-      "mcp__serena",
-      "mcp__cloudflare-docs",
-      "mcp__context7",
       "WebSearch",
       "WebFetch",
       "Bash(git status:*)",
@@ -32,13 +29,6 @@
       "Read(.env.*)"
     ]
   },
-  "enabledMcpjsonServers": [
-    "playwright",
-    "cloudflare-observability",
-    "cloudflare-docs",
-    "serena",
-    "context7"
-  ],
   "hooks": {
     "Stop": [
       {
