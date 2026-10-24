@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   jq \
   nano \
   vim \
+  locales \
   # Playwright browser dependencies \
   libnss3 \
   libnspr4 \
@@ -40,6 +41,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libxss1 \
   libasound2 \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# zsh-in-docker が .zshrc で LC_ALL=en_US.UTF-8 を設定するため、そのロケールを生成しておく
+# （無いと bash などが setlocale の警告を出す）
+RUN sed -i 's/^# *\(en_US.UTF-8 UTF-8\)/\1/' /etc/locale.gen && locale-gen
 
 # Ensure default node user has access to /usr/local/share
 RUN mkdir -p /usr/local/share/npm-global && \
