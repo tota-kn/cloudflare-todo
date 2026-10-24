@@ -51,16 +51,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # 開発サーバー（マイグレーション自動適用）
 pnpm dev              # local envでlocalhost:8787で実行
 
-# 型生成・チェック
-pnpm typegen          # Cloudflare環境の型を生成（src/types/env.d.ts）
-pnpm typecheck        # typegen + tsc --declaration
-
-# リント（vp lint --fix + vp fmt を両方実行。設定はルートの vite.config.ts）
-pnpm lint
+# 型生成（型チェックはルートの pnpm typecheck）
+pnpm typegen          # Cloudflare環境の型（src/types/env.d.ts）+ front 向けの dist/types を生成
+pnpm typegen:dts      # front 向けの dist/types だけを生成（型チェックなしで高速）
 
 # テスト
 pnpm test:unit        # Vitest実行（カバレッジ付き）
-pnpm test:unit:watch  # ウォッチモード
 pnpm test:api         # bucket:reset + db:reset後にBruno APIテスト実行
 
 # 単一テストファイルの実行
@@ -96,7 +92,7 @@ pnpm deploy:prd       # production環境
 
 ## 開発指針
 
-- オニオンアーキテクチャの依存方向を厳守（`pnpm lint`で検証可能）
+- オニオンアーキテクチャの依存方向を厳守（ルートの `pnpm lint` で検証可能）
 - Presentation層からは`Dependencies`経由でのみ他層にアクセス
 - バリデーションはPresentation層のZodスキーマで実施
 - 新しいルートを追加する場合：ルートハンドラー作成 → `app.ts`に登録 → Brunoテスト追加

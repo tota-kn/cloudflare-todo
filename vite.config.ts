@@ -88,6 +88,6 @@ export default defineConfig({
         },
       },
     ],
-    options: { typeAware: true },
+    options: { typeAware: true, typeCheck: true },
   },
 })

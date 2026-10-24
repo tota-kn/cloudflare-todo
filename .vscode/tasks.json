@@ -16,34 +16,6 @@
       }
     },
     {
-      "label": "back unit test",
-      "type": "shell",
-      "command": "pnpm",
-      "args": [
-        "test:unit:watch"
-      ],
-      "presentation": {
-        "group": "check"
-      },
-      "options": {
-        "cwd": "${workspaceFolder}/workspaces/back"
-      }
-    },
-    {
-      "label": "back typecheck",
-      "type": "shell",
-      "command": "pnpm",
-      "args": [
-        "typecheck:watch"
-      ],
-      "presentation": {
-        "group": "check"
-      },
-      "options": {
-        "cwd": "${workspaceFolder}/workspaces/back"
-      }
-    },
-    {
       "label": "front dev",
       "type": "shell",
       "command": "pnpm",
@@ -58,64 +30,17 @@
       }
     },
     {
-      "label": "front typecheck",
-      "type": "shell",
-      "command": "pnpm",
-      "args": [
-        "typecheck:watch"
-      ],
-      "presentation": {
-        "group": "check"
-      },
-      "options": {
-        "cwd": "${workspaceFolder}/workspaces/front"
-      }
-    },
-    {
-      "label": "front unit test",
-      "type": "shell",
-      "command": "pnpm",
-      "args": [
-        "test:unit"
-      ],
-      "presentation": {
-        "group": "check"
-      },
-      "options": {
-        "cwd": "${workspaceFolder}/workspaces/front"
-      }
-    },
-    {
       "label": "dev",
       "dependsOrder": "parallel",
       "dependsOn": [
         "back dev",
         "front dev"
       ],
-      "problemMatcher": []
-    },
-    {
-      "label": "check",
-      "dependsOrder": "parallel",
-      "dependsOn": [
-        "back typecheck",
-        "back unit test",
-        "front typecheck",
-        "front unit test"
-      ]
-    },
-    {
-      "label": "all",
-      "dependsOrder": "parallel",
-      "dependsOn": [
-        "dev",
-        "check"
-      ],
+      "problemMatcher": [],
       "group": {
         "kind": "build",
         "isDefault": true
-      },
-      "problemMatcher": []
+      }
     }
   ]
 }

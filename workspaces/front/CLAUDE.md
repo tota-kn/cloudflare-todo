@@ -9,13 +9,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 pnpm dev                # local envでlocalhost:5173で実行
 pnpm build              # アプリケーションをビルド
-pnpm lint               # vp lint --fix + vp fmt を実行
-pnpm typecheck          # CF types + RR types生成 → tsc -b
-pnpm typegen            # wrangler typesでCloudflare環境の型を生成
+pnpm typegen            # Cloudflare環境の型 + React Router の型を生成（型チェックはルートの pnpm typecheck）
 
 # テスト
 pnpm test:unit          # vp test run（単発実行）
-pnpm test:unit:watch    # vp test（ウォッチモード）
 
 # デプロイ
 pnpm deploy:dev         # CLOUDFLARE_ENV=dev でビルド→デプロイ
@@ -102,7 +99,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 ### 型共有（`app/types/shared.ts`）
 
 - バックエンドの`AppType`と`TodoDto`を`../../../back/dist/types/`から直接インポート
-- バックエンドの型変更時は`pnpm b build`で型を再生成する必要がある
+- バックエンドの型変更時は`pnpm b typegen`で型を再生成する必要がある
 
 ## 重要なファイル
 

@@ -16,7 +16,7 @@ export const auth = (env: CloudflareEnv) => {
     }),
     plugins: [bearer()],
     // 環境ごとに自オリジン(フロントエンドのURL)のみ信頼する。
-    // ドメインをハードコードしないことでテンプレートからのプロジェクト生成時の置換対象を減らす
+    // ドメインをハードコードせず、環境ごとの値は wrangler.jsonc の CORS_ORIGIN に寄せる
     trustedOrigins: [env.CORS_ORIGIN],
     socialProviders: {
       google: {

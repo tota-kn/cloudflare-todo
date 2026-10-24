@@ -45,7 +45,20 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '✅ 作業完了 - 確認をお願いします'"
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/stop-check.sh",
+            "timeout": 300
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/check-file.sh",
+            "timeout": 60
           }
         ]
       }

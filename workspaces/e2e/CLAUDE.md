@@ -29,7 +29,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 pnpm test              # Playwrightテスト実行（line レポーター）
 pnpm test:ui           # UIモードでインタラクティブにテスト実行
-pnpm lint              # vp lint --fix + vp fmt でコード品質チェック
 
 # 単一テスト実行
 npx playwright test tests/todo-crud.spec.ts

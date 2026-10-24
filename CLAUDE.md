@@ -20,33 +20,29 @@ pnpm install              # 依存関係インストール（Node / pnpm のバ�
 
 # ワークスペースへのコマンド委譲
 pnpm b [command]          # バックエンド（例: pnpm b dev, pnpm b test:unit）
-pnpm f [command]          # フロントエンド（例: pnpm f dev, pnpm f lint）
+pnpm f [command]          # フロントエンド（例: pnpm f dev, pnpm f build）
 pnpm e2e [command]        # E2Eテスト
 
 # 横断コマンド
-pnpm typecheck            # back + front の型チェック
-pnpm test:e2e             # DB/バケットリセット → E2Eテスト実行
-pnpm template:check       # テンプレート生成スクリプトの整合性検査（高速・オフライン）
-pnpm check-all            # lint + template:check + typecheck + 全テスト（CI相当）
+pnpm lint                 # 全ワークスペースを lint（vp lint --fix）
+pnpm fmt                  # 全ワークスペースを整形（vp fmt）
+pnpm typegen              # 生成型（wrangler / back の dist/types / react-router）を作る。postinstall でも実行
+pnpm typecheck            # typegen → vp で型チェック
+pnpm test:unit            # back + front の単体テスト
+pnpm test:api             # API統合テスト（Bruno、DB/バケットをリセット）
+pnpm test:e2e             # DBリセット → E2Eテスト実行
+pnpm check-all            # typegen → vp check（fmt・lint・型、書き換えなし） + 全テスト（CI相当）
 ```
-
-### テンプレートからの新プロジェクト生成
-
-```bash
-node scripts/create-project.mjs <project-name>
-```
-
-このリポジトリをテンプレートとして新プロジェクトを生成する。固有値の置換、Cloudflareリソース（D1/R2）の作成、dev環境のworkers.devへのデプロイ、GitHubリポジトリ作成までを自動実行する。詳細は `scripts/create-project.mjs` のヘッダコメントを参照。
-
-**注意**: 環境固有値（ドメイン・リソース名など）をコードに新たに追加する場合は、既存の命名パターン（`todo-back` / `todo-app-db-` / `todo.totakn.com` 等）を踏襲すること。逸脱した固有値は生成スクリプトの置換対象にならず、`pnpm template:check` でも検知できない。スクリプトが壊れていないかは `pnpm template:check` で随時検査できる（check-all にも含まれる）。
 
 ### タスク完了時のチェックリスト
-1. `pnpm typecheck` — 型エラーがないこと
-2. `pnpm b lint` && `pnpm f lint` — リントエラーがないこと
-3. `pnpm b test:unit` — バックエンド単体テスト
-4. `pnpm b test:api` — API統合テスト（Bruno）
+
+1〜3 は Claude Code の hooks（`.claude/hooks/`）が自動で実行する。Edit / Write の直後に編集したファイルを `vp check --fix` し、終了時に typegen → `vp check` → 単体テストを流して、失敗すれば差し戻す。4・5 は DB をリセットするので hooks では実行しない。
+
+1. `pnpm lint` && `pnpm fmt` — リントエラーがなく整形済みであること
+2. `pnpm typecheck` — 型エラーがないこと
+3. `pnpm test:unit` — 単体テスト（back + front）
+4. `pnpm test:api` — API統合テスト（Bruno）
 5. `pnpm test:e2e` — E2Eテスト（UI変更時）
-6. `pnpm template:check` — テンプレート生成スクリプトの整合性検査（数秒で完了）
 
 ## アーキテクチャ概要
 
@@ -55,7 +51,7 @@ node scripts/create-project.mjs <project-name>
 1. バックエンド: `workspaces/back/src/presentation/app.ts` → `AppType`をエクスポート
 2. フロントエンド: `workspaces/front/app/types/shared.ts` → `ClientType = AppType`として取得
 3. フロントエンド: `hc<ClientType>()`で完全に型付けされたAPIクライアントを生成
-4. バックエンドの型変更時は `pnpm b typecheck`（`tsc --declaration`）で型を再生成
+4. バックエンドの型変更時は `pnpm b typegen`（`tsc --declaration --noCheck`）で型を再生成
 
 ### 環境設定
 両アプリはWranglerで環境別設定を使用（`workspaces/*/wrangler.jsonc`）：

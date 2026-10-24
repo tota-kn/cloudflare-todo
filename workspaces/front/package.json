@@ -3,18 +3,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "CLOUDFLARE_ENV=local react-router dev",
-    "lint": "vp lint --fix && vp fmt",
-    "typecheck": "pnpm run typegen && react-router typegen && tsc -b",
-    "typecheck:watch": "pnpm typecheck --watch",
-    "deploy:dev": "CLOUDFLARE_ENV=dev pnpm run build && wrangler deploy",
-    "deploy:prd": "CLOUDFLARE_ENV=prd pnpm run build && wrangler deploy",
-    "build": "react-router build",
-    "typegen": "wrangler types -e local --strict-vars=false",
-    "postinstall": "pnpm run typegen",
-    "preview": "pnpm run build && vp preview",
-    "test:unit": "vp test run",
-    "test:unit:watch": "vp test"
+    "dev": "CLOUDFLARE_ENV=local vp dev",
+    "deploy:dev": "CLOUDFLARE_ENV=dev pnpm build && wrangler deploy",
+    "deploy:prd": "CLOUDFLARE_ENV=prd pnpm build && wrangler deploy",
+    "build": "vp build",
+    "typegen": "wrangler types -e local --strict-vars=false && react-router typegen",
+    "preview": "pnpm build && vp preview",
+    "test:unit": "vp test run"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.104.5",

@@ -5,13 +5,15 @@
     "b": "pnpm --filter \"back\" run",
     "f": "pnpm --filter \"front\" run",
     "e2e": "pnpm --filter \"e2e\" run",
-    "lint": "pnpm -r lint",
-    "typecheck": "pnpm b typecheck && pnpm f typecheck",
+    "postinstall": "pnpm typegen",
+    "typegen": "pnpm b typegen && pnpm f typegen",
+    "lint": "vp lint --fix",
+    "fmt": "vp fmt",
+    "typecheck": "pnpm typegen && vp check --no-fmt --no-lint",
     "test:unit": "pnpm -r test:unit",
     "test:api": "pnpm b test:api",
     "test:e2e": "pnpm b db:reset && pnpm e2e test",
-    "template:check": "node scripts/create-project.mjs --check",
-    "check-all": "pnpm lint && pnpm template:check && pnpm typecheck && pnpm test:unit && pnpm test:api && pnpm test:e2e"
+    "check-all": "pnpm typegen && vp check && pnpm test:unit && pnpm test:api && pnpm test:e2e"
   },
   "devDependencies": {
     "vite-plus": "catalog:"

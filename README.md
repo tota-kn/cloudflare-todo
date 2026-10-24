@@ -37,7 +37,7 @@
 1. pnpm install
 2. pnpx playwright install
 3. Run Task: dev
-4. pnpm all-check
+4. pnpm check-all
 
 ## 環境変数の設定
 
