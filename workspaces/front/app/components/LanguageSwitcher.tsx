@@ -53,7 +53,7 @@ function LanguageMenu({
   onSelect: (lang: SupportedLanguage) => void
 }) {
   return (
-    <div className="absolute top-full right-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 min-w-[120px]">
+    <div className="absolute top-full right-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 min-w-30">
       {supportedLanguages.map((lang) => (
         <button
           key={lang}

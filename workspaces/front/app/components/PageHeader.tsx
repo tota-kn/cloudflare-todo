@@ -23,7 +23,7 @@ function AuthControl({ currentLang }: { currentLang: SupportedLanguage }) {
 
   return session?.user ? (
     <div className="flex items-center gap-2 px-3 py-1 bg-secondary/50 rounded-md min-w-0">
-      <span className="text-sm text-foreground font-medium truncate max-w-[120px] sm:max-w-[200px]">
+      <span className="text-sm text-foreground font-medium truncate max-w-30 sm:max-w-50">
         {session.user.name || session.user.email}
       </span>
       <button
