@@ -30,11 +30,6 @@
       "Bash(wrangler:*)",
       "Bash(pnpx:*)",
       "Read(.env.*)"
-    ],
-    "ask": [
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(git push:*)"
     ]
   },
   "enabledMcpjsonServers": [
