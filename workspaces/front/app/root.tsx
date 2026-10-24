@@ -54,7 +54,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const currentLanguage = getCurrentLanguage()
 
   return (
-    <html lang={currentLanguage}>
+    // data-theme は下のインラインスクリプトが hydration 前に付けるため、
+    // サーバーHTMLとの属性差分の警告を <html> 要素に限って抑止する
+    <html lang={currentLanguage} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
