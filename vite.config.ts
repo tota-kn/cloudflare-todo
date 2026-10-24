@@ -25,7 +25,6 @@ export default defineConfig({
     ignorePatterns: [
       ".claude/**",
       ".devcontainer/**",
-      ".github/**",
       ".vscode/**",
       "scripts/**",
       "**/*.md",

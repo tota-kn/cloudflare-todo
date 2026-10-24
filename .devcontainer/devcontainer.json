@@ -32,7 +32,6 @@
                 "bradlc.vscode-tailwindcss",
                 "usernamehw.errorlens",
                 "christian-kohler.path-intellisense",
-                "ms-vscode.vscode-json",
                 "antfu.browse-lite"
             ],
             "settings": {

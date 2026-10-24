@@ -7,7 +7,6 @@
         "ms-playwright.playwright",
         "bradlc.vscode-tailwindcss",
         "usernamehw.errorlens",
-        "christian-kohler.path-intellisense",
-        "ms-vscode.vscode-json"
+        "christian-kohler.path-intellisense"
     ]
 }

@@ -21,9 +21,6 @@
     "oxc.disableNestedConfig": true,
     "oxc.fmt.disableNestedConfig": true,
     "files.autoSave": "afterDelay",
-    "javascript.updateImportsOnFileMove.enabled": "always",
-    "typescript.preferences.preferTypeOnlyAutoImports": true,
-    "typescript.suggest.autoImports": true,
-    "playwright.showTrace": false,
-    "playwright.reuseBrowser": false
+    "js/ts.updateImportsOnFileMove.enabled": "always",
+    "js/ts.preferences.preferTypeOnlyAutoImports": true
 }
