@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import {
   initReactI18next,
   useTranslation as useI18nextTranslation,
@@ -8,11 +8,15 @@ import {
   createI18nInstance,
   type SupportedLanguage,
   defaultLanguage,
-  isSupportedLanguage,
 } from "./config"
 
 let clientI18nInstance: i18n | null = null
 
+/**
+ * クライアント用の i18n インスタンスを一度だけ作り、以降は言語だけ切り替える
+ * @param language 使う言語
+ * @returns クライアント用の i18n インスタンス
+ */
 function initI18nClient(language: SupportedLanguage = defaultLanguage) {
   if (clientI18nInstance) {
     // すでに初期化されている場合は言語を変更するだけ
@@ -43,32 +47,18 @@ export function useI18nLanguage(language: SupportedLanguage) {
   }, [language])
 }
 
+/**
+ * 翻訳関数と言語切り替えを返す。i18n が未初期化なら既定の言語で初期化する
+ * @returns 翻訳関数 t と、言語を切り替える changeLanguage
+ */
 export function useTranslation() {
   // 必要に応じてi18nインスタンスを初期化
-  if (!clientI18nInstance) {
-    initI18nClient(defaultLanguage)
-  }
-
-  const { t, i18n } = useI18nextTranslation("common", {
-    i18n: clientI18nInstance!,
-  })
-
-  const [isInitialized] = useState(true) // 初期化済みと仮定
+  const instance = clientI18nInstance ?? initI18nClient(defaultLanguage)
+  const { t } = useI18nextTranslation("common", { i18n: instance })
 
   const changeLanguage = (language: SupportedLanguage) => {
-    if (clientI18nInstance) {
-      void clientI18nInstance.changeLanguage(language)
-      // 言語変更時にURLも更新する処理はここに追加可能
-    }
+    void instance.changeLanguage(language)
   }
 
-  return {
-    t,
-    i18n,
-    isInitialized,
-    changeLanguage,
-    currentLanguage: isSupportedLanguage(i18n?.language)
-      ? i18n.language
-      : defaultLanguage,
-  }
+  return { t, changeLanguage }
 }

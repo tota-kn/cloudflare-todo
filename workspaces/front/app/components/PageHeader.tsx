@@ -1,12 +1,12 @@
-import { useState } from "react"
 import { useLocation, useNavigate } from "react-router"
 import { ActionButton } from "~/components/CircleButton"
 import { GoogleIcon } from "~/components/CustomIcon"
 import { LanguageSwitcher } from "~/components/LanguageSwitcher"
 import type { SupportedLanguage } from "~/i18n/config"
+import { useGoogleSignIn } from "~/hooks/useGoogleSignIn"
 import { useTheme } from "~/contexts/ThemeContext"
 import { useTranslation } from "~/i18n/client"
-import { signIn, signOut, useSession } from "~/utils/auth-client"
+import { signOut, useSession } from "~/utils/auth-client"
 import { getFrontUrl } from "~/utils/env"
 import { getCurrentLanguage, getLanguageAwarePath } from "~/utils/language"
 
@@ -19,7 +19,7 @@ function AuthControl({ currentLang }: { currentLang: SupportedLanguage }) {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { data: session } = useSession()
-  const [signingIn, setSigningIn] = useState(false)
+  const { signingIn, signInWithGoogle } = useGoogleSignIn(getFrontUrl())
 
   return session?.user ? (
     <div className="flex items-center gap-2 px-3 py-1 bg-secondary/50 rounded-md min-w-0">
@@ -43,25 +43,12 @@ function AuthControl({ currentLang }: { currentLang: SupportedLanguage }) {
     </div>
   ) : (
     <button
-      onClick={async () => {
-        setSigningIn(true)
-        await signIn.social(
-          {
-            provider: "google",
-            callbackURL: getFrontUrl(),
-          },
-          {
-            onResponse: () => {
-              setSigningIn(false)
-            },
-          }
-        )
-      }}
+      onClick={signInWithGoogle}
       disabled={signingIn}
       className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors flex items-center gap-2 disabled:opacity-50"
     >
       <GoogleIcon />
-      {signingIn ? "Signing in..." : "Sign in with Google"}
+      {signingIn ? t("Signing in...") : t("Sign in with Google")}
     </button>
   )
 }

@@ -23,7 +23,7 @@ function readBetterAuthSecret(): string {
   const devVarsPath = path.resolve(__dirname, "../../back/.dev.vars")
   const content = readFileSync(devVarsPath, "utf-8")
   const match = content.match(/^BETTER_AUTH_SECRET=(.+)$/m)
-  if (!match) {
+  if (!match?.[1]) {
     throw new Error(`BETTER_AUTH_SECRET が ${devVarsPath} に見つかりません`)
   }
   return match[1].trim()

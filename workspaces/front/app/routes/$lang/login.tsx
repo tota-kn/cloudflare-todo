@@ -1,14 +1,13 @@
 import { env } from "cloudflare:workers"
-import { useState } from "react"
 import { redirect } from "react-router"
 import { checkSession } from "~/client"
 import { GoogleIcon, MoonIcon, SunIcon } from "~/components/CustomIcon"
+import { useGoogleSignIn } from "~/hooks/useGoogleSignIn"
 import { LanguageSwitcher } from "~/components/LanguageSwitcher"
 import { useTheme } from "~/contexts/ThemeContext"
 import { useI18nLanguage, useTranslation } from "~/i18n/client"
 import { defaultLanguage, isSupportedLanguage } from "~/i18n/config"
-import { signIn } from "~/utils/auth-client"
-import { getApiUrl, getFrontUrl, isLocal } from "~/utils/env"
+import { getFrontUrl } from "~/utils/env"
 import { getLanguageAwarePath } from "~/utils/language"
 import type { Route } from "./+types/login"
 
@@ -71,33 +70,11 @@ function ThemeToggle() {
  */
 export default function Login({ loaderData }: Route.ComponentProps) {
   const { t } = useTranslation()
-  const [signingIn, setSigningIn] = useState(false)
-
   useI18nLanguage(loaderData.language)
 
-  const todosPath = `${getFrontUrl()}${getLanguageAwarePath(loaderData.language, "/todos")}`
-
-  const handleSignIn = async () => {
-    // local環境では実際のGoogle OAuthをスキップし、
-    // dev-loginエンドポイントでシード済みテストユーザーとしてログインする
-    if (isLocal()) {
-      window.location.href = `${getApiUrl()}/api/auth/dev-login?callbackURL=${encodeURIComponent(todosPath)}`
-      return
-    }
-
-    setSigningIn(true)
-    await signIn.social(
-      {
-        provider: "google",
-        callbackURL: todosPath,
-      },
-      {
-        onResponse: () => {
-          setSigningIn(false)
-        },
-      }
-    )
-  }
+  const { signingIn, signInWithGoogle } = useGoogleSignIn(
+    `${getFrontUrl()}${getLanguageAwarePath(loaderData.language, "/todos")}`
+  )
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4 sm:p-6">
@@ -114,7 +91,7 @@ export default function Login({ loaderData }: Route.ComponentProps) {
         </p>
 
         <button
-          onClick={handleSignIn}
+          onClick={signInWithGoogle}
           disabled={signingIn}
           className="w-full px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
         >

@@ -123,12 +123,7 @@ export function TodoEditor(props: TodoEditorProps) {
         )}
 
         <div className="flex-1 min-w-0">
-          <TodoInput
-            {...draft}
-            autoFocusTitle={true}
-            showHelpText={mode === "create"}
-            mode={mode}
-          />
+          <TodoInput {...draft} autoFocusTitle={true} />
 
           {showTimestamps && todo && <TodoTimestamps todo={todo} />}
         </div>

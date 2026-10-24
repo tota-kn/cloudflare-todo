@@ -27,9 +27,9 @@ describe("sortTodosByUpdatedAt", () => {
 
       const sorted = sortTodosByUpdatedAt(todos)
 
-      expect(sorted[0].id).toBe("2") // 2024-01-03 (最新)
-      expect(sorted[1].id).toBe("3") // 2024-01-02
-      expect(sorted[2].id).toBe("1") // 2024-01-01 (最古)
+      expect(sorted[0]?.id).toBe("2") // 2024-01-03 (最新)
+      expect(sorted[1]?.id).toBe("3") // 2024-01-02
+      expect(sorted[2]?.id).toBe("1") // 2024-01-01 (最古)
     })
 
     it("同じ更新日時の場合、元の順序が保持されること", () => {
@@ -42,9 +42,9 @@ describe("sortTodosByUpdatedAt", () => {
 
       const sorted = sortTodosByUpdatedAt(todos)
 
-      expect(sorted[0].id).toBe("1")
-      expect(sorted[1].id).toBe("2")
-      expect(sorted[2].id).toBe("3")
+      expect(sorted[0]?.id).toBe("1")
+      expect(sorted[1]?.id).toBe("2")
+      expect(sorted[2]?.id).toBe("3")
     })
 
     it("ミリ秒単位での精密なソートができること", () => {
@@ -56,9 +56,9 @@ describe("sortTodosByUpdatedAt", () => {
 
       const sorted = sortTodosByUpdatedAt(todos)
 
-      expect(sorted[0].id).toBe("2") // .003Z (最新)
-      expect(sorted[1].id).toBe("3") // .002Z
-      expect(sorted[2].id).toBe("1") // .001Z (最古)
+      expect(sorted[0]?.id).toBe("2") // .003Z (最新)
+      expect(sorted[1]?.id).toBe("3") // .002Z
+      expect(sorted[2]?.id).toBe("1") // .001Z (最古)
     })
   })
 
@@ -76,7 +76,7 @@ describe("sortTodosByUpdatedAt", () => {
       const sorted = sortTodosByUpdatedAt(todos)
 
       expect(sorted).toHaveLength(1)
-      expect(sorted[0].id).toBe("1")
+      expect(sorted[0]?.id).toBe("1")
     })
 
     it("最小限の日付値でソートできること", () => {
@@ -87,8 +87,8 @@ describe("sortTodosByUpdatedAt", () => {
 
       const sorted = sortTodosByUpdatedAt(todos)
 
-      expect(sorted[0].id).toBe("2") // 2024年 (最新)
-      expect(sorted[1].id).toBe("1") // 1970年 (最古)
+      expect(sorted[0]?.id).toBe("2") // 2024年 (最新)
+      expect(sorted[1]?.id).toBe("1") // 1970年 (最古)
     })
 
     it("将来の日付でもソートできること", () => {
@@ -100,9 +100,9 @@ describe("sortTodosByUpdatedAt", () => {
 
       const sorted = sortTodosByUpdatedAt(todos)
 
-      expect(sorted[0].id).toBe("2") // 2030年 (最新)
-      expect(sorted[1].id).toBe("3") // 2025年
-      expect(sorted[2].id).toBe("1") // 2024年 (最古)
+      expect(sorted[0]?.id).toBe("2") // 2030年 (最新)
+      expect(sorted[1]?.id).toBe("3") // 2025年
+      expect(sorted[2]?.id).toBe("1") // 2024年 (最古)
     })
   })
 
@@ -131,10 +131,10 @@ describe("sortTodosByUpdatedAt", () => {
 
       const sorted = sortTodosByUpdatedAt(todos)
 
-      expect(sorted[0].id).toBe("2")
-      expect(sorted[0].title).toBe("Todo 2")
-      expect(sorted[1].id).toBe("1")
-      expect(sorted[1].title).toBe("Todo 1")
+      expect(sorted[0]?.id).toBe("2")
+      expect(sorted[0]?.title).toBe("Todo 2")
+      expect(sorted[1]?.id).toBe("1")
+      expect(sorted[1]?.title).toBe("Todo 1")
     })
 
     it("型の制約が正しく働くこと", () => {
@@ -149,8 +149,8 @@ describe("sortTodosByUpdatedAt", () => {
       ]
 
       const sorted = sortTodosByUpdatedAt(validTodos)
-      expect(sorted[0].id).toBe("2")
-      expect(sorted[1].id).toBe("1")
+      expect(sorted[0]?.id).toBe("2")
+      expect(sorted[1]?.id).toBe("1")
     })
   })
 
@@ -169,8 +169,8 @@ describe("sortTodosByUpdatedAt", () => {
       // ソート結果は新しい配列
       expect(sorted).not.toBe(originalTodos)
       // ソート結果は正しい
-      expect(sorted[0].id).toBe("2")
-      expect(sorted[1].id).toBe("1")
+      expect(sorted[0]?.id).toBe("2")
+      expect(sorted[1]?.id).toBe("1")
     })
   })
 
@@ -188,8 +188,8 @@ describe("sortTodosByUpdatedAt", () => {
       expect(sorted).toHaveLength(1000)
 
       // 最新が最初、最古が最後に来ることを確認
-      expect(sorted[0].id).toBe("id-999")
-      expect(sorted[999].id).toBe("id-0")
+      expect(sorted[0]?.id).toBe("id-999")
+      expect(sorted[999]?.id).toBe("id-0")
     })
   })
 

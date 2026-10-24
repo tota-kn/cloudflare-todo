@@ -147,7 +147,7 @@ describe("ListTodosUseCase", () => {
       const result = await useCase.execute(TEST_USER_ID)
 
       expect(result).toHaveLength(1)
-      expect(result[0].title).toBe("User1のタスク")
+      expect(result[0]?.title).toBe("User1のタスク")
     })
   })
 })

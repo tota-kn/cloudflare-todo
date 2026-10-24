@@ -156,7 +156,7 @@ describe("DeleteTodoUseCase", () => {
 
       // 中間のTodoを削除
       const targetIndex = 25
-      const targetTodo = todos[targetIndex]
+      const targetTodo = todos[targetIndex]!
       const result = await useCase.execute(
         targetTodo.getId().getValue(),
         TEST_USER_ID
