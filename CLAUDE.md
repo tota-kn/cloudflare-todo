@@ -15,6 +15,7 @@ pnpm ワークスペースモノレポによるフルスタックCloudflare Todo
 ## 開発コマンド
 
 ```bash
+scripts/claude.sh         # devcontainer を起動（無ければ作成）してその中で Claude Code を起動
 pnpm install              # 依存関係インストール（Node / pnpm のバージョンは mise.toml で固定）
 
 # ワークスペースへのコマンド委譲
