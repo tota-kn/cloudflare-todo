@@ -14,6 +14,7 @@
         "STAGE": "local",
         "DOMAIN": "localhost",
         "CORS_ORIGIN": "http://localhost:5173",
+        "BETTER_AUTH_URL": "http://localhost:8787",
       },
       "r2_buckets": [
         {
@@ -35,6 +36,7 @@
         "STAGE": "dev",
         "DOMAIN": "todo.dev.totakn.com",
         "CORS_ORIGIN": "https://todo.dev.totakn.com",
+        "BETTER_AUTH_URL": "https://api.todo.dev.totakn.com",
       },
       "r2_buckets": [
         {
@@ -62,6 +64,7 @@
         "STAGE": "prd",
         "DOMAIN": "todo.totakn.com",
         "CORS_ORIGIN": "https://todo.totakn.com",
+        "BETTER_AUTH_URL": "https://api.todo.totakn.com",
       },
       "r2_buckets": [
         {
