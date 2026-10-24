@@ -1,6 +1,18 @@
 # CLAUDE.md
 
-pnpm ワークスペースモノレポによるフルスタック Cloudflare Todo アプリ。各ワークスペースの詳細は個別の CLAUDE.md を参照：
+Cloudflare Workers で Web サービスを作るときのひな形。題材として Todo アプリを実装している。
+
+## 方針
+
+デプロイ先で継続的に使われているサービスではない。ひな形を最新に保つことを優先する。
+
+- 後方互換は考えない。API・DB スキーマ・設定は、移行措置や旧形式との両対応を入れずに書き換える
+- ツールやライブラリの推奨構成が変わったら追従する。非推奨になった書き方は残さず新しい書き方に置き換える
+- 追従を見送るときは、理由をメモリかコミットログに残す（例: 新ツールの非互換）
+
+## 構成
+
+pnpm ワークスペースのモノレポ。各ワークスペースの詳細は個別の CLAUDE.md を参照：
 
 - **workspaces/back/**: Hono API サーバー（Cloudflare Workers）— オニオンアーキテクチャ
 - **workspaces/front/**: React Router v8 SSR アプリ（Cloudflare Workers）— TanStack Query + i18n
