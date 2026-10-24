@@ -11,7 +11,7 @@
     "deploy:prd": "CLOUDFLARE_ENV=prd pnpm run build && wrangler deploy",
     "build": "react-router build",
     "typegen": "wrangler types -e local --strict-vars=false",
-    "postinstall": "npm run typegen",
+    "postinstall": "pnpm run typegen",
     "preview": "pnpm run build && vp preview",
     "test:unit": "vp test run",
     "test:unit:watch": "vp test"
